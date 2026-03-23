@@ -11,99 +11,234 @@ body{font-family:'Nunito',sans-serif;background:#1a1040;min-height:100vh;color:#
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,#2d1b69 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,#0d3b6e 0%,transparent 60%);pointer-events:none;z-index:0}
 #app{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:16px}
 .screen{display:none}.screen.active{display:block}
-
-.hero{text-align:center;padding:28px 0 20px}
-.rocket-emoji{font-size:64px;display:block;animation:bob 3s ease-in-out infinite}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,7vw,2.8rem);color:#ffe066;margin:10px 0 4px;letter-spacing:1px}
-.tagline{color:rgba(255,255,255,0.65);font-size:.95rem;font-weight:700;margin-bottom:24px}
 
-.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
-.stat-box{background:rgba(255,255,255,0.08);border-radius:14px;padding:12px;text-align:center}
-.stat-num{font-family:'Fredoka One',cursive;font-size:1.8rem;color:#ffe066}
-.stat-lbl{font-size:.68rem;font-weight:800;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:.6px;margin-top:2px}
+/* HOME */
+.hero{text-align:center;padding:20px 0 16px}
+.rocket-emoji{font-size:60px;display:block;animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.tagline{color:rgba(255,255,255,0.65);font-size:.9rem;font-weight:700;margin-bottom:6px}
+.player-bar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 16px}
+.player-av{font-size:1.4rem}.player-name{font-weight:800;font-size:.95rem;color:#ffe066}
+.player-rank{font-size:.75rem;color:rgba(255,255,255,0.55);font-weight:700}
+.player-xp{font-size:.75rem;color:#4ecdc4;font-weight:800;margin-left:auto}
 
-.pick-label{font-size:.78rem;font-weight:800;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-.subj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.stat-box{background:rgba(255,255,255,0.08);border-radius:12px;padding:10px 6px;text-align:center}
+.stat-num{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#ffe066}
+.stat-lbl{font-size:.62rem;font-weight:800;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
 
-button.subj{background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.15);border-radius:16px;padding:14px 6px;cursor:pointer;color:rgba(255,255,255,0.4);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;transition:all .18s;-webkit-tap-highlight-color:transparent;opacity:0.5}
+/* DAILY CHALLENGE BANNER */
+.daily-banner{background:linear-gradient(135deg,rgba(255,107,107,0.2),rgba(255,169,77,0.2));border:1.5px solid rgba(255,150,80,0.4);border-radius:16px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.daily-banner:hover{background:linear-gradient(135deg,rgba(255,107,107,0.3),rgba(255,169,77,0.3))}
+.daily-icon{font-size:2rem}
+.daily-text{flex:1}
+.daily-title{font-weight:800;font-size:.95rem;color:#ffa94d}
+.daily-sub{font-size:.78rem;color:rgba(255,255,255,0.6);margin-top:2px}
+.daily-done{font-size:.75rem;font-weight:800;color:#3dd68c;background:rgba(61,214,140,0.15);border-radius:20px;padding:4px 10px;white-space:nowrap}
+
+.pick-label{font-size:.75rem;font-weight:800;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.subj-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+button.subj{background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:10px 4px;cursor:pointer;color:rgba(255,255,255,0.4);font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;transition:all .18s;-webkit-tap-highlight-color:transparent;opacity:0.5}
 button.subj:hover{opacity:0.8;border-color:rgba(255,255,255,0.35)}
-button.subj.on{border-color:#ffe066;background:rgba(255,224,102,0.18);color:#ffe066;opacity:1;box-shadow:0 0 12px rgba(255,224,102,0.2)}
-button.subj .icon{font-size:26px;line-height:1;pointer-events:none}
+button.subj.on{border-color:#ffe066;background:rgba(255,224,102,0.15);color:#ffe066;opacity:1}
+button.subj .icon{font-size:22px;line-height:1;pointer-events:none}
 button.subj span{pointer-events:none}
 
-button.start{width:100%;padding:16px;background:#ffe066;color:#1a1000;font-family:'Fredoka One',cursive;font-size:1.3rem;border:none;border-radius:20px;cursor:pointer;letter-spacing:1px;transition:transform .15s,background .15s;-webkit-tap-highlight-color:transparent}
-button.start:hover{transform:scale(1.03);background:#ffed6b}
+/* SPEED PICKER */
+.speed-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+button.speed{background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:10px 6px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:800;color:rgba(255,255,255,0.5);display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;transition:all .15s;-webkit-tap-highlight-color:transparent}
+button.speed.on{border-color:#4ecdc4;background:rgba(78,205,196,0.15);color:#4ecdc4}
+button.speed .sp-icon{font-size:1.4rem;pointer-events:none}
+button.speed span{pointer-events:none}
+
+button.start{width:100%;padding:15px;background:#ffe066;color:#1a1000;font-family:'Fredoka One',cursive;font-size:1.25rem;border:none;border-radius:20px;cursor:pointer;letter-spacing:1px;transition:all .15s;-webkit-tap-highlight-color:transparent;margin-bottom:10px}
+button.start:hover{transform:scale(1.02);background:#ffed6b}
 button.start:disabled{opacity:.35;cursor:not-allowed;transform:none}
 
-.game-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-button.back{background:rgba(255,255,255,0.1);border:none;color:#fff;border-radius:12px;padding:8px 14px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;transition:background .15s}
+/* HOW TO PLAY */
+.how-to-play{margin:10px 0 14px}
+.htp-title{font-size:.75rem;font-weight:800;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.htp-title .arrow{font-size:.7rem;transition:transform .25s;display:inline-block}
+.htp-steps{display:none;gap:8px;flex-direction:column}
+.htp-step{background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 12px;display:flex;align-items:flex-start;gap:10px}
+.htp-num{font-family:'Fredoka One',cursive;font-size:1.2rem;color:#ffe066;min-width:24px;line-height:1.2}
+.htp-body{flex:1}.htp-head{font-weight:800;font-size:.85rem;color:#fff;margin-bottom:2px}
+.htp-desc{font-size:.77rem;color:rgba(255,255,255,0.58);line-height:1.5}
+.htp-tip{margin-top:8px;background:rgba(255,224,102,0.08);border:1.5px solid rgba(255,224,102,0.22);border-radius:10px;padding:8px 12px;font-size:.77rem;color:rgba(255,224,102,0.85);font-weight:700;line-height:1.5}
+
+/* ACHIEVEMENTS BUTTON */
+button.ach-btn{width:100%;padding:11px;background:rgba(167,139,250,0.12);color:#a78bfa;font-family:'Fredoka One',cursive;font-size:1rem;border:1.5px solid rgba(167,139,250,0.3);border-radius:16px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+button.ach-btn:hover{background:rgba(167,139,250,0.22)}
+
+/* GAME */
+.game-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+button.back{background:rgba(255,255,255,0.1);border:none;color:#fff;border-radius:12px;padding:7px 12px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;transition:background .15s}
 button.back:hover{background:rgba(255,255,255,0.2)}
 .prog-track{flex:1;height:10px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden}
 .prog-bar{height:100%;background:#ffe066;border-radius:10px;transition:width .35s ease;width:0%}
-.q-num{font-weight:800;font-size:.88rem;color:rgba(255,255,255,0.6);white-space:nowrap}
-
-.hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.score-pill{background:rgba(255,255,255,0.08);border-radius:14px;padding:8px 14px;display:flex;align-items:center;gap:8px}
-.score-big{font-family:'Fredoka One',cursive;font-size:1.4rem;color:#ffe066}
-.streak{font-size:.82rem;font-weight:800;color:#ffa94d}
-.lvl-lbl{font-size:.78rem;font-weight:800;color:rgba(255,255,255,0.55)}
-
-.timer-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.q-num{font-weight:800;font-size:.85rem;color:rgba(255,255,255,0.6);white-space:nowrap}
+.hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.score-pill{background:rgba(255,255,255,0.08);border-radius:12px;padding:7px 12px;display:flex;align-items:center;gap:7px}
+.score-big{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#ffe066}
+.streak{font-size:.8rem;font-weight:800;color:#ffa94d}
+.lvl-lbl{font-size:.75rem;font-weight:800;color:rgba(255,255,255,0.5)}
+.timer-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .timer-track{flex:1;height:9px;background:rgba(255,255,255,0.1);border-radius:8px;overflow:hidden}
 .timer-bar{height:100%;border-radius:8px;background:#3dd68c;transition:width .1s linear,background .3s}
-.timer-num{font-weight:800;font-size:.95rem;min-width:26px;text-align:right}
+.timer-num{font-weight:800;font-size:.92rem;min-width:30px;text-align:right}
 
-.q-card{background:rgba(255,255,255,0.07);border:2px solid rgba(255,255,255,0.12);border-radius:22px;padding:20px;margin-bottom:14px}
-.q-tag{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
-.q-text{font-size:1.1rem;font-weight:700;line-height:1.5}
-.q-hint{font-size:.82rem;color:rgba(255,255,255,0.6);font-style:italic;margin-top:10px}
-.story-card{background:rgba(255,182,193,0.1);border:1.5px solid rgba(255,105,180,0.3);border-radius:16px;padding:16px 18px;margin-bottom:14px;font-size:.92rem;font-weight:600;line-height:1.7;color:rgba(255,255,255,0.88)}
+/* POWER-UPS */
+.powerup-row{display:flex;gap:8px;margin-bottom:12px}
+button.pup{flex:1;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;padding:8px 4px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:rgba(255,255,255,0.7);display:flex;flex-direction:column;align-items:center;gap:3px;transition:all .15s;-webkit-tap-highlight-color:transparent}
+button.pup:hover:not(:disabled){background:rgba(255,255,255,0.15);transform:translateY(-1px)}
+button.pup:disabled{opacity:.3;cursor:not-allowed}
+button.pup .pup-icon{font-size:1.2rem;pointer-events:none}
+button.pup span{pointer-events:none}
+button.pup.used{opacity:.25;cursor:not-allowed}
 
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-button.opt{background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);border-radius:16px;padding:14px 10px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:700;color:#fff;text-align:center;line-height:1.35;transition:transform .12s,border-color .12s,background .12s;-webkit-tap-highlight-color:transparent}
+.q-card{background:rgba(255,255,255,0.07);border:2px solid rgba(255,255,255,0.12);border-radius:20px;padding:18px;margin-bottom:12px}
+.q-tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.q-text{font-size:1.05rem;font-weight:700;line-height:1.5}
+.q-hint{font-size:.8rem;color:rgba(255,255,255,0.58);font-style:italic;margin-top:8px}
+.story-card{background:rgba(255,182,193,0.1);border:1.5px solid rgba(255,105,180,0.3);border-radius:14px;padding:14px 16px;margin-bottom:12px;font-size:.9rem;font-weight:600;line-height:1.75;color:rgba(255,255,255,0.88)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+button.opt{background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:12px 10px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;color:#fff;text-align:center;line-height:1.35;transition:all .12s;-webkit-tap-highlight-color:transparent}
 button.opt:hover:not(:disabled){background:rgba(255,255,255,0.16);border-color:rgba(255,255,255,0.4);transform:translateY(-2px)}
 button.opt:disabled{cursor:default;transform:none!important}
 button.opt.correct{background:rgba(61,214,140,0.22);border-color:#3dd68c;color:#3dd68c}
 button.opt.wrong{background:rgba(255,107,107,0.18);border-color:#ff6b6b;color:#ff8585}
-
-.feedback{text-align:center;padding:14px 16px;border-radius:16px;margin-bottom:12px;font-weight:700;font-size:.95rem;line-height:1.4}
+button.opt.hidden-opt{display:none}
+.feedback{text-align:center;padding:12px 14px;border-radius:14px;margin-bottom:10px;font-weight:700;font-size:.92rem;line-height:1.4}
 .feedback.good{background:rgba(61,214,140,0.14);color:#3dd68c;border:1.5px solid rgba(61,214,140,0.3)}
 .feedback.bad{background:rgba(255,107,107,0.12);color:#ff8585;border:1.5px solid rgba(255,107,107,0.28)}
-
-button.next-q{width:100%;padding:14px;background:#a78bfa;color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;border:none;border-radius:16px;cursor:pointer;transition:transform .15s,background .15s;-webkit-tap-highlight-color:transparent}
+button.next-q{width:100%;padding:13px;background:#a78bfa;color:#fff;font-family:'Fredoka One',cursive;font-size:1.05rem;border:none;border-radius:14px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
 button.next-q:hover{background:#8b5cf6;transform:scale(1.02)}
-
 .hidden{display:none!important}
 
-.results{text-align:center;padding:28px 0 20px}
-.res-icon{font-size:68px;display:block;animation:pop .5s cubic-bezier(.175,.885,.32,1.275)}
+/* RESULTS */
+.results{text-align:center;padding:20px 0 16px}
+.res-icon{font-size:64px;display:block;animation:pop .5s cubic-bezier(.175,.885,.32,1.275)}
 @keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-.res-title{font-family:'Fredoka One',cursive;font-size:clamp(1.8rem,5vw,2.2rem);color:#ffe066;margin:12px 0 4px}
-.res-sub{color:rgba(255,255,255,0.65);font-size:.95rem;font-weight:700;margin-bottom:22px}
-.res-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
-.badges{margin-bottom:22px}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:.76rem;font-weight:800;margin:4px}
+.res-title{font-family:'Fredoka One',cursive;font-size:clamp(1.6rem,5vw,2rem);color:#ffe066;margin:10px 0 3px}
+.res-sub{color:rgba(255,255,255,0.62);font-size:.9rem;font-weight:700;margin-bottom:14px}
+.xp-gain{display:inline-block;background:rgba(78,205,196,0.15);border:1.5px solid rgba(78,205,196,0.3);border-radius:20px;padding:5px 14px;font-size:.82rem;font-weight:800;color:#4ecdc4;margin-bottom:14px}
+.res-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.badges{margin-bottom:14px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:20px;font-size:.73rem;font-weight:800;margin:3px}
+button.replay{width:100%;padding:14px;background:#3dd68c;color:#062916;font-family:'Fredoka One',cursive;font-size:1.2rem;border:none;border-radius:18px;cursor:pointer;margin-bottom:8px;transition:all .15s;-webkit-tap-highlight-color:transparent}
+button.replay:hover{transform:scale(1.02);background:#52eea4}
+button.menu-btn{width:100%;padding:12px;background:rgba(255,255,255,0.07);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;border:1.5px solid rgba(255,255,255,0.18);border-radius:16px;cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent;margin-bottom:8px}
+button.menu-btn:hover{background:rgba(255,255,255,0.14)}
 
-button.replay{width:100%;padding:16px;background:#3dd68c;color:#062916;font-family:'Fredoka One',cursive;font-size:1.25rem;border:none;border-radius:20px;cursor:pointer;margin-bottom:10px;transition:transform .15s,background .15s;-webkit-tap-highlight-color:transparent}
-button.replay:hover{transform:scale(1.03);background:#52eea4}
-button.menu-btn{width:100%;padding:13px;background:rgba(255,255,255,0.08);color:#fff;font-family:'Fredoka One',cursive;font-size:1.05rem;border:2px solid rgba(255,255,255,0.2);border-radius:18px;cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent}
-button.menu-btn:hover{background:rgba(255,255,255,0.15)}
+/* LEADERBOARD */
+.lb-section{margin-top:16px}
+.lb-title{font-family:'Fredoka One',cursive;font-size:1rem;color:#ffe066;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.lb-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+button.lb-tab{background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 10px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;color:rgba(255,255,255,0.55);transition:all .15s;-webkit-tap-highlight-color:transparent}
+button.lb-tab.active{border-color:#ffe066;background:rgba(255,224,102,0.15);color:#ffe066}
+.lb-list{display:flex;flex-direction:column;gap:6px}
+.lb-row{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;padding:9px 12px}
+.lb-row.me{border-color:#ffe066;background:rgba(255,224,102,0.08)}
+.lb-rank{font-family:'Fredoka One',cursive;font-size:1rem;min-width:26px;text-align:center}
+.lb-rank.gold{color:#ffe066}.lb-rank.silver{color:#c0c0c0}.lb-rank.bronze{color:#cd7f32}
+.lb-av{font-size:1.2rem;min-width:24px;text-align:center}
+.lb-name{flex:1;font-weight:800;font-size:.88rem;color:#fff}
+.lb-score{font-family:'Fredoka One',cursive;font-size:1rem;color:#ffe066}
+.lb-empty{text-align:center;color:rgba(255,255,255,0.38);font-size:.85rem;padding:16px 0;font-weight:700}
 
-@media(max-width:420px){.subj-grid{grid-template-columns:repeat(2,1fr)}.opts{grid-template-columns:1fr}}
+/* NICKNAME OVERLAY */
+.nick-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.nick-box{background:#1e1550;border:2px solid rgba(255,255,255,0.15);border-radius:22px;padding:24px 20px;max-width:400px;width:100%;text-align:center}
+.nick-box h2{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#ffe066;margin-bottom:5px}
+.nick-box p{color:rgba(255,255,255,0.62);font-size:.85rem;margin-bottom:16px}
+.nick-input{width:100%;padding:11px 14px;border-radius:12px;border:2px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:700;text-align:center;margin-bottom:14px;outline:none}
+.nick-input:focus{border-color:#ffe066}
+.avatar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px}
+.av-btn{background:rgba(255,255,255,0.07);border:2px solid rgba(255,255,255,0.12);border-radius:10px;padding:7px 4px;cursor:pointer;font-size:1.4rem;text-align:center;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.av-btn:hover{background:rgba(255,255,255,0.15);transform:scale(1.1)}
+.av-btn.picked{border-color:#ffe066;background:rgba(255,224,102,0.18)}
+button.nick-go{width:100%;padding:13px;background:#ffe066;color:#1a1000;font-family:'Fredoka One',cursive;font-size:1.1rem;border:none;border-radius:14px;cursor:pointer;transition:all .15s}
+button.nick-go:hover{background:#ffed6b;transform:scale(1.02)}
+button.nick-go:disabled{opacity:.35;cursor:not-allowed;transform:none}
 
-/* HOW TO PLAY */
-.how-to-play{margin:22px 0 18px}
-.htp-title{font-size:.78rem;font-weight:800;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
-.htp-title .arrow{font-size:.7rem;transition:transform .25s;display:inline-block}
-.htp-title .arrow.open{transform:rotate(90deg)}
-.htp-steps{display:none;gap:10px;flex-direction:column}
-.htp-step{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px}
-.htp-num{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#ffe066;min-width:28px;line-height:1.2}
-.htp-body{flex:1}
-.htp-head{font-weight:800;font-size:.9rem;color:#fff;margin-bottom:3px}
-.htp-desc{font-size:.8rem;color:rgba(255,255,255,0.6);line-height:1.5}
-.htp-tip{margin-top:10px;background:rgba(255,224,102,0.1);border:1.5px solid rgba(255,224,102,0.25);border-radius:12px;padding:10px 14px;font-size:.8rem;color:rgba(255,224,102,0.9);font-weight:700;line-height:1.5}
+/* ACHIEVEMENTS OVERLAY */
+.ach-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.ach-box{background:#1e1550;border:2px solid rgba(255,255,255,0.15);border-radius:22px;padding:24px 20px;max-width:400px;width:100%}
+.ach-box h2{font-family:'Fredoka One',cursive;font-size:1.4rem;color:#ffe066;margin-bottom:4px;text-align:center}
+.ach-sub{text-align:center;color:rgba(255,255,255,0.55);font-size:.8rem;font-weight:700;margin-bottom:16px}
+.ach-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.ach-item{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px;text-align:center;transition:all .2s}
+.ach-item.unlocked{border-color:#ffe066;background:rgba(255,224,102,0.1)}
+.ach-item.unlocked .ach-icon{filter:none}
+.ach-icon{font-size:1.8rem;display:block;margin-bottom:4px;filter:grayscale(1) opacity(.3)}
+.ach-name{font-size:.72rem;font-weight:800;color:#fff;margin-bottom:2px}
+.ach-desc{font-size:.65rem;color:rgba(255,255,255,0.5)}
+.rank-section{background:rgba(255,255,255,0.05);border-radius:14px;padding:14px;margin-bottom:14px}
+.rank-title{font-size:.72rem;font-weight:800;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.rank-list{display:flex;flex-direction:column;gap:6px}
+.rank-item{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;background:rgba(255,255,255,0.04)}
+.rank-item.current{background:rgba(255,224,102,0.12);border:1px solid rgba(255,224,102,0.25)}
+.rank-badge{font-size:1.2rem;min-width:28px;text-align:center}
+.rank-info{flex:1}.rank-name{font-weight:800;font-size:.82rem;color:#fff}
+.rank-req{font-size:.68rem;color:rgba(255,255,255,0.45)}
+button.ach-close{width:100%;padding:11px;background:rgba(255,255,255,0.08);color:#fff;font-family:'Fredoka One',cursive;font-size:1rem;border:1.5px solid rgba(255,255,255,0.18);border-radius:14px;cursor:pointer;transition:background .15s}
+button.ach-close:hover{background:rgba(255,255,255,0.15)}
+
+/* GRADE PICKER */
+.grade-label{font-size:.78rem;font-weight:800;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;margin-top:4px}
+.grade-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+button.grade-btn{background:rgba(255,255,255,0.07);border:2px solid rgba(255,255,255,0.15);border-radius:14px;padding:10px 4px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;color:rgba(255,255,255,0.55);display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;transition:all .15s;-webkit-tap-highlight-color:transparent}
+button.grade-btn:hover{border-color:rgba(255,255,255,0.35);background:rgba(255,255,255,0.12)}
+button.grade-btn.picked{border-color:#a78bfa;background:rgba(167,139,250,0.18);color:#a78bfa}
+button.grade-btn .g-num{font-family:'Fredoka One',cursive;font-size:1.5rem;line-height:1;pointer-events:none}
+button.grade-btn .g-lbl{font-size:.62rem;pointer-events:none}
+.grade-badge{display:inline-block;background:rgba(167,139,250,0.18);border:1.5px solid rgba(167,139,250,0.35);border-radius:20px;padding:3px 10px;font-size:.72rem;font-weight:800;color:#a78bfa;margin-left:8px}
+
+@media(max-width:420px){.subj-grid{grid-template-columns:repeat(3,1fr)}.opts{grid-template-columns:1fr}.stats-bar{grid-template-columns:repeat(2,1fr)}}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:#120d35;border-top:1.5px solid rgba(255,255,255,0.1);display:flex;justify-content:center;gap:0;max-width:660px;margin:0 auto}
+.bottom-nav{left:50%;transform:translateX(-50%);width:100%;max-width:660px}
+button.nav-tab{flex:1;background:none;border:none;color:rgba(255,255,255,0.45);font-family:"Nunito",sans-serif;font-size:.62rem;font-weight:800;padding:10px 4px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .15s;-webkit-tap-highlight-color:transparent;text-transform:uppercase;letter-spacing:.4px}
+button.nav-tab .nav-icon{font-size:1.3rem;line-height:1;pointer-events:none}
+button.nav-tab span{pointer-events:none}
+button.nav-tab.active{color:#ffe066}
+#app{padding-bottom:72px}
+
+/* MEMORY GAME */
+.mem-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.mem-title{font-family:"Fredoka One",cursive;font-size:1.3rem;color:#ffe066}
+.mem-stats{display:flex;gap:10px;align-items:center}
+.mem-stat{background:rgba(255,255,255,0.08);border-radius:10px;padding:6px 12px;font-size:.75rem;font-weight:800;color:rgba(255,255,255,0.7)}
+.mem-stat span{color:#ffe066;font-family:"Fredoka One",cursive;font-size:1rem}
+.diff-row{display:flex;gap:8px;margin-bottom:16px}
+button.diff-btn{flex:1;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;padding:10px 6px;cursor:pointer;font-family:"Nunito",sans-serif;font-size:.75rem;font-weight:800;color:rgba(255,255,255,0.5);display:flex;flex-direction:column;align-items:center;gap:3px;transition:all .15s;-webkit-tap-highlight-color:transparent}
+button.diff-btn.on{border-color:#ffe066;background:rgba(255,224,102,0.14);color:#ffe066}
+button.diff-btn span{pointer-events:none}
+.mem-grid{display:grid;gap:8px;margin-bottom:16px}
+.mem-grid.g8{grid-template-columns:repeat(4,1fr)}
+.mem-grid.g12{grid-template-columns:repeat(4,1fr)}
+.mem-grid.g16{grid-template-columns:repeat(4,1fr)}
+.mem-card{aspect-ratio:1;border-radius:12px;cursor:pointer;position:relative;-webkit-tap-highlight-color:transparent;transform-style:preserve-3d;transition:transform .35s}
+.mem-card.flipped{transform:rotateY(180deg)}
+.mem-card.matched{transform:rotateY(180deg);pointer-events:none}
+.mem-card.matched .card-front{border-color:#3dd68c;background:rgba(61,214,140,0.15)}
+.card-back,.card-front{position:absolute;inset:0;border-radius:12px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.card-back{background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);font-size:1.6rem}
+.card-front{background:rgba(26,16,64,0.95);border:2px solid rgba(255,255,255,0.2);transform:rotateY(180deg);flex-direction:column;gap:4px;padding:4px}
+.card-flag{font-size:1.8rem;line-height:1}
+.card-name{font-size:.58rem;font-weight:800;color:rgba(255,255,255,0.8);text-align:center;line-height:1.2}
+.card-type-flag .card-flag{font-size:2.2rem}
+.card-type-name .card-name{font-size:.72rem;color:#ffe066;font-family:"Fredoka One",cursive}
+.card-type-name .card-flag{display:none}
+button.mem-new{width:100%;padding:13px;background:#ffe066;color:#1a1000;font-family:"Fredoka One",cursive;font-size:1.1rem;border:none;border-radius:16px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+button.mem-new:hover{transform:scale(1.02);background:#ffed6b}
+.mem-complete{text-align:center;padding:20px 0;display:none}
+.mem-complete-icon{font-size:56px;display:block;animation:pop .5s cubic-bezier(.175,.885,.32,1.275)}
+.mem-complete-title{font-family:"Fredoka One",cursive;font-size:1.8rem;color:#ffe066;margin:10px 0 4px}
+.mem-complete-sub{color:rgba(255,255,255,0.6);font-size:.9rem;font-weight:700;margin-bottom:18px}
+.mem-best{display:inline-block;background:rgba(78,205,196,0.15);border:1.5px solid rgba(78,205,196,0.3);border-radius:20px;padding:5px 14px;font-size:.82rem;font-weight:800;color:#4ecdc4;margin-bottom:16px}
 </style>
 </head>
 <body>
@@ -111,17 +246,46 @@ button.menu-btn:hover{background:rgba(255,255,255,0.15)}
 
   <!-- HOME -->
   <div class="screen active" id="screen-home">
-    <div class="hero">
+    <!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button type="button" class="nav-tab active" id="nav-quiz" onclick="switchTab('quiz')"><span class="nav-icon">&#128640;</span><span>Quiz</span></button>
+  <button type="button" class="nav-tab" id="nav-memory" onclick="switchTab('memory')"><span class="nav-icon">&#127988;</span><span>Memory</span></button>
+  <button type="button" class="nav-tab" id="nav-trophy" onclick="switchTab('trophy')"><span class="nav-icon">&#127942;</span><span>Trophies</span></button>
+</nav>
+
+  <div id="tab-quiz">
+<div class="hero">
       <span class="rocket-emoji">&#128640;</span>
       <h1>Brain Blast!</h1>
-      <p class="tagline">The adventure learning game for Grade 4 &mdash; Alberta</p>
+      <p class="tagline">The adventure learning game &mdash; Alberta &mdash; <span id="grade-tagline">Grade 4</span></p>
+    </div>
+    <div class="player-bar" id="player-bar">
+      <span class="player-av" id="home-av">&#128640;</span>
+      <div>
+        <div class="player-name" id="home-name">Guest</div>
+        <div class="player-rank" id="home-rank">Cadet &#128640;</div>
+        <span class="grade-badge" id="home-grade" style="display:none">Grade 4</span>
+      </div>
+      <div class="player-xp" id="home-xp">0 XP</div>
     </div>
     <div class="stats-bar">
-      <div class="stat-box"><div class="stat-num" id="h-total">0</div><div class="stat-lbl">Total Stars</div></div>
+      <div class="stat-box"><div class="stat-num" id="h-total">0</div><div class="stat-lbl">Stars</div></div>
       <div class="stat-box"><div class="stat-num" id="h-streak">0</div><div class="stat-lbl">Best Streak</div></div>
-      <div class="stat-box"><div class="stat-num" id="h-games">0</div><div class="stat-lbl">Games Won</div></div>
+      <div class="stat-box"><div class="stat-num" id="h-games">0</div><div class="stat-lbl">Games</div></div>
+      <div class="stat-box"><div class="stat-num" id="h-xp">0</div><div class="stat-lbl">XP</div></div>
     </div>
-    <div class="pick-label">Pick your subjects &mdash; <span id="subj-count" style="color:#ffe066">7 selected</span></div>
+
+    <!-- DAILY CHALLENGE -->
+    <div class="daily-banner" id="daily-banner">
+      <div class="daily-icon">&#127881;</div>
+      <div class="daily-text">
+        <div class="daily-title">Daily Challenge</div>
+        <div class="daily-sub" id="daily-sub">10 mixed questions &bull; Bonus 50 XP today!</div>
+      </div>
+      <div id="daily-badge"></div>
+    </div>
+
+    <div class="pick-label">Pick subjects &mdash; <span id="subj-count" style="color:#ffe066">10 selected</span></div>
     <div class="subj-grid">
       <button type="button" class="subj on" data-subj="math"><span class="icon">&#128290;</span>Math</button>
       <button type="button" class="subj on" data-subj="science"><span class="icon">&#128300;</span>Science</button>
@@ -130,58 +294,69 @@ button.menu-btn:hover{background:rgba(255,255,255,0.15)}
       <button type="button" class="subj on" data-subj="english"><span class="icon">&#128218;</span>English</button>
       <button type="button" class="subj on" data-subj="engineering"><span class="icon">&#9881;</span>Engineering</button>
       <button type="button" class="subj on" data-subj="stories"><span class="icon">&#128214;</span>Stories</button>
+      <button type="button" class="subj on" data-subj="socialstudies"><span class="icon">&#127758;</span>Social Studies</button>
+      <button type="button" class="subj on" data-subj="health"><span class="icon">&#129293;</span>Health</button>
+      <button type="button" class="subj on" data-subj="geography"><span class="icon">&#127809;</span>Geography</button>
     </div>
-    <div class="how-to-play">
-      <div class="htp-title" id="htp-toggle">
-        <span class="arrow" id="htp-arrow">&#9654;</span> How to Play
-      </div>
-      <div class="htp-steps" id="htp-steps">
-        <div class="htp-step">
-          <div class="htp-num">1</div>
-          <div class="htp-body">
-            <div class="htp-head">&#127775; Pick your subjects</div>
-            <div class="htp-desc">Tap any subject button above to turn it on or off. Golden = selected! Pick just one subject or mix them all together. The counter shows how many are active.</div>
-          </div>
-        </div>
-        <div class="htp-step">
-          <div class="htp-num">2</div>
-          <div class="htp-body">
-            <div class="htp-head">&#128640; Launch the game</div>
-            <div class="htp-desc">Press the big yellow Launch button. You will get 10 random questions from your chosen subjects. Each game is different!</div>
-          </div>
-        </div>
-        <div class="htp-step">
-          <div class="htp-num">3</div>
-          <div class="htp-body">
-            <div class="htp-head">&#9201; Answer before the timer runs out!</div>
-            <div class="htp-desc">A coloured bar counts down at the top. Green = lots of time. Orange = hurry up! Red = almost out of time! The faster you answer, the more bonus stars you earn.</div>
-          </div>
-        </div>
-        <div class="htp-step">
-          <div class="htp-num">4</div>
-          <div class="htp-body">
-            <div class="htp-head">&#128218; Read the story first (Stories mode)</div>
-            <div class="htp-desc">When a story question appears, a pink box shows a short story. Read it carefully, THEN pick your answer. The question is always about the story!</div>
-          </div>
-        </div>
-        <div class="htp-step">
-          <div class="htp-num">5</div>
-          <div class="htp-body">
-            <div class="htp-head">&#11088; Collect stars and build streaks</div>
-            <div class="htp-desc">Every correct answer earns stars. Answer 3 or more in a row for a STREAK BONUS! The game gets harder as you get more right, and hints disappear at higher levels.</div>
-          </div>
-        </div>
-        <div class="htp-step">
-          <div class="htp-num">6</div>
-          <div class="htp-body">
-            <div class="htp-head">&#127942; Earn badges at the end</div>
-            <div class="htp-desc">Finish all 10 questions to see your score and collect special badges like Perfect Score, Speed Demon, Brain Master, and 5-Streak Champ!</div>
-          </div>
-        </div>
-        <div class="htp-tip">&#128161; Top Tip: Answer quickly for bonus stars, but make sure you read the question first. A right answer is always better than a fast wrong one!</div>
-      </div>
+
+    <div class="pick-label">Speed &mdash; how fast is the timer?</div>
+    <div class="speed-row">
+      <button type="button" class="speed" id="sp-slow"><span class="sp-icon">&#128034;</span><span>Chill Mode</span><span style="font-size:.62rem;opacity:.7">35 sec - no rush!</span></button>
+      <button type="button" class="speed on" id="sp-med"><span class="sp-icon">&#128008;</span><span>Adventure</span><span style="font-size:.62rem;opacity:.7">20 sec - lets go!</span></button>
+      <button type="button" class="speed" id="sp-fast"><span class="sp-icon">&#128005;</span><span>Turbo Brain</span><span style="font-size:.62rem;opacity:.7">12 sec - superstar!</span></button>
     </div>
+
     <button type="button" class="start" id="btn-start">&#128640; Launch Brain Blast!</button>
+    <button type="button" class="ach-btn" id="btn-achievements">&#127942; Achievements &amp; Ranks</button>
+  </div><!-- end quiz-tab -->
+
+  <!-- MEMORY TAB -->
+  <div id="tab-memory" style="display:none">
+    <div class="mem-header">
+      <div class="mem-title">&#127988; Flag Memory</div>
+      <div class="mem-stats">
+        <div class="mem-stat">Moves: <span id="mem-moves">0</span></div>
+        <div class="mem-stat">Pairs: <span id="mem-pairs">0</span>/<span id="mem-total">8</span></div>
+      </div>
+    </div>
+    <div class="diff-row">
+      <button type="button" class="diff-btn on" id="diff-easy" onclick="setMemDiff(8,this)"><span style="font-size:1.2rem">&#128512;</span><span>Easy</span><span style="font-size:.6rem;opacity:.7">8 pairs</span></button>
+      <button type="button" class="diff-btn" id="diff-med" onclick="setMemDiff(12,this)"><span style="font-size:1.2rem">&#128064;</span><span>Medium</span><span style="font-size:.6rem;opacity:.7">12 pairs</span></button>
+      <button type="button" class="diff-btn" id="diff-hard" onclick="setMemDiff(16,this)"><span style="font-size:1.2rem">&#129327;</span><span>Hard</span><span style="font-size:.6rem;opacity:.7">16 pairs</span></button>
+    </div>
+    <div id="mem-board" class="mem-grid g8"></div>
+    <div class="mem-complete" id="mem-complete">
+      <span class="mem-complete-icon">&#127881;</span>
+      <div class="mem-complete-title">You matched them all!</div>
+      <div class="mem-complete-sub" id="mem-complete-sub">Great memory!</div>
+      <div class="mem-best" id="mem-best-label">Best: -- moves</div>
+      <button type="button" class="mem-new" onclick="startMemory()">&#128260; Play Again!</button>
+    </div>
+    <button type="button" class="mem-new" id="mem-new-btn" onclick="startMemory()">&#128260; New Game</button>
+  </div>
+
+  <!-- TROPHY TAB -->
+  <div id="tab-trophy" style="display:none">
+    <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#ffe066;margin-bottom:14px">&#127942; Achievements</div>
+    <div class="ach-sub" id="trophy-count" style="margin-bottom:14px;color:rgba(255,255,255,0.55);font-size:.8rem;font-weight:700">0 of 12 unlocked</div>
+    <div class="ach-grid" id="trophy-grid"></div>
+    <div class="rank-section">
+      <div class="rank-title">&#11088; XP Ranks</div>
+      <div class="rank-list" id="trophy-rank-list"></div>
+    </div>
+  </div>
+
+    <div class="how-to-play">
+      <div class="htp-title" id="htp-toggle"><span class="arrow" id="htp-arrow">&#9654;</span> How to Play</div>
+      <div class="htp-steps" id="htp-steps">
+        <div class="htp-step"><div class="htp-num">1</div><div class="htp-body"><div class="htp-head">&#127775; Pick your subjects</div><div class="htp-desc">Tap subjects to toggle on or off. Gold = selected! Mix them all or focus on one.</div></div></div>
+        <div class="htp-step"><div class="htp-num">2</div><div class="htp-body"><div class="htp-head">&#128034; Choose your speed</div><div class="htp-desc">Slow gives you 35 seconds, Medium gives 20, Fast gives 12. Pick what feels right!</div></div></div>
+        <div class="htp-step"><div class="htp-num">3</div><div class="htp-body"><div class="htp-head">&#9889; Use your power-ups wisely</div><div class="htp-desc">You get 3 power-ups per game: 50/50 removes 2 wrong answers, Extra Time adds 10 seconds, Skip jumps to the next question.</div></div></div>
+        <div class="htp-step"><div class="htp-num">4</div><div class="htp-body"><div class="htp-head">&#11088; Earn XP and climb ranks</div><div class="htp-desc">Every game earns XP. Collect enough to go from Cadet all the way to Einstein! Unlock trophies along the way.</div></div></div>
+        <div class="htp-step"><div class="htp-num">5</div><div class="htp-body"><div class="htp-head">&#127881; Do the Daily Challenge</div><div class="htp-desc">A special bonus game every day worth extra XP. Come back each day to keep your streak going!</div></div></div>
+        <div class="htp-tip">&#128161; Top Tip: A right answer beats a fast wrong one. Read carefully, then answer quickly for maximum stars!</div>
+      </div>
+    </div>
   </div>
 
   <!-- GAME -->
@@ -203,6 +378,12 @@ button.menu-btn:hover{background:rgba(255,255,255,0.15)}
       <div class="timer-track"><div class="timer-bar" id="timer-bar"></div></div>
       <div class="timer-num" id="timer-num">20</div>
     </div>
+    <!-- POWER-UPS -->
+    <div class="powerup-row">
+      <button type="button" class="pup" id="pup-5050"><span class="pup-icon">&#9986;</span><span>50/50</span></button>
+      <button type="button" class="pup" id="pup-time"><span class="pup-icon">&#9201;</span><span>+10 sec</span></button>
+      <button type="button" class="pup" id="pup-skip"><span class="pup-icon">&#9193;</span><span>Skip</span></button>
+    </div>
     <div class="q-card">
       <div class="q-tag" id="q-tag">Subject</div>
       <div class="q-text" id="q-text">Loading...</div>
@@ -220,135 +401,292 @@ button.menu-btn:hover{background:rgba(255,255,255,0.15)}
       <span class="res-icon" id="res-icon">&#127942;</span>
       <div class="res-title" id="res-title">Amazing!</div>
       <div class="res-sub" id="res-sub">You completed Brain Blast!</div>
+      <div class="xp-gain" id="xp-gain">+0 XP earned</div>
       <div class="res-stats">
         <div class="stat-box"><div class="stat-num" id="res-score">0</div><div class="stat-lbl">Stars</div></div>
         <div class="stat-box"><div class="stat-num" id="res-correct">0/10</div><div class="stat-lbl">Correct</div></div>
         <div class="stat-box"><div class="stat-num" id="res-streak">0</div><div class="stat-lbl">Best Streak</div></div>
       </div>
       <div class="badges" id="badges"></div>
+      <div class="lb-section">
+        <div class="lb-title">&#127942; Top Scores by Subject</div>
+        <div class="lb-tabs" id="lb-tabs"></div>
+        <div class="lb-list" id="lb-list"></div>
+      </div>
       <button type="button" class="replay" id="btn-replay">&#128260; Play Again!</button>
       <button type="button" class="menu-btn" id="btn-menu">&#127968; Main Menu</button>
     </div>
   </div>
 
 </div>
+
+<!-- NICKNAME OVERLAY -->
+<div class="nick-overlay hidden" id="nick-overlay">
+  <div class="nick-box">
+    <h2>&#127881; Who are you?</h2>
+    <p>Enter your nickname, pick an avatar and choose your grade!</p>
+    <input type="text" class="nick-input" id="nick-input" placeholder="Enter your nickname..." maxlength="16" />
+    <div class="avatar-grid" id="avatar-grid"></div>
+    <div class="grade-label">What grade are you in?</div>
+    <div class="grade-row">
+      <button type="button" class="grade-btn" data-grade="1"><span class="g-num">1</span><span class="g-lbl">Grade 1</span><span style="font-size:.9rem;pointer-events:none">&#127774;</span></button>
+      <button type="button" class="grade-btn" data-grade="2"><span class="g-num">2</span><span class="g-lbl">Grade 2</span><span style="font-size:.9rem;pointer-events:none">&#11088;</span></button>
+      <button type="button" class="grade-btn" data-grade="3"><span class="g-num">3</span><span class="g-lbl">Grade 3</span><span style="font-size:.9rem;pointer-events:none">&#128640;</span></button>
+      <button type="button" class="grade-btn" data-grade="4"><span class="g-num">4</span><span class="g-lbl">Grade 4</span><span style="font-size:.9rem;pointer-events:none">&#128293;</span></button>
+    </div>
+    <button type="button" class="nick-go" id="nick-go" disabled>Let's Go! &#128640;</button>
+  </div>
+</div>
+
+<!-- ACHIEVEMENTS OVERLAY -->
+<div class="ach-overlay hidden" id="ach-overlay">
+  <div class="ach-box">
+    <h2>&#127942; Achievements</h2>
+    <div class="ach-sub" id="ach-unlocked-count">0 of 12 unlocked</div>
+    <div class="ach-grid" id="ach-grid"></div>
+    <div class="rank-section">
+      <div class="rank-title">&#11088; XP Ranks</div>
+      <div class="rank-list" id="rank-list"></div>
+    </div>
+    <button type="button" class="ach-close" id="ach-close">Close</button>
+  </div>
+</div>
+
 <script>
 var Q = {
   math:[
-    {q:"A T-Rex ate 144 hot dogs and split them equally over 12 days. How many hot dogs per day? (Impressive diet!)",a:["12","14","11","13"],c:0,h:"Divide 144 by 12"},
-    {q:"Your pet hamster runs 8km every night. How far does he run in a week? (Someone needs to slow down!)",a:["56km","48km","64km","54km"],c:0,h:"Multiply 8 by 7 days"},
-    {q:"A wizard has 256 magic spells. He forgets half of them after lunch. How many does he remember?",a:["128","124","132","256"],c:0,h:"Divide 256 by 2"},
-    {q:"A penguin waddles 3/4 of a kilometre to school each day. How far does he waddle in 4 days?",a:["3 km","2 km","4 km","2.5 km"],c:0,h:"Multiply 3/4 by 4"},
-    {q:"Your teacher has 1,000 stickers. She gives away 347. How many stickers does she have left? (She really loves stickers)",a:["653","643","663","753"],c:0,h:"Subtract 347 from 1000"},
-    {q:"A ninja needs to jump over a wall that is 2.4m tall. He can jump 1.9m. How much higher does he need to train?",a:["0.5m","0.4m","0.6m","0.3m"],c:0,h:"Subtract 1.9 from 2.4"},
-    {q:"A dragon baked 96 cookies and wants to share them equally among 8 knights. How many cookies per knight?",a:["12","8","16","14"],c:0,h:"Divide 96 by 8"},
-    {q:"A sloth travels at 0.03km per hour. At that speed, how far does it travel in 100 hours? (Slow and steady!)",a:["3 km","0.3 km","30 km","300 km"],c:0,h:"Multiply 0.03 by 100"},
-    {q:"A superhero saves 15 people on Monday, 23 on Tuesday, and 7 on Wednesday. What is the average per day?",a:["15","14","16","13"],c:0,h:"Add all three then divide by 3"},
-    {q:"A pizza is cut into 12 slices. You eat 3 slices and your dog sneaks 1. What percentage of the pizza is left?",a:["66.6%","75%","25%","50%"],c:0,h:"8 slices remain out of 12"},
-    {q:"An alien has 4 arms. There are 9 aliens at a party. How many arms are there in total? (Awkward handshakes!)",a:["36","32","40","28"],c:0,h:"Multiply 4 by 9"},
-    {q:"A zombie walks 1.5km every hour. How far will it walk in 6 hours? (Please walk the other way!)",a:["9 km","7.5 km","10.5 km","8 km"],c:0,h:"Multiply 1.5 by 6"},
-    {q:"A skateboarder starts at position 12 on a number line, skates back 18 spaces. Where does he end up?",a:["-6","6","-4","30"],c:0,h:"12 minus 18 goes below zero"},
-    {q:"A pirate has a treasure chest with 500 gold coins. He spends 35% on snacks. How many coins does he spend?",a:["175","150","200","125"],c:0,h:"Find 35% of 500"},
-    {q:"A cat knocks 7 cups off a table every hour for 8 hours. How many cups fell? (Classic cat behaviour!)",a:["56","48","63","54"],c:0,h:"Multiply 7 by 8"},
-    {q:"A spaceship travels 1,250 km in 5 hours. What is its speed per hour?",a:["250 km/h","200 km/h","300 km/h","275 km/h"],c:0,h:"Divide 1250 by 5"},
-    {q:"A robot vacuum cleaner covers a 6m by 4m room. What area does it clean?",a:["24 m2","20 m2","10 m2","28 m2"],c:0,h:"Area equals length times width"},
-    {q:"What is the next number in this pattern? 3, 6, 12, 24, ___",a:["48","36","42","30"],c:0,h:"Each number is doubled"},
-    {q:"A class of 30 students voted for their favourite animal. 12 chose dogs. What fraction chose dogs?",a:["2/5","1/3","2/3","1/5"],c:0,h:"12 out of 30 - can you simplify?"},
-    {q:"Your mum buys 4 packs of juice. Each pack has 6 cartons. Each carton costs $0.75. What is the total cost?",a:["$18.00","$16.00","$20.00","$15.00"],c:0,h:"Work out how many cartons first, then multiply by $0.75"},
-    {q:"A fence around a rectangular garden is 36m long. The garden is 10m long. How wide is it?",a:["8m","9m","6m","7m"],c:0,h:"Perimeter = 2 x (length + width). Solve for width!"},
-    {q:"A snail and a cheetah have a race. The snail gets a 500m head start. The cheetah runs at 100m per minute, the snail at 5m per minute. After 5 minutes, how far ahead is the cheetah?",a:["25m","55m","45m","75m"],c:0,h:"Calculate both distances after 5 minutes, then compare"}
+
+    {q:"A bunny has 3 carrots. She finds 2 more. How many carrots does she have?",a:["5","4","6","3"],c:0,h:"Count them all together!",g:1},
+    {q:"There are 7 birds on a fence. 3 fly away. How many are left?",a:["4","5","3","6"],c:0,h:"Start at 7 and count back 3",g:1},
+    {q:"What number comes after 9?",a:["10","8","11","7"],c:0,h:"Count up one more from 9",g:1},
+    {q:"A dog has 4 legs. How many legs do 2 dogs have?",a:["8","6","4","10"],c:0,h:"Add 4 plus 4",g:1},
+    {q:"Which number is bigger: 12 or 21?",a:["21","12","They are the same","Cannot tell"],c:0,h:"Look at the first digit",g:1},
+    {q:"How many sides does a triangle have?",a:["3","4","5","2"],c:0,h:"Tri means three!",g:1},
+    {q:"You have 5 sweets and eat 2. How many are left?",a:["3","4","2","5"],c:0,h:"5 take away 2",g:1},
+    {q:"What is 4 plus 4?",a:["8","6","9","7"],c:0,h:"Double 4",g:1},
+    {q:"Count the shapes: circle, circle, square, circle. How many circles?",a:["3","2","4","1"],c:0,h:"Count only the circles",g:1},
+    {q:"A caterpillar has 10 legs. It loses 3. How many legs now?",a:["7","6","8","9"],c:0,h:"10 take away 3",g:1},
+    {q:"A cookie jar has 14 cookies. You eat 6. How many are left?",a:["8","7","9","10"],c:0,h:"14 minus 6",g:2},
+    {q:"What is 3 times 4?",a:["12","10","9","15"],c:0,h:"3 groups of 4",g:2},
+    {q:"Which is longer: 30cm or 1 metre?",a:["1 metre","30cm","They are the same","Cannot tell"],c:0,h:"1 metre equals 100cm",g:2},
+    {q:"A bag has 20 marbles. Half are red. How many red marbles?",a:["10","5","15","8"],c:0,h:"Half of 20",g:2},
+    {q:"What is 25 plus 13?",a:["38","37","39","36"],c:0,h:"Add the tens then the ones",g:2},
+    {q:"A box has 3 rows of 5 apples. How many apples in total?",a:["15","12","18","10"],c:0,h:"Multiply 3 times 5",g:2},
+    {q:"What shape has 4 equal sides?",a:["Square","Rectangle","Triangle","Circle"],c:0,h:"All sides are exactly the same length",g:2},
+    {q:"How many minutes are in one hour?",a:["60","30","100","45"],c:0,h:"Watch the clock for clues!",g:2},
+    {q:"A farm has 8 cows and 5 pigs. How many animals altogether?",a:["13","12","14","11"],c:0,h:"Add 8 and 5",g:2},
+    {q:"Round 18 to the nearest ten.",a:["20","10","18","15"],c:0,h:"Is 18 closer to 10 or 20?",g:2},
+    {q:"A baker makes 48 muffins and packs them in boxes of 6. How many boxes?",a:["8","7","9","6"],c:0,h:"Divide 48 by 6",g:3},
+    {q:"What is 123 plus 456?",a:["579","569","589","560"],c:0,h:"Add hundreds, tens and ones separately",g:3},
+    {q:"A rectangle has a length of 8cm and a width of 3cm. What is the perimeter?",a:["22cm","24cm","11cm","18cm"],c:0,h:"Perimeter is all sides added together",g:3},
+    {q:"What fraction of a week is one day?",a:["1/7","1/5","1/6","1/4"],c:0,h:"There are 7 days in a week",g:3},
+    {q:"Which is larger: 3/4 or 1/2?",a:["3/4","1/2","They are equal","Cannot tell"],c:0,h:"Draw a picture to compare",g:3},
+    {q:"A train travels 60km each hour. How far in 3 hours?",a:["180km","120km","160km","200km"],c:0,h:"Multiply 60 by 3",g:3},
+    {q:"What is 400 minus 175?",a:["225","215","235","250"],c:0,h:"Try counting up from 175 to 400",g:3},
+    {q:"A triangle has angles of 60 and 70 degrees. What is the third angle?",a:["50 degrees","40 degrees","60 degrees","70 degrees"],c:0,h:"Angles in a triangle add up to 180 degrees",g:3},
+    {q:"If one book costs $4.50, how much do 4 books cost?",a:["$18.00","$16.00","$20.00","$14.00"],c:0,h:"Multiply 4.50 by 4",g:3},
+    {q:"What is the area of a square with sides of 5cm?",a:["25 cm2","20 cm2","10 cm2","15 cm2"],c:0,h:"Area equals side times side",g:3},
+        {q:"A T-Rex ate 144 hot dogs and split them equally over 12 days. How many hot dogs per day? (Impressive diet!)",a:["12","14","11","13"],c:0,h:"Divide 144 by 12",g:4},
+    {q:"Your pet hamster runs 8km every night. How far does he run in a week? (Someone needs to slow down!)",a:["56km","48km","64km","54km"],c:0,h:"Multiply 8 by 7 days",g:4},
+    {q:"A wizard has 256 magic spells. He forgets half of them after lunch. How many does he remember?",a:["128","124","132","256"],c:0,h:"Divide 256 by 2",g:4},
+    {q:"A penguin waddles 3/4 of a kilometre to school each day. How far does he waddle in 4 days?",a:["3 km","2 km","4 km","2.5 km"],c:0,h:"Multiply 3/4 by 4",g:4},
+    {q:"Your teacher has 1,000 stickers. She gives away 347. How many stickers does she have left? (She really loves stickers)",a:["653","643","663","753"],c:0,h:"Subtract 347 from 1000",g:4},
+    {q:"A ninja needs to jump over a wall that is 2.4m tall. He can jump 1.9m. How much higher does he need to train?",a:["0.5m","0.4m","0.6m","0.3m"],c:0,h:"Subtract 1.9 from 2.4",g:4},
+    {q:"A dragon baked 96 cookies and wants to share them equally among 8 knights. How many cookies per knight?",a:["12","8","16","14"],c:0,h:"Divide 96 by 8",g:4},
+    {q:"A sloth travels at 0.03km per hour. At that speed, how far does it travel in 100 hours? (Slow and steady!)",a:["3 km","0.3 km","30 km","300 km"],c:0,h:"Multiply 0.03 by 100",g:4},
+    {q:"A superhero saves 15 people on Monday, 23 on Tuesday, and 7 on Wednesday. What is the average per day?",a:["15","14","16","13"],c:0,h:"Add all three then divide by 3",g:4},
+    {q:"A pizza is cut into 12 slices. You eat 3 slices and your dog sneaks 1. What percentage of the pizza is left?",a:["66.6%","75%","25%","50%"],c:0,h:"8 slices remain out of 12",g:4},
+    {q:"An alien has 4 arms. There are 9 aliens at a party. How many arms are there in total? (Awkward handshakes!)",a:["36","32","40","28"],c:0,h:"Multiply 4 by 9",g:4},
+    {q:"A zombie walks 1.5km every hour. How far will it walk in 6 hours? (Please walk the other way!)",a:["9 km","7.5 km","10.5 km","8 km"],c:0,h:"Multiply 1.5 by 6",g:4},
+    {q:"A skateboarder starts at position 12 on a number line, skates back 18 spaces. Where does he end up?",a:["-6","6","-4","30"],c:0,h:"12 minus 18 goes below zero",g:4},
+    {q:"A pirate has a treasure chest with 500 gold coins. He spends 35% on snacks. How many coins does he spend?",a:["175","150","200","125"],c:0,h:"Find 35% of 500",g:4},
+    {q:"A cat knocks 7 cups off a table every hour for 8 hours. How many cups fell? (Classic cat behaviour!)",a:["56","48","63","54"],c:0,h:"Multiply 7 by 8",g:4},
+    {q:"A spaceship travels 1,250 km in 5 hours. What is its speed per hour?",a:["250 km/h","200 km/h","300 km/h","275 km/h"],c:0,h:"Divide 1250 by 5",g:4},
+    {q:"A robot vacuum cleaner covers a 6m by 4m room. What area does it clean?",a:["24 m2","20 m2","10 m2","28 m2"],c:0,h:"Area equals length times width",g:4},
+    {q:"What is the next number in this pattern? 3, 6, 12, 24, ___",a:["48","36","42","30"],c:0,h:"Each number is doubled",g:4},
+    {q:"A class of 30 students voted for their favourite animal. 12 chose dogs. What fraction chose dogs?",a:["2/5","1/3","2/3","1/5"],c:0,h:"12 out of 30 - can you simplify?",g:4},
+    {q:"Your mum buys 4 packs of juice. Each pack has 6 cartons. Each carton costs $0.75. What is the total cost?",a:["$18.00","$16.00","$20.00","$15.00"],c:0,h:"Work out how many cartons first, then multiply by $0.75",g:4},
+    {q:"A fence around a rectangular garden is 36m long. The garden is 10m long. How wide is it?",a:["8m","9m","6m","7m"],c:0,h:"Perimeter = 2 x (length + width). Solve for width!",g:4},
+    {q:"A snail and a cheetah have a race. The snail gets a 500m head start. The cheetah runs at 100m per minute, the snail at 5m per minute. After 5 minutes, how far ahead is the cheetah?",a:["25m","55m","45m","75m"],c:0,h:"Calculate both distances after 5 minutes, then compare",g:4}
   ],
   science:[
-    {q:"What gas do plants use to make food during photosynthesis?",a:["Carbon dioxide","Oxygen","Nitrogen","Hydrogen"],c:0,h:"We breathe this out!"},
-    {q:"What organ pumps blood around your body?",a:["Heart","Lungs","Brain","Liver"],c:0,h:"You can feel it beat"},
-    {q:"Which of these is a mammal?",a:["Whale","Salmon","Eagle","Frog"],c:0,h:"Mammals breathe air and feed young with milk"},
-    {q:"What is the boiling point of water in Celsius?",a:["100 degrees","50 degrees","212 degrees","0 degrees"],c:0,h:"When water turns to steam"},
-    {q:"Which part of the plant makes seeds?",a:["Flower","Leaf","Root","Stem"],c:0,h:"Bees love to visit this part"},
-    {q:"What do we call it when a caterpillar becomes a butterfly?",a:["Metamorphosis","Photosynthesis","Respiration","Evolution"],c:0,h:"The caterpillar changes inside its cocoon"},
-    {q:"What is the hard outer layer of Earth called?",a:["The crust","The mantle","The core","The atmosphere"],c:0,h:"We live on it"},
-    {q:"What do we call animals that eat only plants?",a:["Herbivores","Carnivores","Omnivores","Predators"],c:0,h:"Rabbits and deer are examples"},
-    {q:"What is the process of water turning into vapour called?",a:["Evaporation","Condensation","Precipitation","Melting"],c:0,h:"Puddles disappear this way on a sunny day"},
-    {q:"Which of these is NOT a renewable energy source?",a:["Coal","Solar power","Wind power","Hydro power"],c:0,h:"It took millions of years to form underground"},
-    {q:"What do plants produce during photosynthesis that we need to breathe?",a:["Oxygen","Carbon dioxide","Nitrogen","Water vapour"],c:0,h:"Trees are like air factories!"},
-    {q:"What is the name of the process where water falls from clouds?",a:["Precipitation","Evaporation","Condensation","Transpiration"],c:0,h:"Rain and snow are examples"},
-    {q:"How many bones does an adult human body have?",a:["206","150","300","180"],c:0,h:"Babies actually have more!"},
-    {q:"What do we call the study of living things?",a:["Biology","Chemistry","Physics","Geology"],c:0,h:"Bio means life in Greek"},
-    {q:"Which planet in our solar system is NOT a science topic - wait, trick question! What is the centre of our Solar System?",a:["The Sun","Earth","The Moon","Jupiter"],c:0,h:"Everything orbits around it"},
-    {q:"What are the three states of matter?",a:["Solid, liquid and gas","Hot, warm and cold","Hard, soft and squishy","Big, medium and small"],c:0,h:"Think of ice, water and steam"},
-    {q:"When ice melts, it changes from a solid to a what?",a:["Liquid","Gas","Plasma","Vapour"],c:0,h:"Think of what happens to an ice cube on a warm day"},
-    {q:"When water boils and turns to steam, what state of matter is the steam?",a:["Gas","Liquid","Solid","Plasma"],c:0,h:"Steam rises and spreads out - just like a gas!"},
-    {q:"What do we call the amount of matter in an object?",a:["Mass","Weight","Volume","Density"],c:0,h:"It is measured in grams or kilograms"},
-    {q:"Which tool do scientists use to measure mass?",a:["A balance scale","A ruler","A thermometer","A stopwatch"],c:0,h:"It compares two sides to find mass"},
-    {q:"A feather and a rock are the same size. Which has more mass?",a:["The rock","The feather","They are the same","It depends on colour"],c:0,h:"Think about which is heavier"},
-    {q:"What is the difference between mass and weight?",a:["Mass is the amount of matter, weight is the pull of gravity on it","They mean exactly the same thing","Mass is for liquids, weight is for solids","Weight is measured in kilograms, mass in Newtons"],c:0,h:"Mass stays the same on the Moon, but weight changes!"},
-    {q:"What symbol is used for the element Gold on the periodic table?",a:["Au","Go","Gd","Gl"],c:0,h:"It comes from the Latin word Aurum"},
-    {q:"What symbol is used for the element Oxygen on the periodic table?",a:["O","Ox","On","Og"],c:0,h:"Simple - just one letter!"},
-    {q:"What symbol is used for the element Iron on the periodic table?",a:["Fe","Ir","In","Io"],c:0,h:"It comes from the Latin word Ferrum"},
-    {q:"What symbol is used for the element Carbon on the periodic table?",a:["C","Ca","Cb","Cr"],c:0,h:"Pencil lead is made of carbon!"},
-    {q:"What symbol is used for the element Hydrogen on the periodic table?",a:["H","Hy","Hg","Hd"],c:0,h:"The lightest element of all!"},
-    {q:"What symbol is used for the element Silver on the periodic table?",a:["Ag","Si","Sv","Sl"],c:0,h:"It comes from the Latin word Argentum"},
-    {q:"How many elements are on the periodic table? (approximately)",a:["118","100","50","200"],c:0,h:"Scientists have discovered new ones over time"},
-    {q:"What do all elements on the periodic table have in common?",a:["They are all pure substances made of one type of atom","They are all metals","They are all gases","They are all found in nature"],c:0,h:"The periodic table organises all known elements"},
-    {q:"What is motion?",a:["When an object changes its position","When an object gets hotter","When an object changes colour","When an object gets bigger"],c:0,h:"Is the object moving from one place to another?"},
-    {q:"What do we call how fast an object is moving?",a:["Speed","Force","Mass","Friction"],c:0,h:"Measured in km per hour or m per second"},
-    {q:"A ball is sitting still on the ground. What is its speed?",a:["Zero","Very fast","Unknown","It depends on size"],c:0,h:"If it is not moving, its speed is..."},
-    {q:"What is a force?",a:["A push or a pull on an object","The speed of an object","The mass of an object","The colour of an object"],c:0,h:"You use force when you open a door!"},
-    {q:"What force pulls everything down toward Earth?",a:["Gravity","Friction","Magnetism","Air resistance"],c:0,h:"It is why things fall when you drop them"},
-    {q:"When you kick a football, what type of force are you using?",a:["A push force","A pull force","Gravity","Friction"],c:0,h:"Your foot pushes the ball forward"},
-    {q:"What happens to a stationary object when a force is applied to it?",a:["It starts to move","It disappears","It gets heavier","Nothing happens"],c:0,h:"Think about pushing a toy car"},
-    {q:"What is friction?",a:["A force that slows down moving objects","A type of magnet","The speed of a moving object","A force that makes things float"],c:0,h:"It acts between two surfaces that are touching"},
-    {q:"Which surface would create MORE friction for a sliding book?",a:["A rough carpet","A smooth glass table","An icy surface","A polished floor"],c:0,h:"More bumps and texture means more friction"},
-    {q:"Is friction helpful or harmful?",a:["It can be both helpful and harmful","It is always helpful","It is always harmful","It has no effect"],c:0,h:"Think of car brakes AND engine wear"},
-    {q:"Why do cars have brakes?",a:["Friction from the brakes slows the car down","The brakes push the car forward","Brakes make the car go faster","Brakes reduce the mass of the car"],c:0,h:"What force do brakes create?"},
-    {q:"What would happen if there was NO friction on a road?",a:["Cars would not be able to stop or steer","Cars would go faster","Cars would be lighter","Cars would float"],c:0,h:"Think about walking on ice!"},
-    {q:"What do we put on machines to reduce friction?",a:["Oil or lubricant","Water","Sand","Glue"],c:0,h:"It makes surfaces slippery so they move more smoothly"}
+
+    {q:"What do plants need to grow?",a:["Water, sunlight and soil","Only water","Only sunlight","Just soil"],c:0,h:"Think about what you give a plant at home",g:1},
+    {q:"Which animal is a pet that says meow?",a:["Cat","Dog","Bird","Fish"],c:0,h:"It likes to purr!",g:1},
+    {q:"What falls from the sky when it rains?",a:["Water","Snow","Hail","All of these"],c:0,h:"Not snow - that is a different kind of weather",g:1},
+    {q:"What do you use your eyes for?",a:["Seeing","Hearing","Smelling","Tasting"],c:0,h:"They are on your face",g:1},
+    {q:"Which of these is alive?",a:["A tree","A rock","A glass","A brick"],c:0,h:"Living things grow and change",g:1},
+    {q:"What season comes after winter in Canada?",a:["Spring","Summer","Autumn","Another winter"],c:0,h:"Flowers start to bloom in this season",g:1},
+    {q:"How many legs does an insect have?",a:["6","4","8","2"],c:0,h:"Ants and beetles are insects",g:1},
+    {q:"What does a caterpillar turn into?",a:["A butterfly","A bee","A moth","A dragonfly"],c:0,h:"It starts in a cocoon",g:1},
+    {q:"What are the three states of matter?",a:["Solid, liquid and gas","Hot, warm and cold","Big, small and tiny","Rock, water and air"],c:0,h:"Think of ice, water and steam",g:2},
+    {q:"What does a thermometer measure?",a:["Temperature","Weight","Length","Time"],c:0,h:"You use it to check if you have a fever",g:2},
+    {q:"Which animal lays eggs?",a:["Chicken","Dog","Cat","Rabbit"],c:0,h:"We eat its eggs for breakfast!",g:2},
+    {q:"What gas do we breathe in to stay alive?",a:["Oxygen","Carbon dioxide","Nitrogen","Hydrogen"],c:0,h:"Plants make this for us",g:2},
+    {q:"What is the nearest star to Earth?",a:["The Sun","The Moon","Sirius","Alpha Centauri"],c:0,h:"It rises every morning",g:2},
+    {q:"Which sense do you use to smell a flower?",a:["Smell (nose)","Taste (tongue)","Sight (eyes)","Touch (skin)"],c:0,h:"You use the sense organ on your face",g:2},
+    {q:"What do we call an animal that eats both plants and meat?",a:["Omnivore","Herbivore","Carnivore","Predator"],c:0,h:"Omni means all",g:2},
+    {q:"What covers most of the surface of the Earth?",a:["Water (oceans)","Land","Ice","Deserts"],c:0,h:"About 71 percent of Earth is covered in this",g:2},
+    {q:"What is the process called when water vapour turns back into liquid?",a:["Condensation","Evaporation","Precipitation","Freezing"],c:0,h:"You see this on a cold glass of water",g:3},
+    {q:"What is a food chain?",a:["The order in which animals eat each other","A type of supermarket","How food is cooked","The way food gets digested"],c:0,h:"Grass - rabbit - fox is an example",g:3},
+    {q:"What is the function of roots in a plant?",a:["Absorb water and anchor the plant","Make food from sunlight","Produce seeds","Attract insects"],c:0,h:"They grow underground",g:3},
+    {q:"What type of rock is formed from cooling lava?",a:["Igneous","Sedimentary","Metamorphic","Limestone"],c:0,h:"Volcanoes produce this type of rock",g:3},
+    {q:"How do fish breathe underwater?",a:["Through gills","Through lungs","Through their skin","They hold their breath"],c:0,h:"You can see these on the side of a fish",g:3},
+    {q:"What is the water cycle?",a:["The continuous movement of water through evaporation, condensation and precipitation","How water is cleaned in a factory","The way oceans move","How water is pumped to homes"],c:0,h:"It never stops - water keeps moving around",g:3},
+    {q:"What type of energy does the Sun give us?",a:["Light and heat energy","Electrical energy","Sound energy","Chemical energy"],c:0,h:"Solar panels capture this type of energy",g:3},
+    {q:"What do we call animals that are active at night?",a:["Nocturnal","Diurnal","Hibernating","Migrating"],c:0,h:"Owls and bats are examples",g:3},
+        {q:"What gas do plants use to make food during photosynthesis?",a:["Carbon dioxide","Oxygen","Nitrogen","Hydrogen"],c:0,h:"We breathe this out!",g:4},
+    {q:"What organ pumps blood around your body?",a:["Heart","Lungs","Brain","Liver"],c:0,h:"You can feel it beat",g:4},
+    {q:"Which of these is a mammal?",a:["Whale","Salmon","Eagle","Frog"],c:0,h:"Mammals breathe air and feed young with milk",g:4},
+    {q:"What is the boiling point of water in Celsius?",a:["100 degrees","50 degrees","212 degrees","0 degrees"],c:0,h:"When water turns to steam",g:4},
+    {q:"Which part of the plant makes seeds?",a:["Flower","Leaf","Root","Stem"],c:0,h:"Bees love to visit this part",g:4},
+    {q:"What do we call it when a caterpillar becomes a butterfly?",a:["Metamorphosis","Photosynthesis","Respiration","Evolution"],c:0,h:"The caterpillar changes inside its cocoon",g:4},
+    {q:"What is the hard outer layer of Earth called?",a:["The crust","The mantle","The core","The atmosphere"],c:0,h:"We live on it",g:4},
+    {q:"What do we call animals that eat only plants?",a:["Herbivores","Carnivores","Omnivores","Predators"],c:0,h:"Rabbits and deer are examples",g:4},
+    {q:"What is the process of water turning into vapour called?",a:["Evaporation","Condensation","Precipitation","Melting"],c:0,h:"Puddles disappear this way on a sunny day",g:4},
+    {q:"Which of these is NOT a renewable energy source?",a:["Coal","Solar power","Wind power","Hydro power"],c:0,h:"It took millions of years to form underground",g:4},
+    {q:"What do plants produce during photosynthesis that we need to breathe?",a:["Oxygen","Carbon dioxide","Nitrogen","Water vapour"],c:0,h:"Trees are like air factories!",g:4},
+    {q:"What is the name of the process where water falls from clouds?",a:["Precipitation","Evaporation","Condensation","Transpiration"],c:0,h:"Rain and snow are examples",g:4},
+    {q:"How many bones does an adult human body have?",a:["206","150","300","180"],c:0,h:"Babies actually have more!",g:4},
+    {q:"What do we call the study of living things?",a:["Biology","Chemistry","Physics","Geology"],c:0,h:"Bio means life in Greek",g:4},
+    {q:"Which planet in our solar system is NOT a science topic - wait, trick question! What is the centre of our Solar System?",a:["The Sun","Earth","The Moon","Jupiter"],c:0,h:"Everything orbits around it",g:4},
+    {q:"What are the three states of matter?",a:["Solid, liquid and gas","Hot, warm and cold","Hard, soft and squishy","Big, medium and small"],c:0,h:"Think of ice, water and steam",g:4},
+    {q:"When ice melts, it changes from a solid to a what?",a:["Liquid","Gas","Plasma","Vapour"],c:0,h:"Think of what happens to an ice cube on a warm day",g:4},
+    {q:"When water boils and turns to steam, what state of matter is the steam?",a:["Gas","Liquid","Solid","Plasma"],c:0,h:"Steam rises and spreads out - just like a gas!",g:4},
+    {q:"What do we call the amount of matter in an object?",a:["Mass","Weight","Volume","Density"],c:0,h:"It is measured in grams or kilograms",g:4},
+    {q:"Which tool do scientists use to measure mass?",a:["A balance scale","A ruler","A thermometer","A stopwatch"],c:0,h:"It compares two sides to find mass",g:4},
+    {q:"A feather and a rock are the same size. Which has more mass?",a:["The rock","The feather","They are the same","It depends on colour"],c:0,h:"Think about which is heavier",g:4},
+    {q:"What is the difference between mass and weight?",a:["Mass is the amount of matter, weight is the pull of gravity on it","They mean exactly the same thing","Mass is for liquids, weight is for solids","Weight is measured in kilograms, mass in Newtons"],c:0,h:"Mass stays the same on the Moon, but weight changes!",g:4},
+    {q:"What symbol is used for the element Gold on the periodic table?",a:["Au","Go","Gd","Gl"],c:0,h:"It comes from the Latin word Aurum",g:4},
+    {q:"What symbol is used for the element Oxygen on the periodic table?",a:["O","Ox","On","Og"],c:0,h:"Simple - just one letter!",g:4},
+    {q:"What symbol is used for the element Iron on the periodic table?",a:["Fe","Ir","In","Io"],c:0,h:"It comes from the Latin word Ferrum",g:4},
+    {q:"What symbol is used for the element Carbon on the periodic table?",a:["C","Ca","Cb","Cr"],c:0,h:"Pencil lead is made of carbon!",g:4},
+    {q:"What symbol is used for the element Hydrogen on the periodic table?",a:["H","Hy","Hg","Hd"],c:0,h:"The lightest element of all!",g:4},
+    {q:"What symbol is used for the element Silver on the periodic table?",a:["Ag","Si","Sv","Sl"],c:0,h:"It comes from the Latin word Argentum",g:4},
+    {q:"How many elements are on the periodic table? (approximately)",a:["118","100","50","200"],c:0,h:"Scientists have discovered new ones over time",g:4},
+    {q:"What do all elements on the periodic table have in common?",a:["They are all pure substances made of one type of atom","They are all metals","They are all gases","They are all found in nature"],c:0,h:"The periodic table organises all known elements",g:4},
+    {q:"What is motion?",a:["When an object changes its position","When an object gets hotter","When an object changes colour","When an object gets bigger"],c:0,h:"Is the object moving from one place to another?",g:4},
+    {q:"What do we call how fast an object is moving?",a:["Speed","Force","Mass","Friction"],c:0,h:"Measured in km per hour or m per second",g:4},
+    {q:"A ball is sitting still on the ground. What is its speed?",a:["Zero","Very fast","Unknown","It depends on size"],c:0,h:"If it is not moving, its speed is...",g:4},
+    {q:"What is a force?",a:["A push or a pull on an object","The speed of an object","The mass of an object","The colour of an object"],c:0,h:"You use force when you open a door!",g:4},
+    {q:"What force pulls everything down toward Earth?",a:["Gravity","Friction","Magnetism","Air resistance"],c:0,h:"It is why things fall when you drop them",g:4},
+    {q:"When you kick a football, what type of force are you using?",a:["A push force","A pull force","Gravity","Friction"],c:0,h:"Your foot pushes the ball forward",g:4},
+    {q:"What happens to a stationary object when a force is applied to it?",a:["It starts to move","It disappears","It gets heavier","Nothing happens"],c:0,h:"Think about pushing a toy car",g:4},
+    {q:"What is friction?",a:["A force that slows down moving objects","A type of magnet","The speed of a moving object","A force that makes things float"],c:0,h:"It acts between two surfaces that are touching",g:4},
+    {q:"Which surface would create MORE friction for a sliding book?",a:["A rough carpet","A smooth glass table","An icy surface","A polished floor"],c:0,h:"More bumps and texture means more friction",g:4},
+    {q:"Is friction helpful or harmful?",a:["It can be both helpful and harmful","It is always helpful","It is always harmful","It has no effect"],c:0,h:"Think of car brakes AND engine wear",g:4},
+    {q:"Why do cars have brakes?",a:["Friction from the brakes slows the car down","The brakes push the car forward","Brakes make the car go faster","Brakes reduce the mass of the car"],c:0,h:"What force do brakes create?",g:4},
+    {q:"What would happen if there was NO friction on a road?",a:["Cars would not be able to stop or steer","Cars would go faster","Cars would be lighter","Cars would float"],c:0,h:"Think about walking on ice!",g:4},
+    {q:"What do we put on machines to reduce friction?",a:["Oil or lubricant","Water","Sand","Glue"],c:0,h:"It makes surfaces slippery so they move more smoothly",g:4}
   ],
   coding:[
-    {q:"In coding, what does a loop do?",a:["Repeats actions","Stops the program","Deletes data","Names a variable"],c:0,h:"Think of a circular track"},
-    {q:"What does an IF statement do in a program?",a:["Makes a decision","Prints text","Stores a number","Loops forever"],c:0,h:"IF something is true, THEN do this"},
-    {q:"What is a variable in coding?",a:["A box that stores information","A type of loop","A button on screen","A website"],c:0,h:"You give it a name and put data inside"},
-    {q:"Which best describes an algorithm?",a:["Step-by-step instructions","A type of computer","A programming language","A website address"],c:0,h:"Like a recipe for a computer"},
-    {q:"What does debugging mean in coding?",a:["Finding and fixing errors","Making the screen brighter","Writing new code","Deleting programs"],c:0,h:"Bugs are mistakes in code"},
-    {q:"If x equals 5, then x equals x plus 3, what does x equal now?",a:["8","5","3","53"],c:0,h:"Start with 5, then add 3"},
-    {q:"Which shape shows a decision in a flowchart?",a:["Diamond","Circle","Rectangle","Triangle"],c:0,h:"It has 4 pointed corners"},
-    {q:"What does HTML stand for?",a:["HyperText Markup Language","High Tech Modern Links","Home Tool Making Language","HyperText Modern Layout"],c:0},
-    {q:"If a program does Task A, then B, then C in order, what is this called?",a:["Sequence","Loop","Function","Variable"],c:0,h:"Things in a specific order"},
-    {q:"In coding, what is a function?",a:["A reusable block of code","A type of variable","A screen button","A computer chip"],c:0,h:"Write once, use many times!"},
-    {q:"What is a computer program?",a:["A set of instructions for a computer","A type of screen","A storage device","An internet connection"],c:0,h:"Computers follow instructions exactly"},
-    {q:"TRUE and FALSE are examples of what data type?",a:["Boolean","String","Integer","Array"],c:0,h:"Only two possible values!"}
+
+    {q:"What do you call step-by-step instructions that tell a computer what to do?",a:["An algorithm","A robot","A screen","A button"],c:0,h:"Think of it like a recipe",g:1},
+    {q:"Which of these is an example of technology?",a:["A tablet computer","A wooden chair","A rock","A flower"],c:0,h:"Technology is made by people to help us",g:1},
+    {q:"If you give a robot the instruction MOVE FORWARD 3 times, how far does it go?",a:["3 steps","1 step","2 steps","5 steps"],c:0,h:"It follows each instruction once",g:1},
+    {q:"What does a computer need to turn on?",a:["Electricity","Water","Sunlight","Air"],c:0,h:"You plug it into the wall",g:1},
+    {q:"Which of these tells a computer what to do?",a:["A program","A chair","A window","A pencil"],c:0,h:"It is made of coded instructions",g:1},
+    {q:"In a simple program, if you want something to happen again and again, you use a what?",a:["Loop","Variable","Button","Screen"],c:0,h:"It goes round and round",g:2},
+    {q:"What is the order of steps in an algorithm called?",a:["Sequence","A loop","A variable","A bug"],c:0,h:"Like following a recipe step by step",g:2},
+    {q:"If a program stops working correctly, what do we say it has?",a:["A bug","A virus","A loop","A screen"],c:0,h:"Fixing it is called debugging",g:2},
+    {q:"Which of these is an input device?",a:["Keyboard","Printer","Screen","Speaker"],c:0,h:"You use it to put information INTO the computer",g:2},
+    {q:"What does a computer mouse do?",a:["Controls a pointer on the screen","Types letters","Stores files","Plays sounds"],c:0,h:"You click it to select things",g:2},
+    {q:"What is a variable in a computer program?",a:["A storage place for information that can change","A type of loop","A command to repeat","A type of screen"],c:0,h:"It is like a box that holds a value",g:3},
+    {q:"What does an IF statement check in a program?",a:["Whether a condition is true or false","How fast the computer runs","The colour of the screen","How many loops there are"],c:0,h:"If it is raining THEN bring an umbrella",g:3},
+    {q:"What is the difference between hardware and software?",a:["Hardware is the physical parts, software is the programs","They are the same thing","Hardware is programs, software is the physical parts","Hardware is the internet"],c:0,h:"You can touch hardware but not software",g:3},
+    {q:"What does it mean to decompose a problem in coding?",a:["Break a big problem into smaller parts","Delete all the code","Make the program faster","Add more loops"],c:0,h:"Divide and conquer is the idea",g:3},
+    {q:"In a flowchart, what does a rectangle usually represent?",a:["A process or action","A decision","The start or end","A connection"],c:0,h:"It shows something the program does",g:3},
+        {q:"In coding, what does a loop do?",a:["Repeats actions","Stops the program","Deletes data","Names a variable"],c:0,h:"Think of a circular track",g:4},
+    {q:"What does an IF statement do in a program?",a:["Makes a decision","Prints text","Stores a number","Loops forever"],c:0,h:"IF something is true, THEN do this",g:4},
+    {q:"What is a variable in coding?",a:["A box that stores information","A type of loop","A button on screen","A website"],c:0,h:"You give it a name and put data inside",g:4},
+    {q:"Which best describes an algorithm?",a:["Step-by-step instructions","A type of computer","A programming language","A website address"],c:0,h:"Like a recipe for a computer",g:4},
+    {q:"What does debugging mean in coding?",a:["Finding and fixing errors","Making the screen brighter","Writing new code","Deleting programs"],c:0,h:"Bugs are mistakes in code",g:4},
+    {q:"If x equals 5, then x equals x plus 3, what does x equal now?",a:["8","5","3","53"],c:0,h:"Start with 5, then add 3",g:4},
+    {q:"Which shape shows a decision in a flowchart?",a:["Diamond","Circle","Rectangle","Triangle"],c:0,h:"It has 4 pointed corners",g:4},
+    {q:"What does HTML stand for?",a:["HyperText Markup Language","High Tech Modern Links","Home Tool Making Language","HyperText Modern Layout"],c:0,g:4},
+    {q:"If a program does Task A, then B, then C in order, what is this called?",a:["Sequence","Loop","Function","Variable"],c:0,h:"Things in a specific order",g:4},
+    {q:"In coding, what is a function?",a:["A reusable block of code","A type of variable","A screen button","A computer chip"],c:0,h:"Write once, use many times!",g:4},
+    {q:"What is a computer program?",a:["A set of instructions for a computer","A type of screen","A storage device","An internet connection"],c:0,h:"Computers follow instructions exactly",g:4},
+    {q:"TRUE and FALSE are examples of what data type?",a:["Boolean","String","Integer","Array"],c:0,h:"Only two possible values!",g:4}
   ],
   space:[
-    {q:"How many planets are in our Solar System?",a:["8","9","7","10"],c:0,h:"Pluto is now a dwarf planet"},
-    {q:"Which planet is closest to the Sun?",a:["Mercury","Venus","Earth","Mars"],c:0,h:"It is very hot there!"},
-    {q:"What is the name of Earth's natural satellite?",a:["The Moon","Mars","Europa","Titan"],c:0,h:"It lights up the night sky"},
-    {q:"What is a light-year?",a:["Distance light travels in one year","Time for light to reach Earth","A very bright year","How old a star is"],c:0,h:"Light travels very very fast"},
-    {q:"Which is the largest planet in our Solar System?",a:["Jupiter","Saturn","Neptune","Uranus"],c:0,h:"It has a Great Red Spot"},
-    {q:"What is the Sun mostly made of?",a:["Hydrogen gas","Rock and metal","Ice","Carbon"],c:0,h:"It is like a giant ball of burning gas"},
-    {q:"Which planet is famous for its rings?",a:["Saturn","Mars","Earth","Jupiter"],c:0,h:"You would recognise it instantly"},
-    {q:"How long does it take Earth to orbit the Sun?",a:["365 days","24 hours","30 days","100 years"],c:0,h:"One year!"},
-    {q:"What is a black hole?",a:["A region where nothing can escape its gravity","A hole you can see through space","An empty planet","A very dark moon"],c:0},
-    {q:"What is the name of the galaxy we live in?",a:["The Milky Way","Andromeda","Triangulum","Sombrero"],c:0,h:"You can sometimes see it at night"},
-    {q:"What do we call a rock from space that lands on Earth?",a:["Meteorite","Asteroid","Comet","Satellite"],c:0,h:"It survives the journey through the atmosphere"},
-    {q:"Which planet is known as the Red Planet?",a:["Mars","Venus","Mercury","Jupiter"],c:0,h:"Its soil contains iron oxide"}
+
+    {q:"What is the big bright thing we see in the sky during the day?",a:["The Sun","The Moon","A star","A cloud"],c:0,h:"It keeps us warm",g:1},
+    {q:"What do we see in the night sky that twinkle?",a:["Stars","The Sun","Clouds","Satellites"],c:0,h:"Twinkle twinkle little...",g:1},
+    {q:"What shape is the Earth?",a:["Round like a ball","Flat","Square","Triangle"],c:0,h:"Like a sphere or a globe",g:1},
+    {q:"What do we call the Moon going around the Earth?",a:["Orbiting","Flying","Spinning","Floating"],c:0,h:"It takes about 28 days to go all the way around",g:1},
+    {q:"How many planets are in our Solar System?",a:["8","9","7","10"],c:0,h:"Pluto is now a dwarf planet",g:2},
+    {q:"Which planet is closest to the Sun?",a:["Mercury","Venus","Earth","Mars"],c:0,h:"It is very hot there!",g:2},
+    {q:"What is a shooting star really?",a:["A small rock burning up in the atmosphere","A star moving very fast","A piece of a comet","Light from the Sun"],c:0,h:"It is actually called a meteor",g:2},
+    {q:"What is the name of the galaxy we live in?",a:["The Milky Way","Andromeda","The Big Dipper","Orion"],c:0,h:"You can see it as a band of light on a clear night",g:2},
+    {q:"What is gravity?",a:["A force that pulls objects toward each other","A type of rocket fuel","The speed of a planet","The light from a star"],c:0,h:"It keeps us on the ground and planets in orbit",g:3},
+    {q:"Why do we have day and night?",a:["Because Earth spins on its axis","Because the Sun moves around the Earth","Because the Moon blocks the Sun","Because of the seasons"],c:0,h:"One full spin takes 24 hours",g:3},
+    {q:"What is a solar eclipse?",a:["When the Moon passes between the Sun and Earth blocking sunlight","When Earth passes between the Moon and Sun","When the Sun disappears","When two planets line up"],c:0,h:"It makes day go briefly dark",g:3},
+    {q:"What is the difference between a planet and a moon?",a:["A planet orbits the Sun, a moon orbits a planet","They are the same thing","A moon is bigger than a planet","A planet is made of rock and a moon is made of ice"],c:0,h:"Our Moon orbits Earth, which orbits the Sun",g:3},
+        {q:"How many planets are in our Solar System?",a:["8","9","7","10"],c:0,h:"Pluto is now a dwarf planet",g:4},
+    {q:"Which planet is closest to the Sun?",a:["Mercury","Venus","Earth","Mars"],c:0,h:"It is very hot there!",g:4},
+    {q:"What is the name of Earth's natural satellite?",a:["The Moon","Mars","Europa","Titan"],c:0,h:"It lights up the night sky",g:4},
+    {q:"What is a light-year?",a:["Distance light travels in one year","Time for light to reach Earth","A very bright year","How old a star is"],c:0,h:"Light travels very very fast",g:4},
+    {q:"Which is the largest planet in our Solar System?",a:["Jupiter","Saturn","Neptune","Uranus"],c:0,h:"It has a Great Red Spot",g:4},
+    {q:"What is the Sun mostly made of?",a:["Hydrogen gas","Rock and metal","Ice","Carbon"],c:0,h:"It is like a giant ball of burning gas",g:4},
+    {q:"Which planet is famous for its rings?",a:["Saturn","Mars","Earth","Jupiter"],c:0,h:"You would recognise it instantly",g:4},
+    {q:"How long does it take Earth to orbit the Sun?",a:["365 days","24 hours","30 days","100 years"],c:0,h:"One year!",g:4},
+    {q:"What is a black hole?",a:["A region where nothing can escape its gravity","A hole you can see through space","An empty planet","A very dark moon"],c:0,g:4},
+    {q:"What is the name of the galaxy we live in?",a:["The Milky Way","Andromeda","Triangulum","Sombrero"],c:0,h:"You can sometimes see it at night",g:4},
+    {q:"What do we call a rock from space that lands on Earth?",a:["Meteorite","Asteroid","Comet","Satellite"],c:0,h:"It survives the journey through the atmosphere",g:4},
+    {q:"Which planet is known as the Red Planet?",a:["Mars","Venus","Mercury","Jupiter"],c:0,h:"Its soil contains iron oxide",g:4}
   ],
   english:[
-    {q:"What type of word describes a noun? For example: The BIG dog",a:["Adjective","Verb","Adverb","Pronoun"],c:0,h:"It describes what something is like"},
-    {q:"Which word is spelled correctly?",a:["because","becaus","becouse","beacuse"],c:0,h:"Sound it out: be-cause"},
-    {q:"What is a synonym for the word happy?",a:["Joyful","Sad","Angry","Tired"],c:0,h:"It means the same thing"},
-    {q:"Which sentence uses correct punctuation?",a:["I love cats, dogs, and fish.","I love cats dogs and fish","I love cats dogs, and fish.","I love cats, dogs and, fish."],c:0,h:"Use a comma before and in a list"},
-    {q:"What do you call the main character in a story?",a:["Protagonist","Antagonist","Narrator","Setting"],c:0,h:"The hero of the story"},
-    {q:"Which word is an antonym (opposite) of ancient?",a:["Modern","Old","Historic","Vintage"],c:0,h:"Ancient means very old, so the opposite is..."},
-    {q:"What is a metaphor?",a:["Saying something IS something else","Comparing using like or as","A rhyming pattern","A type of punctuation"],c:0,h:"The world is a stage is one example"},
-    {q:"Choose the correct word: She ___ to school every day.",a:["goes","go","gone","going"],c:0,h:"She is third person singular"},
-    {q:"What does the prefix un- mean?",a:["Not or the opposite of","Before","Again","More than"],c:0,h:"Unhappy means NOT happy"},
-    {q:"Which of these is a proper noun?",a:["Edmonton","city","park","river"],c:0,h:"Proper nouns name specific places"},
-    {q:"What is the plural of child?",a:["Children","Childs","Childes","Childrens"],c:0,h:"This is an irregular plural"},
-    {q:"Which word is an adverb?",a:["Quickly","Quick","Quicker","Quickest"],c:0,h:"Adverbs often end in -ly"},
-    {q:"Words that sound the same but have different meanings are called what?",a:["Homophones","Synonyms","Antonyms","Adjectives"],c:0,h:"Like there and their"},
-    {q:"Which sentence is written in the past tense?",a:["She walked to school.","She walks to school.","She will walk to school.","She is walking to school."],c:0,h:"Look for the -ed ending"}
+
+    {q:"Which word rhymes with CAT?",a:["Hat","Car","Cup","Dog"],c:0,h:"It has the same -at sound",g:1},
+    {q:"How many letters are in the word FROG?",a:["4","3","5","6"],c:0,h:"Count each letter: F-R-O-G",g:1},
+    {q:"Which word is a colour?",a:["Blue","Jump","Fast","Tall"],c:0,h:"You can see it in a rainbow",g:1},
+    {q:"What punctuation mark goes at the end of a question?",a:["?",".",",","!"],c:0,h:"It curls around like a hook",g:1},
+    {q:"Which of these is an animal?",a:["Dog","Run","Happy","Big"],c:0,h:"It is a living creature",g:1},
+    {q:"Which word is the opposite of hot?",a:["Cold","Warm","Fast","Big"],c:0,h:"Think about winter in Alberta",g:1},
+    {q:"How do you spell the number 3?",a:["Three","Tree","Trhee","Thre"],c:0,h:"It has five letters",g:1},
+    {q:"Which letter comes first in the alphabet?",a:["A","B","C","Z"],c:0,h:"It is at the very beginning",g:1},
+    {q:"What is a noun?",a:["A person, place or thing","An action word","A describing word","A joining word"],c:0,h:"Dog, school and Edmonton are all examples",g:2},
+    {q:"Which sentence has a capital letter at the start?",a:["The dog runs fast.","the dog runs fast.","The Dog Runs Fast.","the Dog runs fast."],c:0,h:"Every sentence must start with a capital",g:2},
+    {q:"What is a verb?",a:["An action word","A describing word","A naming word","A joining word"],c:0,h:"Run, jump and eat are examples",g:2},
+    {q:"Which word is an adjective in: The BIG red ball rolled away",a:["Big","Ball","Rolled","The"],c:0,h:"It describes the ball",g:2},
+    {q:"How many syllables are in the word BUTTERFLY?",a:["3","2","4","1"],c:0,h:"Clap it out: BUT-TER-FLY",g:2},
+    {q:"Which word is spelled correctly?",a:["friend","freind","frend","friened"],c:0,h:"I before E except after C - but friend is an exception!",g:2},
+    {q:"What does the word ENORMOUS mean?",a:["Very large","Very small","Very fast","Very loud"],c:0,h:"An elephant is enormous",g:2},
+    {q:"Which word is a pronoun that replaces a girl's name?",a:["She","He","They","It"],c:0,h:"Used for a female person",g:2},
+    {q:"What is a compound sentence?",a:["Two simple sentences joined by a connecting word","A sentence with one verb","A sentence with no subject","A very long sentence"],c:0,h:"I like cats AND I like dogs is an example",g:3},
+    {q:"What does the suffix -ful mean?",a:["Full of something","Without something","Before something","Against something"],c:0,h:"Hopeful means full of hope",g:3},
+    {q:"Which word is a conjunction?",a:["Because","Quickly","Jump","Tall"],c:0,h:"It joins two parts of a sentence",g:3},
+    {q:"What is the purpose of a paragraph?",a:["To group related sentences about one main idea","To make writing look longer","To start a new topic on every line","To add punctuation"],c:0,h:"All sentences in a paragraph share one topic",g:3},
+    {q:"What is alliteration?",a:["When words in a sentence start with the same sound","When a sentence rhymes","When words have the same meaning","When letters are silent"],c:0,h:"Peter Piper picked a peck is an example",g:3},
+    {q:"What does the prefix mis- mean?",a:["Wrongly or badly","Before","Again","Not"],c:0,h:"Misunderstand means to understand wrongly",g:3},
+    {q:"What is the difference between fiction and non-fiction?",a:["Fiction is made up, non-fiction is real and true","Fiction is true, non-fiction is made up","Both are made up","Both are true"],c:0,h:"A story about dragons is fiction",g:3},
+    {q:"Which sentence uses speech marks correctly?",a:['"Come here," said the teacher.',"Come here, said the teacher.",'"Come here, said the teacher".','Come here said, "the teacher.".'],c:0,h:"Speech marks go around the exact words spoken",g:3},
+        {q:"What type of word describes a noun? For example: The BIG dog",a:["Adjective","Verb","Adverb","Pronoun"],c:0,h:"It describes what something is like",g:4},
+    {q:"Which word is spelled correctly?",a:["because","becaus","becouse","beacuse"],c:0,h:"Sound it out: be-cause",g:4},
+    {q:"What is a synonym for the word happy?",a:["Joyful","Sad","Angry","Tired"],c:0,h:"It means the same thing",g:4},
+    {q:"Which sentence uses correct punctuation?",a:["I love cats, dogs, and fish.","I love cats dogs and fish","I love cats dogs, and fish.","I love cats, dogs and, fish."],c:0,h:"Use a comma before and in a list",g:4},
+    {q:"What do you call the main character in a story?",a:["Protagonist","Antagonist","Narrator","Setting"],c:0,h:"The hero of the story",g:4},
+    {q:"Which word is an antonym (opposite) of ancient?",a:["Modern","Old","Historic","Vintage"],c:0,h:"Ancient means very old, so the opposite is...",g:4},
+    {q:"What is a metaphor?",a:["Saying something IS something else","Comparing using like or as","A rhyming pattern","A type of punctuation"],c:0,h:"The world is a stage is one example",g:4},
+    {q:"Choose the correct word: She ___ to school every day.",a:["goes","go","gone","going"],c:0,h:"She is third person singular",g:4},
+    {q:"What does the prefix un- mean?",a:["Not or the opposite of","Before","Again","More than"],c:0,h:"Unhappy means NOT happy",g:4},
+    {q:"Which of these is a proper noun?",a:["Edmonton","city","park","river"],c:0,h:"Proper nouns name specific places",g:4},
+    {q:"What is the plural of child?",a:["Children","Childs","Childes","Childrens"],c:0,h:"This is an irregular plural",g:4},
+    {q:"Which word is an adverb?",a:["Quickly","Quick","Quicker","Quickest"],c:0,h:"Adverbs often end in -ly",g:4},
+    {q:"Words that sound the same but have different meanings are called what?",a:["Homophones","Synonyms","Antonyms","Adjectives"],c:0,h:"Like there and their",g:4},
+    {q:"Which sentence is written in the past tense?",a:["She walked to school.","She walks to school.","She will walk to school.","She is walking to school."],c:0,h:"Look for the -ed ending",g:4}
   ],
   stories:[
-    {story:"Mia and her little brother Leo were walking home from school when they found a wallet on the ground. Inside was $50 and a library card with the name Mr. Hassan. Mia wanted to keep the money, but Leo said they should return it. They looked up Mr. Hassan in the school directory and returned the wallet. Mr. Hassan was so grateful he had tears in his eyes. On the walk home, Mia told Leo: You were right. That felt better than keeping the money ever could.",q:"What is the main moral of this story?",a:["Honesty and doing the right thing brings true happiness","Finding money means it is yours to keep","Always check a wallet before returning it","You should only help people you know"],c:0,h:"How did Mia feel at the very end?"},
+
+    {story:"Tom had a dog named Spot. One day Spot ran away. Tom looked and looked. He asked his neighbour Mrs. Lee for help. Mrs. Lee helped Tom search the park. They found Spot by the big oak tree, wagging his tail. Tom gave Mrs. Lee a big thank you hug.",q:"Who helped Tom find Spot?",a:["Mrs. Lee the neighbour","His mum","A police officer","His teacher"],c:0,h:"Re-read and look for who Tom asked for help",g:1},
+    {story:"Lily loved drawing. One day her crayon broke. She started to cry. Her friend Sam gave her one of his crayons. Lily smiled and said thank you. Together they drew a big rainbow.",q:"Why did Lily start to cry?",a:["Her crayon broke","She lost her paper","She could not draw","She was scared"],c:0,h:"Look for what happened to Lily's crayon",g:1},
+    {story:"Every morning, Ben fed the birds in the garden. He put seeds in the feeder. One cold winter day, no birds came. Ben was worried. Then he learned that birds fly south in winter to stay warm. He was glad they were safe.",q:"Why did no birds come to Ben's garden in winter?",a:["They flew south to stay warm","They were sleeping","They forgot the way","They found better food"],c:0,h:"The story tells you where the birds went",g:1},
+    {story:"Maya wanted to be in the school play, but she was very nervous. She practised her lines every day for two weeks. On the night of the play, her hands shook and her voice wobbled. But she remembered her lines perfectly. When the curtain fell, the audience clapped loudly. Maya realised that practising had made all the difference.",q:"What is the main message of this story?",a:["Practice helps you overcome nervousness and do your best","Some people are just naturally talented","Maya was lucky on the night","Being nervous means you should not try"],c:0,h:"What did Maya do every day for two weeks?",g:2},
+    {story:"The two goats met on a narrow bridge over a river. Neither would step aside. They pushed and shoved until both fell into the water below. A wise old owl watching from a tree said quietly: If only one had stepped aside, both would have crossed safely.",q:"What lesson does the owl teach?",a:["Being willing to compromise avoids unnecessary conflict","The strongest animal wins","Owls are always right","Bridges should be wider"],c:0,h:"What would have happened if one goat had stepped aside?",g:2},
+    {story:"When Riya moved to a new school, she found it hard to fit in. Nobody sat with her at lunch. Instead of feeling sorry for herself, Riya decided to start a drawing club at lunchtime. She put up a poster and waited. On the first day, six curious students showed up. Within a month, the club had twenty members and Riya had made friends she would keep for years.",q:"What character quality does Riya show?",a:["Initiative and resilience - she created her own solution","Shyness and sadness","Anger at her old friends","Dependence on others to solve her problems"],c:0,h:"What did Riya do instead of waiting for others to help her?",g:3},
+    {story:"Deep in the forest, all the animals gathered at the only well during a drought. The lion said the well belonged to him because he was the strongest. The elephant said it belonged to her because she was the biggest. While they argued, the water level slowly dropped. A small tortoise spoke up: The well belongs to all of us, and if we share it fairly, there will be enough for everyone. The animals listened. The well never ran dry.",q:"What is the most important lesson from this story?",a:["Sharing fairly ensures everyone benefits, even in times of scarcity","The strongest animal should get the most","Arguments always solve problems","The tortoise was the smartest animal in the forest"],c:0,h:"What happened to the water while the lion and elephant argued?",g:3},
+        {story:"Mia and her little brother Leo were walking home from school when they found a wallet on the ground. Inside was $50 and a library card with the name Mr. Hassan. Mia wanted to keep the money, but Leo said they should return it. They looked up Mr. Hassan in the school directory and returned the wallet. Mr. Hassan was so grateful he had tears in his eyes. On the walk home, Mia told Leo: You were right. That felt better than keeping the money ever could.",q:"What is the main moral of this story?",a:["Honesty and doing the right thing brings true happiness","Finding money means it is yours to keep","Always check a wallet before returning it","You should only help people you know"],c:0,h:"How did Mia feel at the very end?"},
     {story:"Every day at lunch, Omar sat alone because he was new at school. One day, a girl named Sofia noticed him sitting by himself. Even though her friends told her not to bother, Sofia walked over and introduced herself. Soon Omar was smiling and laughing. By the end of the week, Sofia and all her friends were sitting together with Omar and the table was full of laughter.",q:"What lesson does Sofia teach us?",a:["A small act of kindness can change someone's whole day","New students should always sit alone first","You should only make friends your group approves of","Lunch tables should never change"],c:0,h:"What changed by the end of the week?"},
     {story:"Aiden was the fastest runner in Grade 4 and he knew it. Before the school race he laughed at his classmate Priya and said she was too slow to even try. Priya said nothing. She trained hard every morning before school. On race day, Priya finished just one second behind Aiden. The crowd cheered loudly for her. Aiden felt ashamed and went to congratulate her. Priya smiled and said: Want to train together next time?",q:"Which value does Priya best show?",a:["Perseverance and grace","Speed and natural talent","Anger and a desire for revenge","Pride and overconfidence"],c:0,h:"What did Priya do instead of arguing with Aiden?"},
     {story:"The forest animals were thirsty. The river had dried up and only one small pond remained. The larger animals pushed to the front. A tiny rabbit named Pip spoke up: If we all take only what we need and share, there will be enough for everyone. The animals grumbled but listened. By taking turns and being careful, every animal had enough water, and the pond did not run dry.",q:"What is the most important lesson from this story?",a:["When we share and think of others, everyone benefits","The biggest animals should always go first","Small animals should not speak up to large ones","Take as much as you can as quickly as possible"],c:0,h:"What would have happened if the animals had not shared?"},
@@ -362,154 +700,426 @@ var Q = {
     {story:"A group of Grade 4 students led by a boy named Eli learned the old oak tree in their park was going to be cut down to build a car park. Eli and his classmates started a petition, made posters, and spoke at a town meeting. Adults smiled politely but did not think children could make a difference. Three weeks later the town council voted to save the tree. Eli told his class: Never think you are too small to make a change.",q:"What is the most important lesson from Eli's story?",a:["Everyone, even children, can make a difference if they speak up","Adults always know best and children should stay quiet","Petitions and posters never actually work","Car parks are more important than trees"],c:0,h:"What did Eli and his classmates do to try to save the tree?"}
   ],
   engineering:[
-    {q:"What simple machine makes lifting easier by spreading work over a longer distance?",a:["Ramp (inclined plane)","Pulley","Lever","Wheel"],c:0,h:"Think of a loading dock"},
-    {q:"What type of bridge is held up by cables attached to tall towers?",a:["Suspension bridge","Arch bridge","Beam bridge","Truss bridge"],c:0,h:"The Golden Gate Bridge is one!"},
-    {q:"Which material is the best conductor of electricity?",a:["Copper","Wood","Rubber","Plastic"],c:0,h:"Used in most electrical wires"},
-    {q:"What does an engineer do FIRST when solving a problem?",a:["Define the problem clearly","Build the solution","Test the solution","Present the solution"],c:0,h:"You need to understand it before fixing it"},
-    {q:"What do the letters CAD stand for in engineering?",a:["Computer-Aided Design","Creative Art Drawing","Computer Analysis Data","Calculated Accurate Design"],c:0,h:"Engineers use software to draw plans"},
-    {q:"Why do engineers build and test prototypes?",a:["To find problems before building the real thing","To show off their work","To save money","To practice drawing"],c:0,h:"Better to fail small than fail big!"},
-    {q:"Which shape is the STRONGEST for building structures?",a:["Triangle","Square","Circle","Rectangle"],c:0,h:"Pyramids and roof trusses use this shape"},
-    {q:"What is the purpose of insulation in an Alberta house?",a:["Keep heat in during winter","Make the house look nice","Hold up the walls","Make it waterproof"],c:0,h:"Alberta winters are very cold!"},
-    {q:"What does renewable energy mean?",a:["Energy from sources that will not run out","Energy that is cheap","Energy from oil","Energy stored in batteries"],c:0},
-    {q:"What is the FIRST step of the engineering design process?",a:["Identify the problem","Brainstorm ideas","Build a prototype","Test and improve"],c:0,h:"You cannot solve it without knowing what it is"},
-    {q:"What is a gear used for in machines?",a:["To transfer and change the speed of movement","To store electricity","To measure temperature","To filter water"],c:0,h:"Bicycles use gears!"},
-    {q:"What does a circuit need in order to work?",a:["A complete loop with a power source","Just a battery","Just wires","Only a light bulb"],c:0,h:"Electricity needs a full path to flow"}
+
+    {q:"What do engineers do?",a:["Design and build things that solve problems","Only fix cars","Only build houses","Only draw pictures"],c:0,h:"Think of bridges, computers and toys",g:1},
+    {q:"Which material is the strongest for building?",a:["Steel","Paper","Cardboard","Cotton"],c:0,h:"Bridges and buildings are made of this",g:1},
+    {q:"What is a wheel used for?",a:["To make moving things easier","To make things float","To make things fly","To make things smaller"],c:0,h:"Cars and bicycles use these",g:1},
+    {q:"What simple machine do you use when you climb a ramp?",a:["Inclined plane","Lever","Pulley","Wheel"],c:0,h:"A ramp is another name for this",g:1},
+    {q:"What is a prototype?",a:["A first test version of something you are building","The final finished product","A drawing of a design","A list of materials"],c:0,h:"Engineers build one to test their ideas",g:2},
+    {q:"Why do buildings have foundations?",a:["To support the building and keep it stable","To make it look nice","To keep it warm","To connect it to electricity"],c:0,h:"They go underground and hold everything up",g:2},
+    {q:"What does a lever do?",a:["Makes it easier to lift heavy objects","Makes things move faster","Stores energy","Connects two parts"],c:0,h:"A seesaw is a type of lever",g:2},
+    {q:"What is the most important property of a bridge?",a:["It must be strong enough to hold weight","It must look beautiful","It must be made of metal","It must be very long"],c:0,h:"Think about what a bridge needs to do",g:2},
+    {q:"What does the engineering design process start with?",a:["Identifying a problem to solve","Building a prototype","Testing your design","Presenting your solution"],c:0,h:"You cannot design a solution without understanding the problem first",g:3},
+    {q:"What is a pulley?",a:["A wheel with a rope that makes lifting easier","A type of bridge","A type of gear","A type of lever"],c:0,h:"Flag poles use pulleys to raise flags",g:3},
+    {q:"Why do engineers use different materials for different jobs?",a:["Because different materials have different properties like strength and flexibility","Because some materials are cheaper","Because some materials look better","They always use the same materials"],c:0,h:"Steel is strong, rubber is flexible, glass is transparent",g:3},
+    {q:"What is meant by sustainability in engineering?",a:["Designing things that do not harm the environment and can last a long time","Building things as quickly as possible","Using the most expensive materials","Making things as big as possible"],c:0,h:"Think about renewable energy and recycling",g:3},
+        {q:"What simple machine makes lifting easier by spreading work over a longer distance?",a:["Ramp (inclined plane)","Pulley","Lever","Wheel"],c:0,h:"Think of a loading dock",g:4},
+    {q:"What type of bridge is held up by cables attached to tall towers?",a:["Suspension bridge","Arch bridge","Beam bridge","Truss bridge"],c:0,h:"The Golden Gate Bridge is one!",g:4},
+    {q:"Which material is the best conductor of electricity?",a:["Copper","Wood","Rubber","Plastic"],c:0,h:"Used in most electrical wires",g:4},
+    {q:"What does an engineer do FIRST when solving a problem?",a:["Define the problem clearly","Build the solution","Test the solution","Present the solution"],c:0,h:"You need to understand it before fixing it",g:4},
+    {q:"What do the letters CAD stand for in engineering?",a:["Computer-Aided Design","Creative Art Drawing","Computer Analysis Data","Calculated Accurate Design"],c:0,h:"Engineers use software to draw plans",g:4},
+    {q:"Why do engineers build and test prototypes?",a:["To find problems before building the real thing","To show off their work","To save money","To practice drawing"],c:0,h:"Better to fail small than fail big!",g:4},
+    {q:"Which shape is the STRONGEST for building structures?",a:["Triangle","Square","Circle","Rectangle"],c:0,h:"Pyramids and roof trusses use this shape",g:4},
+    {q:"What is the purpose of insulation in an Alberta house?",a:["Keep heat in during winter","Make the house look nice","Hold up the walls","Make it waterproof"],c:0,h:"Alberta winters are very cold!",g:4},
+    {q:"What does renewable energy mean?",a:["Energy from sources that will not run out","Energy that is cheap","Energy from oil","Energy stored in batteries"],c:0,g:4},
+    {q:"What is the FIRST step of the engineering design process?",a:["Identify the problem","Brainstorm ideas","Build a prototype","Test and improve"],c:0,h:"You cannot solve it without knowing what it is",g:4},
+    {q:"What is a gear used for in machines?",a:["To transfer and change the speed of movement","To store electricity","To measure temperature","To filter water"],c:0,h:"Bicycles use gears!",g:4},
+    {q:"What does a circuit need in order to work?",a:["A complete loop with a power source","Just a battery","Just wires","Only a light bulb"],c:0,h:"Electricity needs a full path to flow",g:4}
+  ],
+  socialstudies:[
+
+    {q:"What do we call the people we live with at home?",a:["Family","School","Community","Government"],c:0,h:"Mum, dad, brothers and sisters",g:1},
+    {q:"What is a rule?",a:["Something we must follow to keep everyone safe and fair","Something only adults follow","A type of game","A school subject"],c:0,h:"No hitting is an example of a rule",g:1},
+    {q:"Who helps you if you are sick?",a:["A doctor or nurse","A teacher","A firefighter","A librarian"],c:0,h:"You visit them at the clinic or hospital",g:1},
+    {q:"What do we call the place where children go to learn?",a:["School","Hospital","Library","Store"],c:0,h:"You go there every weekday",g:1},
+    {q:"Which of these is a community helper?",a:["Firefighter","Rock","Table","Pencil"],c:0,h:"They help keep our community safe",g:1},
+    {q:"What country do we live in?",a:["Canada","USA","Australia","England"],c:0,h:"Our flag has a red maple leaf",g:1},
+    {q:"What is a map?",a:["A drawing that shows what a place looks like from above","A list of rules","A type of story","A government document"],c:0,h:"It helps you find your way around",g:2},
+    {q:"What does a mayor do?",a:["Leads the government of a city or town","Leads the whole country","Makes laws for a province","Runs the courts"],c:0,h:"Edmonton has a mayor",g:2},
+    {q:"What is a province?",a:["A large part of Canada with its own government","A type of city","A national park","A neighbourhood"],c:0,h:"Alberta is a province",g:2},
+    {q:"Why do we have laws?",a:["To keep everyone safe and treated fairly","To make police officers busy","To collect taxes","So only adults can have fun"],c:0,h:"Imagine what would happen without any rules",g:2},
+    {q:"What do we call a place where everyone in a neighbourhood can go to borrow books?",a:["Library","School","Hospital","Court"],c:0,h:"It is free to use and you return what you borrow",g:2},
+    {q:"What are the three levels of government in Canada?",a:["Federal, provincial and municipal","National, local and city","Prime Minister, Premier and Mayor","Parliament, Senate and Court"],c:0,h:"They deal with different things at different levels",g:3},
+    {q:"What is culture?",a:["The beliefs, customs, language and traditions of a group of people","The government of a country","The geography of a place","The economy of a nation"],c:0,h:"Food, music and celebrations are all part of culture",g:3},
+    {q:"What does the term First Nations mean?",a:["Indigenous peoples who have lived in Canada for thousands of years","The first European settlers in Canada","The first government of Canada","People who arrived in Canada first in 1867"],c:0,h:"They were here long before European settlers arrived",g:3},
+    {q:"What is a citizen?",a:["An official member of a country who has rights and responsibilities","Someone who is visiting a country","A government worker","A person who was born in a city"],c:0,h:"Canadian citizens can vote and have a passport",g:3},
+    {q:"What does the Canadian Senate do?",a:["Reviews and studies laws before they are passed","Elects the Prime Minister","Manages the military","Runs the courts"],c:0,h:"It is sometimes called the upper chamber of Parliament",g:3},
+        {q:"What is the capital city of Canada?",a:["Ottawa","Toronto","Vancouver","Montreal"],c:0,h:"It is in Ontario but is not the biggest city",g:4},
+    {q:"Canada is divided into how many provinces and territories?",a:["13","10","12","15"],c:0,h:"10 provinces and 3 territories",g:4},
+    {q:"What are the two official languages of Canada?",a:["English and French","English and Spanish","French and Cree","English and Inuktitut"],c:0,h:"Both are used in government and schools",g:4},
+    {q:"Which Indigenous peoples were the first to live in Canada?",a:["First Nations, Metis and Inuit","Vikings","French settlers","British settlers"],c:0,h:"They lived here for thousands of years before others arrived",g:4},
+    {q:"What is the name of the Canadian Parliament building?",a:["Parliament Hill","Rideau Hall","Laurier House","Confederation Hall"],c:0,h:"It sits on a hill in Ottawa overlooking the river",g:4},
+    {q:"Who is the head of state of Canada?",a:["The King of Canada","The Prime Minister","The Governor General","The President"],c:0,h:"Canada is a constitutional monarchy",g:4},
+    {q:"What do we call the leader of the Canadian government?",a:["Prime Minister","President","Chancellor","Governor"],c:0,h:"They lead the party with the most seats in Parliament",g:4},
+    {q:"What is the name of Albertas provincial capital?",a:["Edmonton","Calgary","Red Deer","Lethbridge"],c:0,h:"It is in the north of Alberta",g:4},
+    {q:"What symbol appears in the centre of the Canadian flag?",a:["A maple leaf","A beaver","A moose","A loon"],c:0,h:"It is a red symbol on a white background",g:4},
+    {q:"Canada shares its southern border with which country?",a:["The United States","Mexico","Russia","Greenland"],c:0,h:"It is the longest international border in the world",g:4},
+    {q:"What is the name of the document that gives Canadians their rights and freedoms?",a:["The Charter of Rights and Freedoms","The Constitution Act","The Bill of Rights","The Freedom Charter"],c:0,h:"It was signed in 1982 by Pierre Trudeau",g:4},
+    {q:"What are taxes used for?",a:["To pay for public services like schools, hospitals and roads","To make politicians rich","To buy things for the army only","To pay teachers directly"],c:0,h:"Think about all the services the government provides",g:4},
+    {q:"What is a democracy?",a:["A system where citizens vote to choose their leaders","A system where one person rules forever","A system where the army is in charge","A system where only rich people vote"],c:0,h:"Canada is a democracy",g:4},
+    {q:"What do we call people who move to a new country to live there permanently?",a:["Immigrants","Tourists","Diplomats","Refugees"],c:0,h:"Canada welcomes many people from around the world each year",g:4},
+    {q:"Which ocean is on the west coast of Canada?",a:["Pacific Ocean","Atlantic Ocean","Arctic Ocean","Indian Ocean"],c:0,h:"British Columbia faces this ocean",g:4},
+    {q:"What is the name of the agreement between First Nations peoples and the Canadian government?",a:["Treaties","Agreements","Charters","Contracts"],c:0,h:"These are formal legal agreements about land and rights",g:4},
+    {q:"What does a mayor do?",a:["Leads the government of a city or town","Leads the whole country","Makes the laws for a province","Commands the police"],c:0,h:"Edmonton has a mayor",g:4},
+    {q:"What is the role of a Member of Parliament (MP)?",a:["Represents their local community in the federal government","Runs the provincial government","Commands the military","Manages the court system"],c:0,h:"Canadians vote for their local MP",g:4},
+    {q:"What does the word community mean?",a:["A group of people who live in the same area and share things","A type of government","A big city","A school district"],c:0,h:"Your neighbourhood is part of a community",g:4},
+    {q:"Why is it important to follow rules in a community?",a:["So everyone is safe and treated fairly","So the government can collect more taxes","So police have less work","Rules are not actually important"],c:0,h:"Think about what would happen without rules",g:4},
+    {q:"Which country does this flag belong to? The flag has a red maple leaf on a white background with red stripes on each side.",a:["Canada","Switzerland","Denmark","Austria"],c:0,h:"Think of the national symbol of Canada!",g:4},
+    {q:"Which country does this flag belong to? It has three vertical stripes: blue, white and red.",a:["France","Netherlands","Russia","Luxembourg"],c:0,h:"It is the tricolore of a famous European country",g:4},
+    {q:"Which country does this flag belong to? It is all red with a yellow star in the top left corner.",a:["China","Vietnam","North Korea","Cuba"],c:0,h:"It is the most populated country in the world",g:4},
+    {q:"Which country does this flag belong to? It has a Union Jack in the corner and a red kangaroo on it.",a:["Australia","New Zealand","United Kingdom","Fiji"],c:0,h:"Think of the country known for kangaroos and the Great Barrier Reef",g:4},
+    {q:"Which flag has a crescent moon and star on a red background?",a:["Turkey","Pakistan","Tunisia","Algeria"],c:0,h:"This country sits between Europe and Asia",g:4},
+    {q:"Which country has a flag with a blue Star of David on a white background?",a:["Israel","Greece","United Nations","Uruguay"],c:0,h:"It is located in the Middle East",g:4},
+    {q:"What colour is the maple leaf on the Canadian flag?",a:["Red","Green","Gold","Brown"],c:0,h:"Same colour as the stripes on the sides",g:4},
+    {q:"The Brazilian flag is green with a yellow diamond. What is written on the blue circle in the middle?",a:["Ordem e Progresso","In God We Trust","Liberte Egalite","E Pluribus Unum"],c:0,h:"It means Order and Progress in Portuguese",g:4},
+    {q:"Which country has a flag that is just a plain red colour with no symbols?",a:["None - all flags have symbols","China","Japan","Denmark"],c:0,h:"Think carefully - even simple flags usually have something",g:4},
+    {q:"The Japanese flag is white with what shape in the middle?",a:["A red circle","A red square","A red star","A red triangle"],c:0,h:"It represents the rising sun",g:4},
+  ],
+  health:[
+
+    {q:"How many times a day should you brush your teeth?",a:["Twice","Once","Three times","Only at night"],c:0,h:"Morning and before bed",g:1},
+    {q:"What should you say if someone does something that makes you feel unsafe?",a:["Tell a trusted adult","Keep it a secret","Do nothing","Cry quietly"],c:0,h:"Always tell someone you trust",g:1},
+    {q:"Which food is the healthiest snack?",a:["An apple","A bag of crisps","A chocolate bar","A fizzy drink"],c:0,h:"It grows on a tree",g:1},
+    {q:"What do you do to keep your hands clean before eating?",a:["Wash them with soap and water","Wipe them on your clothes","Rinse them quickly","Use a tissue"],c:0,h:"This stops germs getting into your food",g:1},
+    {q:"Why do we wear a helmet when riding a bike?",a:["To protect our head if we fall","To look cool","Because the law says so","To go faster"],c:0,h:"Safety first!",g:1},
+    {q:"How many hours of sleep do most children need each night?",a:["9 to 11 hours","4 to 5 hours","6 to 7 hours","12 to 14 hours"],c:0,h:"Your brain and body need lots of rest to grow",g:1},
+    {q:"What is a healthy way to deal with feeling angry?",a:["Take deep breaths or talk to someone","Hit a friend","Break something","Shout at everyone"],c:0,h:"Calm your body before you act",g:2},
+    {q:"Which drink is the healthiest choice?",a:["Water","Fizzy soda","Energy drink","Juice with lots of sugar"],c:0,h:"Your body needs lots of this every day",g:2},
+    {q:"What is physical activity good for?",a:["Strong muscles, healthy heart and good mood","Only losing weight","Just having fun","Making you tired"],c:0,h:"It helps your whole body and mind",g:2},
+    {q:"What are germs?",a:["Tiny living things that can make you sick","Dirty hands","Bad food","Allergens"],c:0,h:"Bacteria and viruses are types of germs",g:2},
+    {q:"What does SPF on sunscreen mean?",a:["It protects your skin from the sun","It is a brand name","It means the cream smells nice","It shows the price"],c:0,h:"Higher SPF means more protection",g:2},
+    {q:"What is the difference between a want and a need?",a:["A need is essential for survival, a want is something extra","They mean the same thing","Wants are more important than needs","Needs are things you buy"],c:0,h:"Food is a need, a new toy is a want",g:3},
+    {q:"What is peer pressure?",a:["When friends try to influence you to do something","Pressure from teachers","Stress from homework","Pressure to do sports"],c:0,h:"It can be positive or negative",g:3},
+    {q:"What is the main job of the skeletal system?",a:["Support the body, protect organs and allow movement","Pump blood around the body","Digest food","Fight infections"],c:0,h:"Your skeleton is like your body's frame",g:3},
+    {q:"Why is it important to eat breakfast?",a:["It gives your brain and body energy to start the day","It is just a tradition","Because adults say so","It makes lunch taste better"],c:0,h:"Your brain runs on fuel from food",g:3},
+    {q:"What does the word allergic mean?",a:["Having a reaction to something that does not bother most people","Being afraid of something","Feeling sick from a germ","Having a broken bone"],c:0,h:"Peanut allergies are very common in children",g:3},
+        {q:"How many food groups are in Canadas Food Guide?",a:["3","4","5","6"],c:0,h:"Vegetables and fruits, proteins, and whole grains",g:4},
+    {q:"How many minutes of physical activity do kids need each day?",a:["60 minutes","30 minutes","90 minutes","20 minutes"],c:0,h:"About one hour of moderate to vigorous movement",g:4},
+    {q:"Which nutrient helps build strong bones and teeth?",a:["Calcium","Iron","Protein","Vitamin C"],c:0,h:"Found in milk, cheese and leafy greens",g:4},
+    {q:"What is the main job of the heart?",a:["To pump blood around the body","To filter the blood","To produce oxygen","To digest food"],c:0,h:"It beats about 100,000 times a day!",g:4},
+    {q:"Why do we need to sleep?",a:["So our body and brain can rest and repair","Just because it is dark outside","So we do not eat too much","Because our heart needs a break"],c:0,h:"Kids need about 9 to 11 hours of sleep",g:4},
+    {q:"Which vitamin do we get from sunlight?",a:["Vitamin D","Vitamin C","Vitamin A","Vitamin B"],c:0,h:"Alberta winters mean many Canadians do not get enough of this",g:4},
+    {q:"What does the word hygiene mean?",a:["Keeping yourself clean and healthy","Eating vegetables","Exercising every day","Getting enough sleep"],c:0,h:"Brushing your teeth and washing your hands are examples",g:4},
+    {q:"Why is drinking water important for your body?",a:["Your body is about 60% water and needs it to work properly","Water has lots of calories","It makes you run faster","It cleans your teeth"],c:0,h:"Every cell in your body needs water",g:4},
+    {q:"What is a germ?",a:["A tiny living thing that can cause illness","A type of food","A part of the body","A chemical in medicine"],c:0,h:"Bacteria and viruses are types of germs",g:4},
+    {q:"How long should you wash your hands to kill germs?",a:["At least 20 seconds","5 seconds","1 minute","Just a quick rinse"],c:0,h:"Long enough to sing Happy Birthday twice",g:4},
+    {q:"What does the immune system do?",a:["Protects the body from illness and infection","Pumps blood around the body","Helps you digest food","Controls your breathing"],c:0,h:"It is your body's defence system",g:4},
+    {q:"Which food group gives you the most energy?",a:["Carbohydrates like bread, rice and pasta","Proteins like meat","Fats like butter","Vitamins in vegetables"],c:0,h:"Your brain and muscles love this for fuel",g:4},
+    {q:"What is mental health?",a:["How we feel emotionally and how we handle stress","Only about serious illness","How smart you are","How physically fit you are"],c:0,h:"It is just as important as physical health",g:4},
+    {q:"Which of these is a good way to manage stress?",a:["Exercise, talking to someone or deep breathing","Eating lots of junk food","Staying up very late","Keeping all your worries to yourself"],c:0,h:"Healthy coping strategies help your brain",g:4},
+    {q:"What is a balanced diet?",a:["Eating a variety of healthy foods in the right amounts","Only eating vegetables","Eating as much as possible","Never eating sugar"],c:0,h:"No single food gives you everything you need",g:4},
+    {q:"Why is fibre important in your diet?",a:["It helps your digestive system work properly","It builds strong muscles","It gives you energy","It protects your bones"],c:0,h:"Found in fruits, vegetables and whole grains",g:4},
+    {q:"What happens to your heart rate when you exercise?",a:["It gets faster","It slows down","It stays the same","It stops briefly"],c:0,h:"Your muscles need more oxygen when you move",g:4},
+    {q:"What do antibiotics treat?",a:["Bacterial infections","Viral infections like colds","Broken bones","Allergies"],c:0,h:"They do NOT work on viruses - this is important to know!",g:4},
+    {q:"Which part of the body does asthma affect?",a:["The lungs and airways","The heart","The stomach","The joints"],c:0,h:"People with asthma sometimes use an inhaler",g:4},
+    {q:"What is first aid?",a:["Basic help given to an injured or sick person before a doctor arrives","A type of medicine","A hospital service","A school health class"],c:0,h:"Everyone should know basic first aid",g:4}
+  ],
+  geography:[
+
+    {q:"What do we call the large areas of salt water that cover most of Earth?",a:["Oceans","Lakes","Rivers","Ponds"],c:0,h:"There are five of them on Earth",g:1},
+    {q:"What is weather?",a:["What the sky and air are like outside right now","The shape of the land","The name of a country","The temperature inside"],c:0,h:"Is it sunny or raining outside?",g:1},
+    {q:"What is a mountain?",a:["A very tall area of land","A flat piece of land","A river","A type of cloud"],c:0,h:"You need to climb up to reach the top",g:1},
+    {q:"What direction does the Sun rise from?",a:["East","West","North","South"],c:0,h:"The Sun sets in the west",g:1},
+    {q:"What are the four seasons in Canada?",a:["Spring, summer, autumn and winter","Rain, snow, sun and wind","Hot, warm, cool and cold","January, July, October and December"],c:0,h:"They happen in a cycle every year",g:1},
+    {q:"What is a continent?",a:["One of the seven very large land masses on Earth","A very large country","An ocean","A province"],c:0,h:"North America is one of seven continents",g:2},
+    {q:"What country is directly south of Canada?",a:["United States of America","Mexico","Russia","Greenland"],c:0,h:"They share the world's longest border",g:2},
+    {q:"What is a river?",a:["A long flowing body of fresh water","A large body of salt water","A frozen body of water","A man-made water channel"],c:0,h:"The Bow River flows through Calgary",g:2},
+    {q:"What does a compass show?",a:["Direction - North, South, East and West","Distance between places","The height of mountains","The temperature"],c:0,h:"North is usually at the top",g:2},
+    {q:"What is a forest?",a:["A large area of land covered with trees","A flat grassy area","A sandy desert","A frozen area"],c:0,h:"Much of Canada is covered in this",g:2},
+    {q:"What is a time zone?",a:["A region of the Earth that uses the same time","A very fast part of a race","A section of a map","A weather pattern"],c:0,h:"Canada has six of them",g:3},
+    {q:"What is the equator?",a:["An imaginary line around the middle of the Earth","The border between Canada and the USA","The deepest part of the ocean","The highest point on Earth"],c:0,h:"It divides the Earth into northern and southern halves",g:3},
+    {q:"What is deforestation?",a:["Cutting down large areas of trees","Planting more trees","A type of weather","Animals moving to a new place"],c:0,h:"It is a major environmental problem worldwide",g:3},
+    {q:"What is a population?",a:["The total number of people living in a place","The area of a country","The wealth of a country","The size of a city"],c:0,h:"China has the largest population in the world",g:3},
+    {q:"What is irrigation?",a:["Supplying water to farmland through pipes or channels","A type of weather","Cutting down trees","A mountain range"],c:0,h:"Farmers in dry areas use this to water their crops",g:3},
+        {q:"What is the largest province in Canada by area?",a:["Quebec","Ontario","British Columbia","Alberta"],c:0,h:"It is in eastern Canada and mostly French-speaking",g:4},
+    {q:"What mountain range runs along the western edge of Alberta?",a:["The Rocky Mountains","The Appalachians","The Coast Mountains","The Laurentians"],c:0,h:"You can see them from Calgary on a clear day!",g:4},
+    {q:"What is the name of Canadas longest river?",a:["The Mackenzie River","The St. Lawrence River","The Fraser River","The Saskatchewan River"],c:0,h:"It flows through the Northwest Territories",g:4},
+    {q:"Which of the Great Lakes is entirely within Canada?",a:["Lake Superior - wait, none are! They are all shared.","Lake Ontario","Lake Erie","Lake Michigan"],c:0,h:"All Great Lakes are shared between Canada and the USA except one",g:4},
+    {q:"What type of climate does Alberta have?",a:["Continental - hot summers and very cold winters","Tropical","Oceanic","Desert"],c:0,h:"Think about Calgary winters and summer temperatures",g:4},
+    {q:"What is the name of the large grassland region in the Canadian prairies?",a:["The Prairies","The Tundra","The Boreal Forest","The Shield"],c:0,h:"Alberta, Saskatchewan and Manitoba are called the Prairie provinces",g:4},
+    {q:"What is the Canadian Shield?",a:["A large area of ancient rock covering much of central and eastern Canada","A military shield","A border wall","A type of mountain"],c:0,h:"It is made of some of the oldest rock on Earth",g:4},
+    {q:"Which Canadian province is known as the Ocean Playground?",a:["Nova Scotia","Prince Edward Island","New Brunswick","Newfoundland"],c:0,h:"It is surrounded by water on three sides",g:4},
+    {q:"What is the tundra?",a:["A flat treeless area in the far north where the ground stays frozen","A type of forest in Alberta","A mountain range in BC","A river delta"],c:0,h:"Very few plants and animals can survive here",g:4},
+    {q:"What is a watershed?",a:["An area of land where all water drains to the same river or lake","A building where water is stored","A type of flood","A water treatment plant"],c:0,h:"Alberta has several important watersheds",g:4},
+    {q:"What causes the seasons to change in Canada?",a:["The tilt of Earths axis as it orbits the Sun","The distance from the Sun","The moon changing shape","Wind patterns"],c:0,h:"In summer, Canada is tilted toward the Sun",g:4},
+    {q:"What is the name of the body of water between Alaska and Russia?",a:["The Bering Strait","The Hudson Strait","The Davis Strait","The Drake Passage"],c:0,h:"People may have first crossed to North America here during the ice age",g:4},
+    {q:"What is a province?",a:["A large division of Canada with its own government","A type of city","A national park","A geographic region with no government"],c:0,h:"Alberta is a province",g:4},
+    {q:"What do contour lines on a map show?",a:["The height of the land above sea level","The population of an area","The boundaries between countries","Rivers and lakes"],c:0,h:"Lines that are close together mean steep ground",g:4},
+    {q:"What is the capital city of British Columbia?",a:["Victoria","Vancouver","Kelowna","Prince George"],c:0,h:"It is on Vancouver Island - not in Vancouver the city!",g:4},
+    {q:"What is the most northern territory of Canada?",a:["Nunavut","Yukon","Northwest Territories","Manitoba"],c:0,h:"It was created in 1999 and is home to many Inuit people",g:4},
+    {q:"What is a delta?",a:["Land formed at the mouth of a river where it meets the sea","A type of mountain","An underground river","A frozen lake"],c:0,h:"The Nile and the Mackenzie both have famous ones",g:4},
+    {q:"What is the Ring of Fire?",a:["A zone of volcanic and earthquake activity around the Pacific Ocean","A forest fire region","A desert area","A coral reef system"],c:0,h:"BC and Japan are both on this zone",g:4},
+    {q:"What is urban sprawl?",a:["When cities spread outward into surrounding rural land","When people move from cities to farms","A type of traffic jam","A forest growing into a city"],c:0,h:"Calgary has experienced a lot of this",g:4},
+    {q:"What percentage of Earths water is fresh water that we can drink?",a:["About 3 percent","About 50 percent","About 25 percent","About 75 percent"],c:0,h:"Most of Earths water is salty ocean water",g:4}
   ]
 };
 
 var COLOURS = {
-  stories:     {bg:"rgba(255,182,193,0.22)",col:"#ffb6c1",bdr:"#ff69b4"},
   math:        {bg:"rgba(255,107,107,0.22)",col:"#ff8585",bdr:"#ff6b6b"},
   science:     {bg:"rgba(61,214,140,0.22)", col:"#3dd68c",bdr:"#3dd68c"},
   coding:      {bg:"rgba(78,205,196,0.22)", col:"#4ecdc4",bdr:"#4ecdc4"},
   space:       {bg:"rgba(167,139,250,0.22)",col:"#a78bfa",bdr:"#a78bfa"},
   english:     {bg:"rgba(255,169,77,0.22)", col:"#ffa94d",bdr:"#ffa94d"},
-  engineering: {bg:"rgba(244,114,182,0.22)",col:"#f472b6",bdr:"#f472b6"}
+  engineering: {bg:"rgba(244,114,182,0.22)",col:"#f472b6",bdr:"#f472b6"},
+  stories:     {bg:"rgba(255,182,193,0.22)",col:"#ffb6c1",bdr:"#ff69b4"},
+  socialstudies:{bg:"rgba(100,200,100,0.22)",col:"#64c864",bdr:"#4aaa4a"},
+  health:      {bg:"rgba(255,150,100,0.22)",col:"#ff9664",bdr:"#ff7a42"},
+  geography:   {bg:"rgba(100,180,255,0.22)",col:"#64b4ff",bdr:"#4296ff"}
 };
-var LABELS = {math:"Math",science:"Science",coding:"Coding",space:"Space",english:"English",engineering:"Engineering",stories:"Stories"};
+var LABELS = {
+  math:"Math", science:"Science", coding:"Coding", space:"Space",
+  english:"English", engineering:"Engineering", stories:"Stories",
+  socialstudies:"Social Studies", health:"Health", geography:"Geography"
+};
 
-var selected = ["math","science","coding","space","english","engineering","stories"];
-var questions=[], cur=0, score=0, correct=0, streak=0, bestStreak=0;
-var answered=false, timerID=null, timeLeft=20, difficulty=1;
-var totalScore=0, allTimeBest=0, gamesPlayed=0;
+// ── RANKS ─────────────────────────────────────────────────
+var RANKS = [
+  {name:"Cadet",       icon:"&#128640;", xp:0},
+  {name:"Explorer",    icon:"&#128270;", xp:100},
+  {name:"Scholar",     icon:"&#128218;", xp:250},
+  {name:"Thinker",     icon:"&#129504;", xp:500},
+  {name:"Genius",      icon:"&#9889;",   xp:900},
+  {name:"Champion",    icon:"&#127942;", xp:1400},
+  {name:"Master",      icon:"&#127775;", xp:2000},
+  {name:"Einstein",    icon:"&#128161;", xp:3000}
+];
 
+function getRank(xp){
+  var r = RANKS[0];
+  for(var i=0;i<RANKS.length;i++){ if(xp >= RANKS[i].xp) r = RANKS[i]; }
+  return r;
+}
+
+// ── ACHIEVEMENTS ──────────────────────────────────────────
+var ACH_DEFS = [
+  {id:"first_game",   icon:"&#127881;", name:"First Blast!",    desc:"Complete your first game"},
+  {id:"perfect",      icon:"&#128142;", name:"Perfect Score",   desc:"Get 10/10 in a game"},
+  {id:"streak5",      icon:"&#128293;", name:"On Fire!",        desc:"Get a 5-answer streak"},
+  {id:"streak10",     icon:"&#9889;",   name:"Lightning!",      desc:"Get a 10-answer streak"},
+  {id:"speed_demon",  icon:"&#128005;", name:"Speed Demon",     desc:"Score 200+ stars in one game"},
+  {id:"brain_master", icon:"&#129504;", name:"Brain Master",    desc:"Score 150+ stars in a game"},
+  {id:"daily_done",   icon:"&#127881;", name:"Daily Hero",      desc:"Complete a daily challenge"},
+  {id:"games5",       icon:"&#127942;", name:"Veteran",         desc:"Play 5 games"},
+  {id:"games20",      icon:"&#127775;", name:"Superstar",       desc:"Play 20 games"},
+  {id:"all_subjects", icon:"&#127758;", name:"All-Rounder",     desc:"Play all 10 subjects"},
+  {id:"powerup_used", icon:"&#9986;",   name:"Power Player",   desc:"Use all 3 power-ups in one game"},
+  {id:"xp500",        icon:"&#128161;", name:"XP Machine",     desc:"Earn 500 total XP"}
+];
+
+// ── AVATARS ───────────────────────────────────────────────
+var AVATARS = ["&#128049;","&#128054;","&#128007;","&#128045;","&#129408;","&#128056;","&#128008;","&#129409;","&#128015;","&#128013;","&#129412;","&#128038;","&#9733;","&#128640;","&#127881;","&#9889;","&#127775;","&#128293;","&#127754;","&#129310;"];
+
+// ── STORAGE KEYS ──────────────────────────────────────────
+var SAVE_KEY = "brainblast_save_v3";
+var LB_KEY   = "brainblast_lb_v2";
+
+function saveLoad(){
+  try { var r=localStorage.getItem(SAVE_KEY); return r?JSON.parse(r):{xp:0,games:0,totalScore:0,bestStreak:0,achievements:[],subjectsPlayed:[],dailyDate:"",dailyDone:false}; }
+  catch(e){ return {xp:0,games:0,totalScore:0,bestStreak:0,achievements:[],subjectsPlayed:[],dailyDate:"",dailyDone:false,grade:4}; }
+}
+function savePersist(d){ try{ localStorage.setItem(SAVE_KEY,JSON.stringify(d)); }catch(e){} }
+function lbLoad(){ try{ var r=localStorage.getItem(LB_KEY); return r?JSON.parse(r):{}; }catch(e){ return {}; } }
+function lbSave(d){ try{ localStorage.setItem(LB_KEY,JSON.stringify(d)); }catch(e){} }
+
+// ── PLAYER STATE ──────────────────────────────────────────
+var playerName   = "";
+var playerAvatar = "";
+var playerGrade  = 4;
+var pickedAvIdx  = -1;
+var pickedGrade  = 4;
+var speedSetting = 20; // seconds base
+
+// ── GAME STATE ────────────────────────────────────────────
+var selected   = ["math","science","coding","space","english","engineering","stories","socialstudies","health","geography"];
+var questions  = [], cur=0, score=0, correct=0, streak=0, bestStreak=0;
+var answered   = false, timerID=null, timeLeft=20, difficulty=1;
+var totalScore = 0, allTimeBest=0, gamesPlayed=0, totalXP=0;
+var isDailyChallenge = false;
+var pupUsed = {fif:false, time:false, skip:false};
+var pupAllUsed = false;
+
+// ── HELPERS ───────────────────────────────────────────────
 function el(id){ return document.getElementById(id); }
-
 function showScreen(name){
-  ["screen-home","screen-game","screen-results"].forEach(function(id){
-    el(id).classList.remove("active");
-  });
+  ["screen-home","screen-game","screen-results"].forEach(function(id){ el(id).classList.remove("active"); });
   el("screen-"+name).classList.add("active");
 }
-
 function shuffle(arr){
   var a=arr.slice();
-  for(var i=a.length-1;i>0;i--){
-    var j=Math.floor(Math.random()*(i+1));
-    var t=a[i];a[i]=a[j];a[j]=t;
-  }
+  for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; }
   return a;
 }
+function todayStr(){ var d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
 
+// ── HOME STATS ────────────────────────────────────────────
 function updateHomeStats(){
-  el("h-total").textContent=totalScore;
-  el("h-streak").textContent=allTimeBest;
-  el("h-games").textContent=gamesPlayed;
+  var save = saveLoad();
+  el("h-total").textContent  = save.totalScore||0;
+  el("h-streak").textContent = save.bestStreak||0;
+  el("h-games").textContent  = save.games||0;
+  el("h-xp").textContent     = save.xp||0;
+  var rank = getRank(save.xp||0);
+  if(playerName){ el("home-name").textContent = playerName; el("home-av").innerHTML = playerAvatar||"&#128640;"; }
+  el("home-rank").innerHTML  = rank.name+" "+rank.icon;
+  el("home-xp").textContent  = (save.xp||0)+" XP";
+  // grade badge
+  var gradeBadge = el("home-grade");
+  if(gradeBadge){
+    gradeBadge.textContent = "Grade "+playerGrade;
+    gradeBadge.style.display = playerName ? "inline-block" : "none";
+  }
+  var gradeTag = el("grade-tagline");
+  if(gradeTag) gradeTag.textContent = "Grade "+playerGrade;
+  // daily challenge
+  var dailyDone = (save.dailyDate === todayStr() && save.dailyDone);
+  el("daily-badge").innerHTML = dailyDone ? '<span class="daily-done">&#10003; Done!</span>' : '<span style="font-size:.75rem;color:#ffa94d;font-weight:800">Play &#8594;</span>';
+  el("daily-sub").textContent = dailyDone ? "Come back tomorrow for a new challenge!" : "10 mixed questions \u2022 Bonus 50 XP today!";
 }
 
-// Subject toggle buttons
-var subjBtns=document.querySelectorAll("button.subj");
+// ── SUBJECT TOGGLE ────────────────────────────────────────
+var subjBtns = document.querySelectorAll("button.subj");
 for(var si=0;si<subjBtns.length;si++){
   (function(btn){
     btn.addEventListener("click",function(){
       btn.classList.toggle("on");
       selected=[];
       var all=document.querySelectorAll("button.subj");
-      for(var i=0;i<all.length;i++){
-        if(all[i].classList.contains("on")) selected.push(all[i].getAttribute("data-subj"));
-      }
+      for(var i=0;i<all.length;i++){ if(all[i].classList.contains("on")) selected.push(all[i].getAttribute("data-subj")); }
       el("btn-start").disabled=(selected.length===0);
       el("subj-count").textContent=selected.length+" selected";
     });
   })(subjBtns[si]);
 }
 
-el("btn-start").addEventListener("click",function(){ startGame(); });
+// ── SPEED PICKER ──────────────────────────────────────────
+function setSpeed(secs, btnId){
+  speedSetting = secs;
+  ["sp-slow","sp-med","sp-fast"].forEach(function(id){ el(id).classList.remove("on"); });
+  el(btnId).classList.add("on");
+}
+el("sp-slow").addEventListener("click",function(){ setSpeed(35,"sp-slow"); });
+el("sp-med").addEventListener("click",function(){  setSpeed(20,"sp-med"); });
+el("sp-fast").addEventListener("click",function(){ setSpeed(12,"sp-fast"); });
+
+// ── HOW TO PLAY TOGGLE ────────────────────────────────────
+el("htp-toggle").addEventListener("click",function(){
+  var s=el("htp-steps"), a=el("htp-arrow");
+  if(s.style.display==="flex"){ s.style.display="none"; a.style.transform="rotate(0deg)"; }
+  else { s.style.display="flex"; a.style.transform="rotate(90deg)"; }
+});
+
+// ── DAILY CHALLENGE ───────────────────────────────────────
+el("daily-banner").addEventListener("click",function(){
+  var save=saveLoad();
+  if(save.dailyDate===todayStr()&&save.dailyDone){ return; }
+  isDailyChallenge=true;
+  if(!playerName){ showNickOverlay(); } else { startGame(); }
+});
+
+// ── BUTTON LISTENERS ──────────────────────────────────────
+el("btn-start").addEventListener("click",function(){ isDailyChallenge=false; if(!playerName){ showNickOverlay(); } else { startGame(); } });
 el("btn-back").addEventListener("click",function(){ clearInterval(timerID); showScreen("home"); updateHomeStats(); });
 el("btn-next").addEventListener("click",function(){ nextQ(); });
-el("btn-replay").addEventListener("click",function(){ startGame(); });
+el("btn-replay").addEventListener("click",function(){ isDailyChallenge=false; startGame(); });
 el("btn-menu").addEventListener("click",function(){ showScreen("home"); updateHomeStats(); });
+el("btn-achievements").addEventListener("click",function(){ showAchievements(); });
+el("ach-close").addEventListener("click",function(){ el("ach-overlay").classList.add("hidden"); });
 
-function buildQuestions(){
+// ── POWER-UPS ─────────────────────────────────────────────
+el("pup-5050").addEventListener("click",function(){
+  if(pupUsed.fif||answered) return;
+  pupUsed.fif=true; el("pup-5050").classList.add("used"); el("pup-5050").disabled=true;
+  var item=questions[cur]; var wrongBtns=[];
+  var btns=el("opts-grid").querySelectorAll("button.opt");
+  for(var i=0;i<btns.length;i++){ if(!item.opts[i].correct) wrongBtns.push(btns[i]); }
+  wrongBtns=shuffle(wrongBtns);
+  for(var j=0;j<2&&j<wrongBtns.length;j++){ wrongBtns[j].classList.add("hidden-opt"); wrongBtns[j].disabled=true; }
+  checkAllPupUsed();
+});
+el("pup-time").addEventListener("click",function(){
+  if(pupUsed.time||answered) return;
+  pupUsed.time=true; el("pup-time").classList.add("used"); el("pup-time").disabled=true;
+  timeLeft=Math.min(timeLeft+10, speedSetting+10);
+  checkAllPupUsed();
+});
+el("pup-skip").addEventListener("click",function(){
+  if(pupUsed.skip||answered) return;
+  pupUsed.skip=true; el("pup-skip").classList.add("used"); el("pup-skip").disabled=true;
+  clearInterval(timerID); answered=true; streak=0;
+  el("feedback").textContent="Skipped! Moving on...";
+  el("feedback").className="feedback bad";
+  el("btn-next").className="next-q";
+  checkAllPupUsed();
+});
+function checkAllPupUsed(){
+  if(pupUsed.fif&&pupUsed.time&&pupUsed.skip) pupAllUsed=true;
+}
+function resetPups(){
+  pupUsed={fif:false,time:false,skip:false}; pupAllUsed=false;
+  ["pup-5050","pup-time","pup-skip"].forEach(function(id){
+    el(id).classList.remove("used"); el(id).disabled=false;
+  });
+}
+
+// ── BUILD QUESTIONS ───────────────────────────────────────
+function buildQuestions(forDaily){
   var pool=[];
-  var subjs=selected.length>0?selected:Object.keys(Q);
+  var subjs = forDaily ? Object.keys(Q) : (selected.length>0?selected:Object.keys(Q));
   for(var s=0;s<subjs.length;s++){
-    var key=subjs[s];
-    if(!Q[key]) continue;
+    var key=subjs[s]; if(!Q[key]) continue;
     for(var i=0;i<Q[key].length;i++){
       var item=Q[key][i];
-      pool.push({subj:key,q:item.q,a:item.a,c:item.c,h:item.h,story:item.story||null});
+      var itemGrade = item.g || 4;
+    if(itemGrade !== playerGrade) continue;
+    pool.push({subj:key,q:item.q,a:item.a,c:item.c,h:item.h,story:item.story||null});
     }
   }
   pool=shuffle(pool);
   var take=Math.min(10,pool.length);
   var result=[];
   for(var p=0;p<take;p++){
-    var it=pool[p];
-    var opts=[];
-    for(var oi=0;oi<it.a.length;oi++){
-      opts.push({text:it.a[oi],correct:oi===it.c});
-    }
+    var it=pool[p]; var opts=[];
+    for(var oi=0;oi<it.a.length;oi++){ opts.push({text:it.a[oi],correct:oi===it.c}); }
     opts=shuffle(opts);
     result.push({subj:it.subj,q:it.q,opts:opts,h:it.h,story:it.story||null});
   }
   return result;
 }
 
+// ── START GAME ────────────────────────────────────────────
 function startGame(){
-  questions=buildQuestions();
+  questions=buildQuestions(isDailyChallenge);
   cur=0;score=0;correct=0;streak=0;bestStreak=0;difficulty=1;
+  resetPups();
   showScreen("game");
   showQuestion();
 }
 
+// ── SHOW QUESTION ─────────────────────────────────────────
 function showQuestion(){
-  var item=questions[cur];
-  var total=questions.length;
+  var item=questions[cur]; var total=questions.length;
   el("prog-bar").style.width=Math.round((cur/total)*100)+"%";
   el("q-num").textContent=(cur+1)+"/"+total;
   el("live-score").textContent=score;
   el("lvl-lbl").textContent="Level "+difficulty;
-
   var col=COLOURS[item.subj]||COLOURS.math;
   var tag=el("q-tag");
   tag.textContent=LABELS[item.subj]||item.subj;
-  tag.style.cssText="display:inline-block;padding:4px 12px;border-radius:20px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;background:"+col.bg+";color:"+col.col+";border:1.5px solid "+col.bdr;
-
+  tag.style.cssText="display:inline-block;padding:3px 10px;border-radius:20px;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;background:"+col.bg+";color:"+col.col+";border:1.5px solid "+col.bdr;
   el("q-text").textContent=item.q;
-  var storyCard=el("story-card");
-  if(item.story){
-    storyCard.textContent=item.story;
-    storyCard.classList.remove("hidden");
-  } else {
-    storyCard.classList.add("hidden");
-  }
+  var sc=el("story-card");
+  if(item.story){ sc.textContent=item.story; sc.classList.remove("hidden"); } else { sc.classList.add("hidden"); }
   var hint=el("q-hint");
-  if(item.h&&difficulty<=2){hint.textContent="Hint: "+item.h;hint.classList.remove("hidden");}
-  else{hint.classList.add("hidden");}
-
-  var grid=el("opts-grid");
-  grid.innerHTML="";
+  if(item.h&&difficulty<=2){ hint.textContent="Hint: "+item.h; hint.classList.remove("hidden"); } else { hint.classList.add("hidden"); }
+  var grid=el("opts-grid"); grid.innerHTML="";
   for(var i=0;i<item.opts.length;i++){
     (function(idx,isCorrect,text){
       var btn=document.createElement("button");
-      btn.className="opt";
-      btn.textContent=text;
+      btn.type="button"; btn.className="opt"; btn.textContent=text;
       btn.addEventListener("click",function(){ handleAnswer(idx,isCorrect); });
       grid.appendChild(btn);
     })(i,item.opts[i].correct,item.opts[i].text);
   }
-
   el("feedback").className="feedback hidden";
   el("btn-next").className="next-q hidden";
   el("streak-display").classList.add("hidden");
@@ -517,20 +1127,19 @@ function showQuestion(){
   startTimer(!!item.story);
 }
 
+// ── TIMER ─────────────────────────────────────────────────
 function startTimer(isStory){
   clearInterval(timerID);
-  var maxTime=isStory?180:Math.max(10,26-(difficulty*3));
+  var maxTime=isStory?180:Math.max(8,speedSetting-(difficulty-1)*2);
   timeLeft=maxTime;
   el("timer-num").textContent=maxTime;
   updateTimerBar(maxTime,maxTime);
   timerID=setInterval(function(){
-    timeLeft-=0.1;
-    updateTimerBar(timeLeft,maxTime);
+    timeLeft-=0.1; updateTimerBar(timeLeft,maxTime);
     el("timer-num").textContent=Math.max(0,Math.round(timeLeft));
-    if(timeLeft<=0){clearInterval(timerID);if(!answered)handleTimeout();}
+    if(timeLeft<=0){ clearInterval(timerID); if(!answered) handleTimeout(); }
   },100);
 }
-
 function updateTimerBar(left,max){
   var pct=Math.max(0,(left/max)*100);
   var bar=el("timer-bar");
@@ -538,10 +1147,9 @@ function updateTimerBar(left,max){
   bar.style.background=pct>60?"#3dd68c":pct>30?"#ffa94d":"#ff6b6b";
 }
 
+// ── ANSWER ────────────────────────────────────────────────
 function handleAnswer(idx,isCorrect){
-  if(answered) return;
-  answered=true;
-  clearInterval(timerID);
+  if(answered) return; answered=true; clearInterval(timerID);
   var btns=el("opts-grid").querySelectorAll("button.opt");
   var item=questions[cur];
   for(var i=0;i<btns.length;i++){
@@ -556,55 +1164,81 @@ function handleAnswer(idx,isCorrect){
     var timeBonus=Math.round(timeLeft*2);
     var streakBonus=streak>=3?streak*5:0;
     var pts=10+timeBonus+streakBonus;
-    score+=pts;
-    difficulty=Math.min(5,1+Math.floor(correct/3));
-    var msgs=["Awesome!","Great job!","Brilliant!","Correct!","You got it!"];
+    score+=pts; difficulty=Math.min(5,1+Math.floor(correct/3));
+    var msgs=["Awesome!","Great job!","Brilliant!","Correct!","You got it!","Nailed it!"];
     var msg=msgs[Math.floor(Math.random()*msgs.length)];
     if(streak>=3) msg+=" "+streak+" in a row! +"+streakBonus+" bonus!";
-    fb.textContent=msg+" +"+pts+" stars";
-    fb.className="feedback good";
-    if(streak>=2){
-      var sk=el("streak-display");
-      sk.textContent="x"+streak+" streak!";
-      sk.classList.remove("hidden");
-    }
+    fb.textContent=msg+" +"+pts+" stars"; fb.className="feedback good";
+    if(streak>=2){ var sk=el("streak-display"); sk.textContent="x"+streak+" streak!"; sk.classList.remove("hidden"); }
   } else {
     streak=0;
-    var correctText="";
-    for(var oi=0;oi<item.opts.length;oi++){if(item.opts[oi].correct){correctText=item.opts[oi].text;break;}}
-    fb.textContent="Not quite! The answer is: "+correctText+" - keep going!";
-    fb.className="feedback bad";
+    var ct=""; for(var oi=0;oi<item.opts.length;oi++){ if(item.opts[oi].correct){ct=item.opts[oi].text;break;} }
+    fb.textContent="Not quite! The answer is: "+ct+" - keep going!"; fb.className="feedback bad";
     difficulty=Math.max(1,difficulty-1);
   }
   el("live-score").textContent=score;
   el("btn-next").className="next-q";
 }
-
 function handleTimeout(){
-  if(answered) return;
-  answered=true;streak=0;
+  if(answered) return; answered=true; streak=0;
   var btns=el("opts-grid").querySelectorAll("button.opt");
   var item=questions[cur];
-  for(var i=0;i<btns.length;i++){
-    btns[i].disabled=true;
-    if(item.opts[i].correct) btns[i].classList.add("correct");
-  }
+  for(var i=0;i<btns.length;i++){ btns[i].disabled=true; if(item.opts[i].correct) btns[i].classList.add("correct"); }
   el("feedback").textContent="Time is up! No worries, you will get the next one!";
   el("feedback").className="feedback bad";
   el("btn-next").className="next-q";
 }
+function nextQ(){ cur++; if(cur>=questions.length) showResults(); else showQuestion(); }
 
-function nextQ(){
-  cur++;
-  if(cur>=questions.length) showResults();
-  else showQuestion();
-}
-
+// ── SHOW RESULTS ──────────────────────────────────────────
 function showResults(){
   clearInterval(timerID);
-  totalScore+=score;
-  if(bestStreak>allTimeBest) allTimeBest=bestStreak;
-  gamesPlayed++;
+  var save=saveLoad();
+  save.games=(save.games||0)+1;
+  save.totalScore=(save.totalScore||0)+score;
+  if(bestStreak>(save.bestStreak||0)) save.bestStreak=bestStreak;
+  // XP calculation
+  var xpEarned = Math.round(score/2) + (correct*5);
+  if(isDailyChallenge){ xpEarned+=50; save.dailyDate=todayStr(); save.dailyDone=true; }
+  save.xp=(save.xp||0)+xpEarned;
+  // track subjects played
+  if(!save.subjectsPlayed) save.subjectsPlayed=[];
+  for(var qi=0;qi<questions.length;qi++){
+    var sq=questions[qi].subj;
+    if(save.subjectsPlayed.indexOf(sq)===-1) save.subjectsPlayed.push(sq);
+  }
+  // check achievements
+  var newAch=[];
+  if(!save.achievements) save.achievements=[];
+  function checkAch(id, cond){ if(cond&&save.achievements.indexOf(id)===-1){ save.achievements.push(id); newAch.push(id); } }
+  checkAch("first_game", save.games>=1);
+  checkAch("perfect", correct===questions.length&&questions.length===10);
+  checkAch("streak5", bestStreak>=5);
+  checkAch("streak10", bestStreak>=10);
+  checkAch("speed_demon", score>=200);
+  checkAch("brain_master", score>=150);
+  checkAch("daily_done", isDailyChallenge);
+  checkAch("games5", save.games>=5);
+  checkAch("games20", save.games>=20);
+  checkAch("all_subjects", save.subjectsPlayed.length>=10);
+  checkAch("powerup_used", pupAllUsed);
+  checkAch("xp500", save.xp>=500);
+  savePersist(save);
+  totalScore=save.totalScore; allTimeBest=save.bestStreak; gamesPlayed=save.games; totalXP=save.xp;
+  // save to LB
+  var subjsPlayed={};
+  for(var qi2=0;qi2<questions.length;qi2++){ var sq2=questions[qi2].subj; if(!subjsPlayed[sq2]) subjsPlayed[sq2]=true; }
+  var lbd=lbLoad();
+  var subjKeys=Object.keys(subjsPlayed);
+  for(var sk=0;sk<subjKeys.length;sk++){
+    var sk2=subjKeys[sk];
+    if(!lbd[sk2]) lbd[sk2]=[];
+    lbd[sk2].push({name:playerName,avatar:playerAvatar,score:score,correct:correct,date:new Date().toLocaleDateString("en-CA")});
+    lbd[sk2].sort(function(a,b){return b.score-a.score;});
+    if(lbd[sk2].length>10) lbd[sk2]=lbd[sk2].slice(0,10);
+  }
+  lbSave(lbd);
+  // render results
   var pct=Math.round((correct/questions.length)*100);
   var icon,title,sub;
   if(pct>=90){icon="&#127775;";title="Genius!";sub="You nailed it - top of the class!";}
@@ -612,38 +1246,334 @@ function showResults(){
   else if(pct>=50){icon="&#127881;";title="Great effort!";sub="Keep practising and you will ace it!";}
   else{icon="&#128640;";title="Keep going!";sub="Every question makes you smarter!";}
   el("res-icon").innerHTML=icon;
-  el("res-title").textContent=title;
+  el("res-title").textContent=title+(isDailyChallenge?" (Daily Challenge!)":"");
   el("res-sub").textContent=sub;
   el("res-score").textContent=score;
   el("res-correct").textContent=correct+"/"+questions.length;
   el("res-streak").textContent=bestStreak;
-  var badges=[];
-  if(correct===questions.length) badges.push({t:"Perfect Score!",col:"#a78bfa"});
-  if(bestStreak>=5) badges.push({t:"5-Streak Champ!",col:"#ffa94d"});
-  if(score>=150) badges.push({t:"Speed Demon!",col:"#4ecdc4"});
-  if(correct>=8) badges.push({t:"Brain Master!",col:"#3dd68c"});
-  var html="";
-  for(var b=0;b<badges.length;b++){
-    html+='<span class="badge" style="background:'+badges[b].col+'22;color:'+badges[b].col+';border:1.5px solid '+badges[b].col+'">'+badges[b].t+'</span>';
-  }
-  el("badges").innerHTML=html;
+  el("xp-gain").textContent="+"+xpEarned+" XP earned"+(isDailyChallenge?" (includes +50 Daily Bonus!)":"");
+  var bdgs=[];
+  if(correct===questions.length) bdgs.push({t:"Perfect Score!",col:"#a78bfa"});
+  if(bestStreak>=5) bdgs.push({t:"5-Streak!",col:"#ffa94d"});
+  if(score>=200) bdgs.push({t:"Speed Demon!",col:"#4ecdc4"});
+  if(score>=150) bdgs.push({t:"Brain Master!",col:"#3dd68c"});
+  if(isDailyChallenge) bdgs.push({t:"Daily Hero!",col:"#ffa94d"});
+  if(newAch.length) bdgs.push({t:newAch.length+" New Trophy!",col:"#ffe066"});
+  var bhtml="";
+  for(var b=0;b<bdgs.length;b++) bhtml+='<span class="badge" style="background:'+bdgs[b].col+'22;color:'+bdgs[b].col+';border:1.5px solid '+bdgs[b].col+'">'+bdgs[b].t+'</span>';
+  el("badges").innerHTML=bhtml;
+  lbRenderTabs(subjKeys[0]||"math");
   showScreen("results");
   updateHomeStats();
 }
 
-// How to Play toggle
-document.getElementById("htp-toggle").addEventListener("click", function(){
-  var steps = document.getElementById("htp-steps");
-  var arrow = document.getElementById("htp-arrow");
-  if(steps.style.display === "flex"){
-    steps.style.display = "none";
-    arrow.style.transform = "rotate(0deg)";
-  } else {
-    steps.style.display = "flex";
-    arrow.style.transform = "rotate(90deg)";
+// ── LEADERBOARD ───────────────────────────────────────────
+function lbRenderTabs(activeSubj){
+  var lbd=lbLoad(); var subjs=Object.keys(lbd).filter(function(k){return lbd[k]&&lbd[k].length>0;});
+  var tabs=el("lb-tabs"); var list=el("lb-list");
+  if(!subjs.length){ tabs.innerHTML=""; list.innerHTML='<div class="lb-empty">No scores yet! Play a game to get on the board.</div>'; return; }
+  tabs.innerHTML=subjs.map(function(s){ return '<button type="button" class="lb-tab'+(s===activeSubj?" active":"")+'" data-subj="'+s+'">'+(LABELS[s]||s)+'</button>'; }).join("");
+  var tabBtns=tabs.querySelectorAll("button.lb-tab");
+  for(var i=0;i<tabBtns.length;i++){
+    (function(btn){ btn.addEventListener("click",function(){ lbRenderTabs(btn.getAttribute("data-subj")); }); })(tabBtns[i]);
   }
-});
+  lbRenderList(activeSubj, lbd);
+}
+function lbRenderList(subj, lbd){
+  if(!lbd) lbd=lbLoad();
+  var list=el("lb-list"); var entries=lbd[subj]||[];
+  if(!entries.length){ list.innerHTML='<div class="lb-empty">No scores for this subject yet!</div>'; return; }
+  var rs=["&#129351;","&#129352;","&#129353;"]; var rc=["gold","silver","bronze"];
+  list.innerHTML=entries.map(function(e,i){
+    var isMe=(e.name===playerName&&e.avatar===playerAvatar);
+    var rank=i<3?'<span class="lb-rank '+rc[i]+'">'+rs[i]+'</span>':'<span class="lb-rank" style="color:rgba(255,255,255,0.4)">'+(i+1)+'</span>';
+    return '<div class="lb-row'+(isMe?" me":"")+'">'+rank+'<span class="lb-av">'+e.avatar+'</span><span class="lb-name">'+e.name+(isMe?' <span style="font-size:.68rem;color:#ffe066">(you)</span>':'')+'</span><span class="lb-score">'+e.score+' &#11088;</span></div>';
+  }).join("");
+}
 
+// ── NICKNAME PICKER ───────────────────────────────────────
+function initAvatarGrid(){
+  var grid=el("avatar-grid");
+  grid.innerHTML=AVATARS.map(function(av,i){ return '<button type="button" class="av-btn" data-idx="'+i+'">'+av+'</button>'; }).join("");
+  var avBtns=grid.querySelectorAll(".av-btn");
+  for(var i=0;i<avBtns.length;i++){
+    (function(btn,idx){ btn.addEventListener("click",function(){
+      for(var j=0;j<avBtns.length;j++) avBtns[j].classList.remove("picked");
+      btn.classList.add("picked"); pickedAvIdx=idx; playerAvatar=AVATARS[idx]; checkNickReady();
+    }); })(avBtns[i],i);
+  }
+}
+function checkNickReady(){ var inp=el("nick-input"); el("nick-go").disabled=!(inp.value.trim().length>=2&&pickedAvIdx>=0&&pickedGrade>0); }
+function showNickOverlay(){
+  initAvatarGrid();
+  // init grade buttons
+  var gradeBtns = document.querySelectorAll("button.grade-btn");
+  for(var gi=0;gi<gradeBtns.length;gi++){
+    (function(btn){
+      btn.addEventListener("click",function(){
+        for(var j=0;j<gradeBtns.length;j++) gradeBtns[j].classList.remove("picked");
+        btn.classList.add("picked");
+        pickedGrade = parseInt(btn.getAttribute("data-grade"));
+        checkNickReady();
+      });
+    })(gradeBtns[gi]);
+    // restore saved grade
+    if(parseInt(gradeBtns[gi].getAttribute("data-grade")) === pickedGrade){
+      gradeBtns[gi].classList.add("picked");
+    }
+  }
+  el("nick-overlay").classList.remove("hidden");
+  var inp=el("nick-input"); inp.value=playerName||"";
+  inp.oninput=checkNickReady;
+  el("nick-go").onclick=function(){
+    playerName=el("nick-input").value.trim();
+    playerGrade=pickedGrade;
+    var save=saveLoad(); save.grade=playerGrade; savePersist(save);
+    el("nick-overlay").classList.add("hidden");
+    el("home-name").textContent=playerName;
+    el("home-av").innerHTML=playerAvatar;
+    updateHomeStats();
+    startGame();
+  };
+}
+
+// ── ACHIEVEMENTS ──────────────────────────────────────────
+function showAchievements(){
+  var save=saveLoad();
+  var achs=save.achievements||[];
+  var grid=el("ach-grid");
+  grid.innerHTML=ACH_DEFS.map(function(a){
+    var unlocked=achs.indexOf(a.id)!==-1;
+    return '<div class="ach-item'+(unlocked?" unlocked":"")+'"><span class="ach-icon">'+a.icon+'</span><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div>';
+  }).join("");
+  el("ach-unlocked-count").textContent=achs.length+" of "+ACH_DEFS.length+" unlocked";
+  var curXP=save.xp||0; var curRank=getRank(curXP);
+  var rl=el("rank-list");
+  rl.innerHTML=RANKS.map(function(r){
+    var isCur=r.name===curRank.name;
+    return '<div class="rank-item'+(isCur?" current":"")+'"><span class="rank-badge">'+r.icon+'</span><div class="rank-info"><div class="rank-name">'+r.name+(isCur?' <span style="color:#4ecdc4;font-size:.7rem">(YOU)</span>':'')+'</div><div class="rank-req">'+r.xp+' XP needed</div></div></div>';
+  }).join("");
+  el("ach-overlay").classList.remove("hidden");
+}
+
+// ── TAB SWITCHING ─────────────────────────────────────────
+function switchTab(tab){
+  ["quiz","memory","trophy"].forEach(function(t){
+    var el2=document.getElementById("tab-"+t);
+    if(el2) el2.style.display=(t===tab?"block":"none");
+    var nb=document.getElementById("nav-"+t);
+    if(nb) nb.classList.toggle("active",t===tab);
+  });
+  if(tab==="trophy") renderTrophyTab();
+  if(tab==="memory" && !memStarted) startMemory();
+}
+
+// ── FLAGS DATA ────────────────────────────────────────────
+var FLAGS = [
+  {flag:"&#127464;&#127462;",name:"Canada"},
+  {flag:"&#127482;&#127480;",name:"USA"},
+  {flag:"&#127468;&#127463;",name:"UK"},
+  {flag:"&#127467;&#127479;",name:"France"},
+  {flag:"&#127465;&#127466;",name:"Germany"},
+  {flag:"&#127470;&#127481;",name:"Italy"},
+  {flag:"&#127466;&#127480;",name:"Spain"},
+  {flag:"&#127471;&#127477;",name:"Japan"},
+  {flag:"&#127464;&#127475;",name:"China"},
+  {flag:"&#127470;&#127475;",name:"India"},
+  {flag:"&#127463;&#127479;",name:"Brazil"},
+  {flag:"&#127462;&#127482;",name:"Australia"},
+  {flag:"&#127474;&#127485;",name:"Mexico"},
+  {flag:"&#127472;&#127479;",name:"South Korea"},
+  {flag:"&#127479;&#127482;",name:"Russia"},
+  {flag:"&#127475;&#127473;",name:"Netherlands"},
+  {flag:"&#127480;&#127466;",name:"Sweden"},
+  {flag:"&#127475;&#127476;",name:"Norway"},
+  {flag:"&#127465;&#127472;",name:"Denmark"},
+  {flag:"&#127477;&#127473;",name:"Poland"},
+  {flag:"&#127468;&#127479;",name:"Greece"},
+  {flag:"&#127481;&#127479;",name:"Turkey"},
+  {flag:"&#127462;&#127479;",name:"Argentina"},
+  {flag:"&#127480;&#127462;",name:"Saudi Arabia"},
+  {flag:"&#127467;&#127470;",name:"Finland"},
+  {flag:"&#127477;&#127481;",name:"Portugal"},
+  {flag:"&#127462;&#127466;",name:"UAE"},
+  {flag:"&#127470;&#127466;",name:"Ireland"},
+  {flag:"&#127475;&#127487;",name:"New Zealand"},
+  {flag:"&#127480;&#127468;",name:"Singapore"},
+  {flag:"&#127480;&#127462;",name:"South Africa"},
+  {flag:"&#127466;&#127468;",name:"Egypt"}
+];
+
+// ── MEMORY GAME ───────────────────────────────────────────
+var memPairs     = 8;
+var memCards     = [];
+var memFlipped   = [];
+var memMatched   = 0;
+var memMoves     = 0;
+var memLocked    = false;
+var memStarted   = false;
+var MEM_BEST_KEY = "brainblast_mem_best";
+
+function setMemDiff(pairs, btn){
+  memPairs = pairs;
+  ["diff-easy","diff-med","diff-hard"].forEach(function(id){
+    var b=document.getElementById(id);
+    if(b) b.classList.remove("on");
+  });
+  if(btn) btn.classList.add("on");
+  startMemory();
+}
+
+function startMemory(){
+  memStarted   = true;
+  memFlipped   = [];
+  memMatched   = 0;
+  memMoves     = 0;
+  memLocked    = false;
+  document.getElementById("mem-moves").textContent  = 0;
+  document.getElementById("mem-pairs").textContent  = 0;
+  document.getElementById("mem-total").textContent  = memPairs;
+  document.getElementById("mem-complete").style.display = "none";
+  document.getElementById("mem-new-btn").style.display  = "block";
+
+  // pick random flags
+  var pool = shuffle(FLAGS).slice(0, memPairs);
+  // each flag becomes 2 cards: one flag-type, one name-type
+  var cards = [];
+  for(var i=0;i<pool.length;i++){
+    cards.push({id:i, flag:pool[i].flag, name:pool[i].name, type:"flag"});
+    cards.push({id:i, flag:pool[i].flag, name:pool[i].name, type:"name"});
+  }
+  memCards = shuffle(cards);
+
+  var cols = memPairs <= 8 ? 4 : memPairs <= 12 ? 4 : 4;
+  var grid = document.getElementById("mem-board");
+  grid.className = "mem-grid g"+memCards.length;
+  grid.style.gridTemplateColumns = "repeat("+cols+",1fr)";
+  grid.innerHTML = "";
+
+  for(var j=0;j<memCards.length;j++){
+    (function(card, idx){
+      var div = document.createElement("div");
+      div.className = "mem-card";
+      div.setAttribute("data-idx", idx);
+      // back face (question mark)
+      var back = document.createElement("div");
+      back.className = "card-back";
+      back.textContent = "?";
+      // front face
+      var front = document.createElement("div");
+      front.className = "card-front card-type-"+card.type;
+      var flagSpan = document.createElement("span");
+      flagSpan.className = "card-flag";
+      flagSpan.innerHTML = card.flag;
+      var nameSpan = document.createElement("span");
+      nameSpan.className = "card-name";
+      nameSpan.textContent = card.name;
+      front.appendChild(flagSpan);
+      front.appendChild(nameSpan);
+      div.appendChild(back);
+      div.appendChild(front);
+      div.addEventListener("click", function(){ flipCard(idx); });
+      grid.appendChild(div);
+    })(memCards[j], j);
+  }
+
+  // load best score
+  try{
+    var bests = JSON.parse(localStorage.getItem(MEM_BEST_KEY)||"{}");
+    var best = bests[memPairs];
+    document.getElementById("mem-best-label").textContent = best ? "Best: "+best+" moves" : "Best: --";
+  }catch(e){}
+}
+
+function flipCard(idx){
+  if(memLocked) return;
+  var cardEl = document.querySelector("[data-idx='"+idx+"']");
+  if(!cardEl || cardEl.classList.contains("flipped") || cardEl.classList.contains("matched")) return;
+  cardEl.classList.add("flipped");
+  memFlipped.push(idx);
+  if(memFlipped.length === 2){
+    memMoves++;
+    document.getElementById("mem-moves").textContent = memMoves;
+    checkMemMatch();
+  }
+}
+
+function checkMemMatch(){
+  memLocked = true;
+  var i1 = memFlipped[0], i2 = memFlipped[1];
+  var c1 = memCards[i1], c2 = memCards[i2];
+  if(c1.id === c2.id && c1.type !== c2.type){
+    // match!
+    setTimeout(function(){
+      var cards = document.querySelectorAll(".mem-card");
+      cards[i1].classList.add("matched");
+      cards[i2].classList.add("matched");
+      memMatched++;
+      document.getElementById("mem-pairs").textContent = memMatched;
+      memFlipped = [];
+      memLocked  = false;
+      if(memMatched === memPairs) memComplete();
+    }, 400);
+  } else {
+    // no match
+    setTimeout(function(){
+      var cards = document.querySelectorAll(".mem-card");
+      cards[i1].classList.remove("flipped");
+      cards[i2].classList.remove("flipped");
+      memFlipped = [];
+      memLocked  = false;
+    }, 800);
+  }
+}
+
+function memComplete(){
+  var comp = document.getElementById("mem-complete");
+  var sub  = document.getElementById("mem-complete-sub");
+  comp.style.display = "block";
+  document.getElementById("mem-new-btn").style.display = "none";
+  var msg = memMoves <= memPairs+2 ? "Incredible memory! Almost perfect!" : memMoves <= memPairs*2 ? "Great job! You are getting sharper!" : "Well done! Keep practising!";
+  sub.textContent = "You finished in "+memMoves+" moves. "+msg;
+  // save best
+  try{
+    var bests = JSON.parse(localStorage.getItem(MEM_BEST_KEY)||"{}");
+    if(!bests[memPairs] || memMoves < bests[memPairs]) bests[memPairs] = memMoves;
+    localStorage.setItem(MEM_BEST_KEY, JSON.stringify(bests));
+    document.getElementById("mem-best-label").textContent = "Best: "+bests[memPairs]+" moves";
+  }catch(e){}
+  // award XP
+  var save=saveLoad();
+  var xpEarned = memPairs<=8?20:memPairs<=12?30:40;
+  save.xp=(save.xp||0)+xpEarned;
+  savePersist(save);
+  updateHomeStats();
+}
+
+// ── TROPHY TAB RENDERER ───────────────────────────────────
+function renderTrophyTab(){
+  var save=saveLoad();
+  var achs=save.achievements||[];
+  var grid=document.getElementById("trophy-grid");
+  if(!grid) return;
+  grid.innerHTML=ACH_DEFS.map(function(a){
+    var unlocked=achs.indexOf(a.id)!==-1;
+    return '<div class="ach-item'+(unlocked?" unlocked":"")+'"><span class="ach-icon">'+a.icon+'</span><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div>';
+  }).join("");
+  document.getElementById("trophy-count").textContent=achs.length+" of "+ACH_DEFS.length+" unlocked";
+  var curXP=save.xp||0; var curRank=getRank(curXP);
+  var rl=document.getElementById("trophy-rank-list");
+  if(rl) rl.innerHTML=RANKS.map(function(r){
+    var isCur=r.name===curRank.name;
+    return '<div class="rank-item'+(isCur?" current":"")+'"><span class="rank-badge">'+r.icon+'</span><div class="rank-info"><div class="rank-name">'+r.name+(isCur?' <span style="color:#4ecdc4;font-size:.7rem">(YOU)</span>':'')+'</div><div class="rank-req">'+r.xp+' XP needed</div></div></div>';
+  }).join("");
+}
+
+// restore player grade from save on load
+(function(){
+  var save = saveLoad();
+  if(save.grade) { playerGrade = save.grade; pickedGrade = save.grade; }
+})();
 updateHomeStats();
 </script>
 </body>
