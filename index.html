@@ -91,6 +91,19 @@ button.menu-btn{width:100%;padding:13px;background:rgba(255,255,255,0.08);color:
 button.menu-btn:hover{background:rgba(255,255,255,0.15)}
 
 @media(max-width:420px){.subj-grid{grid-template-columns:repeat(2,1fr)}.opts{grid-template-columns:1fr}}
+
+/* HOW TO PLAY */
+.how-to-play{margin:22px 0 18px}
+.htp-title{font-size:.78rem;font-weight:800;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.htp-title .arrow{font-size:.7rem;transition:transform .25s;display:inline-block}
+.htp-title .arrow.open{transform:rotate(90deg)}
+.htp-steps{display:none;gap:10px;flex-direction:column}
+.htp-step{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px}
+.htp-num{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#ffe066;min-width:28px;line-height:1.2}
+.htp-body{flex:1}
+.htp-head{font-weight:800;font-size:.9rem;color:#fff;margin-bottom:3px}
+.htp-desc{font-size:.8rem;color:rgba(255,255,255,0.6);line-height:1.5}
+.htp-tip{margin-top:10px;background:rgba(255,224,102,0.1);border:1.5px solid rgba(255,224,102,0.25);border-radius:12px;padding:10px 14px;font-size:.8rem;color:rgba(255,224,102,0.9);font-weight:700;line-height:1.5}
 </style>
 </head>
 <body>
@@ -117,6 +130,56 @@ button.menu-btn:hover{background:rgba(255,255,255,0.15)}
       <button type="button" class="subj on" data-subj="english"><span class="icon">&#128218;</span>English</button>
       <button type="button" class="subj on" data-subj="engineering"><span class="icon">&#9881;</span>Engineering</button>
       <button type="button" class="subj on" data-subj="stories"><span class="icon">&#128214;</span>Stories</button>
+    </div>
+    <div class="how-to-play">
+      <div class="htp-title" id="htp-toggle">
+        <span class="arrow" id="htp-arrow">&#9654;</span> How to Play
+      </div>
+      <div class="htp-steps" id="htp-steps">
+        <div class="htp-step">
+          <div class="htp-num">1</div>
+          <div class="htp-body">
+            <div class="htp-head">&#127775; Pick your subjects</div>
+            <div class="htp-desc">Tap any subject button above to turn it on or off. Golden = selected! Pick just one subject or mix them all together. The counter shows how many are active.</div>
+          </div>
+        </div>
+        <div class="htp-step">
+          <div class="htp-num">2</div>
+          <div class="htp-body">
+            <div class="htp-head">&#128640; Launch the game</div>
+            <div class="htp-desc">Press the big yellow Launch button. You will get 10 random questions from your chosen subjects. Each game is different!</div>
+          </div>
+        </div>
+        <div class="htp-step">
+          <div class="htp-num">3</div>
+          <div class="htp-body">
+            <div class="htp-head">&#9201; Answer before the timer runs out!</div>
+            <div class="htp-desc">A coloured bar counts down at the top. Green = lots of time. Orange = hurry up! Red = almost out of time! The faster you answer, the more bonus stars you earn.</div>
+          </div>
+        </div>
+        <div class="htp-step">
+          <div class="htp-num">4</div>
+          <div class="htp-body">
+            <div class="htp-head">&#128218; Read the story first (Stories mode)</div>
+            <div class="htp-desc">When a story question appears, a pink box shows a short story. Read it carefully, THEN pick your answer. The question is always about the story!</div>
+          </div>
+        </div>
+        <div class="htp-step">
+          <div class="htp-num">5</div>
+          <div class="htp-body">
+            <div class="htp-head">&#11088; Collect stars and build streaks</div>
+            <div class="htp-desc">Every correct answer earns stars. Answer 3 or more in a row for a STREAK BONUS! The game gets harder as you get more right, and hints disappear at higher levels.</div>
+          </div>
+        </div>
+        <div class="htp-step">
+          <div class="htp-num">6</div>
+          <div class="htp-body">
+            <div class="htp-head">&#127942; Earn badges at the end</div>
+            <div class="htp-desc">Finish all 10 questions to see your score and collect special badges like Perfect Score, Speed Demon, Brain Master, and 5-Streak Champ!</div>
+          </div>
+        </div>
+        <div class="htp-tip">&#128161; Top Tip: Answer quickly for bonus stars, but make sure you read the question first. A right answer is always better than a fast wrong one!</div>
+      </div>
     </div>
     <button type="button" class="start" id="btn-start">&#128640; Launch Brain Blast!</button>
   </div>
@@ -197,9 +260,7 @@ var Q = {
   ],
   science:[
     {q:"What gas do plants use to make food during photosynthesis?",a:["Carbon dioxide","Oxygen","Nitrogen","Hydrogen"],c:0,h:"We breathe this out!"},
-    {q:"Which state of matter has a definite shape AND definite volume?",a:["Solid","Liquid","Gas","Plasma"],c:0,h:"Think of rocks and ice"},
     {q:"What organ pumps blood around your body?",a:["Heart","Lungs","Brain","Liver"],c:0,h:"You can feel it beat"},
-    {q:"What force pulls objects toward the centre of Earth?",a:["Gravity","Friction","Magnetism","Tension"],c:0,h:"It keeps your feet on the ground"},
     {q:"Which of these is a mammal?",a:["Whale","Salmon","Eagle","Frog"],c:0,h:"Mammals breathe air and feed young with milk"},
     {q:"What is the boiling point of water in Celsius?",a:["100 degrees","50 degrees","212 degrees","0 degrees"],c:0,h:"When water turns to steam"},
     {q:"Which part of the plant makes seeds?",a:["Flower","Leaf","Root","Stem"],c:0,h:"Bees love to visit this part"},
@@ -209,7 +270,38 @@ var Q = {
     {q:"What is the process of water turning into vapour called?",a:["Evaporation","Condensation","Precipitation","Melting"],c:0,h:"Puddles disappear this way on a sunny day"},
     {q:"Which of these is NOT a renewable energy source?",a:["Coal","Solar power","Wind power","Hydro power"],c:0,h:"It took millions of years to form underground"},
     {q:"What do plants produce during photosynthesis that we need to breathe?",a:["Oxygen","Carbon dioxide","Nitrogen","Water vapour"],c:0,h:"Trees are like air factories!"},
-    {q:"What is the name of the process where water falls from clouds?",a:["Precipitation","Evaporation","Condensation","Transpiration"],c:0,h:"Rain and snow are examples"}
+    {q:"What is the name of the process where water falls from clouds?",a:["Precipitation","Evaporation","Condensation","Transpiration"],c:0,h:"Rain and snow are examples"},
+    {q:"How many bones does an adult human body have?",a:["206","150","300","180"],c:0,h:"Babies actually have more!"},
+    {q:"What do we call the study of living things?",a:["Biology","Chemistry","Physics","Geology"],c:0,h:"Bio means life in Greek"},
+    {q:"Which planet in our solar system is NOT a science topic - wait, trick question! What is the centre of our Solar System?",a:["The Sun","Earth","The Moon","Jupiter"],c:0,h:"Everything orbits around it"},
+    {q:"What are the three states of matter?",a:["Solid, liquid and gas","Hot, warm and cold","Hard, soft and squishy","Big, medium and small"],c:0,h:"Think of ice, water and steam"},
+    {q:"When ice melts, it changes from a solid to a what?",a:["Liquid","Gas","Plasma","Vapour"],c:0,h:"Think of what happens to an ice cube on a warm day"},
+    {q:"When water boils and turns to steam, what state of matter is the steam?",a:["Gas","Liquid","Solid","Plasma"],c:0,h:"Steam rises and spreads out - just like a gas!"},
+    {q:"What do we call the amount of matter in an object?",a:["Mass","Weight","Volume","Density"],c:0,h:"It is measured in grams or kilograms"},
+    {q:"Which tool do scientists use to measure mass?",a:["A balance scale","A ruler","A thermometer","A stopwatch"],c:0,h:"It compares two sides to find mass"},
+    {q:"A feather and a rock are the same size. Which has more mass?",a:["The rock","The feather","They are the same","It depends on colour"],c:0,h:"Think about which is heavier"},
+    {q:"What is the difference between mass and weight?",a:["Mass is the amount of matter, weight is the pull of gravity on it","They mean exactly the same thing","Mass is for liquids, weight is for solids","Weight is measured in kilograms, mass in Newtons"],c:0,h:"Mass stays the same on the Moon, but weight changes!"},
+    {q:"What symbol is used for the element Gold on the periodic table?",a:["Au","Go","Gd","Gl"],c:0,h:"It comes from the Latin word Aurum"},
+    {q:"What symbol is used for the element Oxygen on the periodic table?",a:["O","Ox","On","Og"],c:0,h:"Simple - just one letter!"},
+    {q:"What symbol is used for the element Iron on the periodic table?",a:["Fe","Ir","In","Io"],c:0,h:"It comes from the Latin word Ferrum"},
+    {q:"What symbol is used for the element Carbon on the periodic table?",a:["C","Ca","Cb","Cr"],c:0,h:"Pencil lead is made of carbon!"},
+    {q:"What symbol is used for the element Hydrogen on the periodic table?",a:["H","Hy","Hg","Hd"],c:0,h:"The lightest element of all!"},
+    {q:"What symbol is used for the element Silver on the periodic table?",a:["Ag","Si","Sv","Sl"],c:0,h:"It comes from the Latin word Argentum"},
+    {q:"How many elements are on the periodic table? (approximately)",a:["118","100","50","200"],c:0,h:"Scientists have discovered new ones over time"},
+    {q:"What do all elements on the periodic table have in common?",a:["They are all pure substances made of one type of atom","They are all metals","They are all gases","They are all found in nature"],c:0,h:"The periodic table organises all known elements"},
+    {q:"What is motion?",a:["When an object changes its position","When an object gets hotter","When an object changes colour","When an object gets bigger"],c:0,h:"Is the object moving from one place to another?"},
+    {q:"What do we call how fast an object is moving?",a:["Speed","Force","Mass","Friction"],c:0,h:"Measured in km per hour or m per second"},
+    {q:"A ball is sitting still on the ground. What is its speed?",a:["Zero","Very fast","Unknown","It depends on size"],c:0,h:"If it is not moving, its speed is..."},
+    {q:"What is a force?",a:["A push or a pull on an object","The speed of an object","The mass of an object","The colour of an object"],c:0,h:"You use force when you open a door!"},
+    {q:"What force pulls everything down toward Earth?",a:["Gravity","Friction","Magnetism","Air resistance"],c:0,h:"It is why things fall when you drop them"},
+    {q:"When you kick a football, what type of force are you using?",a:["A push force","A pull force","Gravity","Friction"],c:0,h:"Your foot pushes the ball forward"},
+    {q:"What happens to a stationary object when a force is applied to it?",a:["It starts to move","It disappears","It gets heavier","Nothing happens"],c:0,h:"Think about pushing a toy car"},
+    {q:"What is friction?",a:["A force that slows down moving objects","A type of magnet","The speed of a moving object","A force that makes things float"],c:0,h:"It acts between two surfaces that are touching"},
+    {q:"Which surface would create MORE friction for a sliding book?",a:["A rough carpet","A smooth glass table","An icy surface","A polished floor"],c:0,h:"More bumps and texture means more friction"},
+    {q:"Is friction helpful or harmful?",a:["It can be both helpful and harmful","It is always helpful","It is always harmful","It has no effect"],c:0,h:"Think of car brakes AND engine wear"},
+    {q:"Why do cars have brakes?",a:["Friction from the brakes slows the car down","The brakes push the car forward","Brakes make the car go faster","Brakes reduce the mass of the car"],c:0,h:"What force do brakes create?"},
+    {q:"What would happen if there was NO friction on a road?",a:["Cars would not be able to stop or steer","Cars would go faster","Cars would be lighter","Cars would float"],c:0,h:"Think about walking on ice!"},
+    {q:"What do we put on machines to reduce friction?",a:["Oil or lubricant","Water","Sand","Glue"],c:0,h:"It makes surfaces slippery so they move more smoothly"}
   ],
   coding:[
     {q:"In coding, what does a loop do?",a:["Repeats actions","Stops the program","Deletes data","Names a variable"],c:0,h:"Think of a circular track"},
@@ -422,12 +514,12 @@ function showQuestion(){
   el("btn-next").className="next-q hidden";
   el("streak-display").classList.add("hidden");
   answered=false;
-  startTimer();
+  startTimer(!!item.story);
 }
 
-function startTimer(){
+function startTimer(isStory){
   clearInterval(timerID);
-  var maxTime=Math.max(10,26-(difficulty*3));
+  var maxTime=isStory?180:Math.max(10,26-(difficulty*3));
   timeLeft=maxTime;
   el("timer-num").textContent=maxTime;
   updateTimerBar(maxTime,maxTime);
@@ -538,6 +630,19 @@ function showResults(){
   showScreen("results");
   updateHomeStats();
 }
+
+// How to Play toggle
+document.getElementById("htp-toggle").addEventListener("click", function(){
+  var steps = document.getElementById("htp-steps");
+  var arrow = document.getElementById("htp-arrow");
+  if(steps.style.display === "flex"){
+    steps.style.display = "none";
+    arrow.style.transform = "rotate(0deg)";
+  } else {
+    steps.style.display = "flex";
+    arrow.style.transform = "rotate(90deg)";
+  }
+});
 
 updateHomeStats();
 </script>
