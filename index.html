@@ -39,19 +39,27 @@ window.fbSaveScore = async function(name, avatar, grade, subject, score, correct
 
 window.fbGetTop5 = async function(subject){
   try {
+    // Simple query - no composite index needed
     const q = query(
       collection(db, "leaderboard"),
-      where("subject","==", subject),
       orderBy("score","desc"),
-      limit(5)
+      limit(100)
     );
     const snap = await getDocs(q);
-    return snap.docs.map(function(d){ return d.data(); });
-  } catch(e){ console.warn("Firebase fetch error:", e); return []; }
+    const all = snap.docs.map(function(d){ return d.data(); });
+    // Filter by subject in JS and keep top 5
+    const filtered = all.filter(function(e){ return e.subject === subject; });
+    return filtered.slice(0, 5);
+  } catch(e){
+    console.warn("Firebase fetch error:", e.message);
+    return [];
+  }
 };
 
 window.fbReady = true;
-console.log("Firebase connected!");
+console.log("Firebase ready!");
+// Signal to any waiting code
+window.dispatchEvent(new Event("fbready"));
 </script>
 <style>
 /* ═══════════════════════════════════════════════
@@ -1674,6 +1682,10 @@ function startGame(){
   cur=0;score=0;correct=0;streak=0;bestStreak=0;difficulty=1;
   pupUsed={fif:false,time:false,skip:false};pupAllUsed=false;
   ["pup-5050","pup-time","pup-skip"].forEach(function(id){ el(id).classList.remove("used"); el(id).disabled=false; });
+  // Pre-fetch global scores in background while kid plays
+  var subjsInGame = {};
+  questions.forEach(function(q){ subjsInGame[q.subj]=true; });
+  glbPrefetch(Object.keys(subjsInGame));
   goPage("page-quiz");
   showQuestion();
 }
@@ -1810,34 +1822,90 @@ function glbRenderTabs(subjects, activeSubj){
   glbLoadSubject(activeSubj);
 }
 
+// In-memory cache: { subjectKey: { entries: [...], ts: timestamp } }
+var glbCache = {};
+var GLB_CACHE_TTL = 60000; // 60 seconds cache lifetime
+
+function glbRenderEntries(subj, entries){
+  var list = document.getElementById("glb-list");
+  if(!list) return;
+  if(!entries || !entries.length){
+    list.innerHTML = '<div class="lb-empty">No scores for this subject yet - you could be first!</div>';
+    return;
+  }
+  var rs=["&#129351;","&#129352;","&#129353;"], rc=["gold","silver","bronze"];
+  list.innerHTML = entries.map(function(e,i){
+    var isMe = (e.name === playerName);
+    return '<div class="lb-row'+(isMe?" me":"")+'">'
+      +(i<3?'<span class="lb-rank '+rc[i]+'">'+rs[i]+'</span>':'<span class="lb-rank" style="color:rgba(255,255,255,0.35)">'+(i+1)+'</span>')
+      +'<span class="lb-av">'+(e.avatar||"&#128640;")+'</span>'
+      +'<span class="lb-name">'+e.name+' <span style="font-size:.62rem;color:var(--muted)">Grade '+e.grade+'</span>'+(isMe?' <span style="color:var(--gold);font-size:.62rem">(you)</span>':'')+'</span>'
+      +'<span class="lb-score">'+e.score+' &#11088;</span>'
+      +'</div>';
+  }).join("");
+}
+
 function glbLoadSubject(subj){
   var list = document.getElementById("glb-list");
   if(!list) return;
-  // update active tab
-  document.querySelectorAll("#glb-tabs .lb-tab").forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-subj")===subj); });
-  list.innerHTML = '<div class="lb-empty" style="padding:10px 0">Loading...</div>';
+  // update active tab highlight
+  document.querySelectorAll("#glb-tabs .lb-tab").forEach(function(b){
+    b.classList.toggle("active", b.getAttribute("data-subj")===subj);
+  });
+  // serve from cache if still fresh
+  var cached = glbCache[subj];
+  if(cached && (Date.now() - cached.ts) < GLB_CACHE_TTL){
+    glbRenderEntries(subj, cached.entries);
+    return;
+  }
+  // show placeholder only if nothing cached yet
+  if(!cached){
+    list.innerHTML = '<div class="lb-empty" style="padding:6px 0;font-size:.78rem">&#8987; Loading global scores...</div>';
+  }
+  // fetch from Firebase
   if(typeof window.fbGetTop5 === "function"){
     window.fbGetTop5(subj).then(function(entries){
-      if(!entries || !entries.length){
-        list.innerHTML = '<div class="lb-empty">No scores for this subject yet - you could be first!</div>';
-        return;
-      }
-      var rs=["&#129351;","&#129352;","&#129353;"], rc=["gold","silver","bronze"];
-      list.innerHTML = entries.map(function(e,i){
-        var isMe = (e.name === playerName);
-        return '<div class="lb-row'+(isMe?" me":"")+'">'
-          +(i<3?'<span class="lb-rank '+rc[i]+'">'+rs[i]+'</span>':'<span class="lb-rank" style="color:rgba(255,255,255,0.35)">'+(i+1)+'</span>')
-          +'<span class="lb-av">'+(e.avatar||"&#128640;")+'</span>'
-          +'<span class="lb-name">'+e.name+' <span style="font-size:.62rem;color:var(--muted)">Grade '+e.grade+'</span>'+(isMe?' <span style="color:var(--gold);font-size:.62rem">(you)</span>':'')+'</span>'
-          +'<span class="lb-score">'+e.score+' &#11088;</span>'
-          +'</div>';
-      }).join("");
+      glbCache[subj] = { entries: entries, ts: Date.now() };
+      glbRenderEntries(subj, entries);
     }).catch(function(){
       list.innerHTML = '<div class="lb-empty">Could not load scores - check your connection.</div>';
     });
   } else {
-    // Firebase not ready yet - retry after a short delay
-    setTimeout(function(){ glbLoadSubject(subj); }, 1500);
+    // Firebase module still initialising - wait for ready event
+    var retryCount = 0;
+    function tryAgain(){
+      retryCount++;
+      if(typeof window.fbGetTop5 === "function"){
+        glbLoadSubject(subj);
+      } else if(retryCount < 10){
+        setTimeout(tryAgain, 500);
+      } else {
+        if(list) list.innerHTML = '<div class="lb-empty">Firebase not available. Check your internet connection.</div>';
+      }
+    }
+    window.addEventListener("fbready", function(){ glbLoadSubject(subj); }, {once:true});
+    setTimeout(tryAgain, 500);
+  }
+}
+
+// Pre-fetch scores in the background as soon as a game starts
+// so they are ready by the time results screen appears
+function glbPrefetch(subjKeys){
+  function doFetch(){
+    if(typeof window.fbGetTop5 !== "function") return;
+    subjKeys.forEach(function(subj){
+      var cached = glbCache[subj];
+      if(cached && (Date.now() - cached.ts) < GLB_CACHE_TTL) return;
+      window.fbGetTop5(subj).then(function(entries){
+        glbCache[subj] = { entries: entries, ts: Date.now() };
+        console.log("Prefetched", subj, ":", entries.length, "entries");
+      }).catch(function(e){ console.warn("Prefetch error:", e); });
+    });
+  }
+  if(typeof window.fbGetTop5 === "function"){
+    doFetch();
+  } else {
+    window.addEventListener("fbready", doFetch, {once:true});
   }
 }
 
