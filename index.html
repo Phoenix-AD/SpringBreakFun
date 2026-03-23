@@ -5,6 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brain Blast! - Learning Adventure</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAn-Ip7OPHVqLh7evHXeebn29gtGMnGr8E",
+  authDomain: "brainblast-59184.firebaseapp.com",
+  projectId: "brainblast-59184",
+  storageBucket: "brainblast-59184.firebasestorage.app",
+  messagingSenderId: "917436999998",
+  appId: "1:917436999998:web:e0e88373e93d9a1e7fa46f"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// Expose to global scope so non-module JS can call these
+window.fbSaveScore = async function(name, avatar, grade, subject, score, correct, total){
+  try {
+    await addDoc(collection(db, "leaderboard"), {
+      name:      name,
+      avatar:    avatar,
+      grade:     grade,
+      subject:   subject,
+      score:     score,
+      correct:   correct,
+      total:     total,
+      timestamp: Date.now()
+    });
+  } catch(e){ console.warn("Firebase save error:", e); }
+};
+
+window.fbGetTop5 = async function(subject){
+  try {
+    const q = query(
+      collection(db, "leaderboard"),
+      where("subject","==", subject),
+      orderBy("score","desc"),
+      limit(5)
+    );
+    const snap = await getDocs(q);
+    return snap.docs.map(function(d){ return d.data(); });
+  } catch(e){ console.warn("Firebase fetch error:", e); return []; }
+};
+
+window.fbReady = true;
+console.log("Firebase connected!");
+</script>
 <style>
 /* ═══════════════════════════════════════════════
    RESET & BASE
@@ -333,6 +381,22 @@ button.pin-key.wide{grid-column:span 2}
 .overlay-box{background:var(--bg-mid);border:1.5px solid var(--border2);border-radius:22px;padding:24px 20px;max-width:420px;width:100%}
 .overlay-box h2{font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--gold);margin-bottom:14px;text-align:center}
 
+/* RULES OVERLAY */
+.rules-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:400;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+.rules-box{background:#0d1b2a;border:2px solid rgba(255,107,0,0.4);border-radius:22px;padding:24px 20px;max-width:440px;width:100%;max-height:90vh;overflow-y:auto}
+.rules-title{font-family:'Fredoka One',cursive;font-size:1.6rem;color:#ffc947;text-align:center;margin-bottom:4px}
+.rules-sub{text-align:center;color:rgba(255,255,255,0.55);font-size:.8rem;font-weight:700;margin-bottom:18px}
+.rule-item{display:flex;align-items:flex-start;gap:12px;background:#132338;border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px 14px;margin-bottom:9px}
+.rule-num{font-family:'Fredoka One',cursive;font-size:1.4rem;color:#ff6b00;min-width:28px;line-height:1.2}
+.rule-body{flex:1}
+.rule-head{font-weight:800;font-size:.9rem;color:#fff;margin-bottom:3px}
+.rule-desc{font-size:.78rem;color:rgba(255,255,255,0.58);line-height:1.55}
+.rules-tip{background:rgba(255,107,0,0.1);border:1.5px solid rgba(255,107,0,0.25);border-radius:12px;padding:11px 14px;font-size:.8rem;font-weight:700;color:#ff8c38;line-height:1.5;margin-bottom:18px;margin-top:4px}
+button.rules-go{width:100%;padding:15px;background:#ff6b00;color:#fff;font-family:'Fredoka One',cursive;font-size:1.2rem;border:none;border-radius:16px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+button.rules-go:hover{background:#ff8c38;transform:scale(1.02)}
+button.rules-skip{width:100%;padding:10px;background:transparent;color:rgba(255,255,255,0.4);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;border:none;cursor:pointer;margin-top:6px;-webkit-tap-highlight-color:transparent}
+button.rules-skip:hover{color:rgba(255,255,255,0.7)}
+
 @media(max-width:400px){
   .subj-grid{grid-template-columns:repeat(4,1fr)}
   .opts-grid{grid-template-columns:1fr}
@@ -549,6 +613,16 @@ button.pin-key.wide{grid-column:span 2}
       <div class="lb-tabs" id="lb-tabs"></div>
       <div class="lb-list" id="lb-list"></div>
     </div>
+
+    <!-- GLOBAL LEADERBOARD -->
+    <div class="lb-section" style="margin-top:20px">
+      <div class="section-head">
+        <span>&#127758; Global Top 5</span>
+        <span style="font-size:.65rem;color:var(--muted)">All players worldwide</span>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px" id="glb-tabs"></div>
+      <div id="glb-list"><div class="lb-empty" style="padding:10px 0">Loading global scores...</div></div>
+    </div>
     <button type="button" class="btn-primary mt16" id="btn-replay">&#128260; Play Again!</button>
     <button type="button" class="btn-secondary mt8" id="btn-to-home">&#127968; Main Menu</button>
   </div>
@@ -560,7 +634,33 @@ button.pin-key.wide{grid-column:span 2}
 <div class="page" id="page-memory">
   <div class="page-wrap">
     <div class="page-title-bar">
-      <h2>&#127988; Flag Memory</h2>
+      <h2 id="mem-page-title">&#127988; Flag Memory</h2>
+    </div>
+    <!-- Mode switcher -->
+    <div class="diff-row" style="margin-bottom:14px">
+      <button type="button" class="diff-btn on" id="mode-memory" onclick="setMemMode('memory',this)"><span style="font-size:1.1rem">&#129504;</span><span>Memory</span><span style="font-size:.58rem;opacity:.7">Match pairs</span></button>
+      <button type="button" class="diff-btn" id="mode-quiz" onclick="setMemMode('quiz',this)"><span style="font-size:1.1rem">&#127988;</span><span>Flag Quiz</span><span style="font-size:.58rem;opacity:.7">Name the flag</span></button>
+    </div>
+    <!-- Flag quiz UI (hidden by default) -->
+    <div id="flag-quiz-ui" style="display:none">
+      <div class="mem-stats-row">
+        <div class="mem-stat"><div class="mv" id="fq-score">0</div><div class="ml">Score</div></div>
+        <div class="mem-stat"><div class="mv" id="fq-num">1/10</div><div class="ml">Question</div></div>
+        <div class="mem-stat"><div class="mv" id="fq-streak">0</div><div class="ml">Streak</div></div>
+      </div>
+      <div style="text-align:center;padding:20px 0 16px">
+        <div id="fq-flag" style="font-size:5rem;line-height:1;margin-bottom:12px">&#127988;</div>
+        <div id="fq-prompt" style="font-size:.85rem;font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:16px">Which country does this flag belong to?</div>
+      </div>
+      <div class="opts-grid" id="fq-opts" style="margin-bottom:12px"></div>
+      <div id="fq-feedback" style="text-align:center;padding:10px 14px;border-radius:13px;margin-bottom:12px;font-weight:700;font-size:.9rem;display:none"></div>
+      <button type="button" class="btn-primary hidden" id="fq-next">Next Flag &#8594;</button>
+      <div id="fq-complete" style="display:none;text-align:center;padding:20px 0">
+        <div style="font-size:56px;margin-bottom:10px">&#127881;</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.6rem;color:#ffc947;margin-bottom:4px" id="fq-done-title">Flag Expert!</div>
+        <div style="font-size:.85rem;color:rgba(255,255,255,0.6);font-weight:700;margin-bottom:16px" id="fq-done-sub">You completed the flag quiz!</div>
+        <button type="button" class="btn-primary" onclick="startFlagQuiz()">&#128260; Play Again!</button>
+      </div>
     </div>
     <div class="mem-stats-row">
       <div class="mem-stat"><div class="mv" id="mem-moves">0</div><div class="ml">Moves</div></div>
@@ -894,7 +994,46 @@ var Q = {
     {q:"Is friction helpful or harmful?",a:["It can be both helpful and harmful","It is always helpful","It is always harmful","It has no effect"],c:0,h:"Think of car brakes AND engine wear",g:4},
     {q:"Why do cars have brakes?",a:["Friction from the brakes slows the car down","The brakes push the car forward","Brakes make the car go faster","Brakes reduce the mass of the car"],c:0,h:"What force do brakes create?",g:4},
     {q:"What would happen if there was NO friction on a road?",a:["Cars would not be able to stop or steer","Cars would go faster","Cars would be lighter","Cars would float"],c:0,h:"Think about walking on ice!",g:4},
-    {q:"What do we put on machines to reduce friction?",a:["Oil or lubricant","Water","Sand","Glue"],c:0,h:"It makes surfaces slippery so they move more smoothly",g:4}
+    {q:"What do we put on machines to reduce friction?",a:["Oil or lubricant","Water","Sand","Glue"],c:0,h:"It makes surfaces slippery so they move more smoothly",g:4},
+    {q:"What is the chemical symbol for water?",a:["H2O","HO2","H2O2","OH"],c:0,h:"Two hydrogen atoms and one oxygen atom",g:4},
+    {q:"What element has the symbol Na on the periodic table?",a:["Sodium","Nitrogen","Nickel","Neon"],c:0,h:"Na comes from the Latin word Natrium",g:4},
+    {q:"What element has the symbol K on the periodic table?",a:["Potassium","Krypton","Kofium","Kalcium"],c:0,h:"K comes from the Latin word Kalium",g:4},
+    {q:"What element has the symbol Pb on the periodic table?",a:["Lead","Phosphorus","Platinum","Palladium"],c:0,h:"Pb comes from the Latin word Plumbum",g:4},
+    {q:"What element has the symbol N on the periodic table?",a:["Nitrogen","Nickel","Neon","Sodium"],c:0,h:"It makes up about 78% of the air we breathe",g:4},
+    {q:"What element has the symbol He on the periodic table?",a:["Helium","Hydrogen","Hafnium","Holmium"],c:0,h:"Balloons are filled with this light gas",g:4},
+    {q:"What element has the symbol Ca on the periodic table?",a:["Calcium","Carbon","Cadmium","Caesium"],c:0,h:"Your bones and teeth are full of this",g:4},
+    {q:"What element has the symbol Cl on the periodic table?",a:["Chlorine","Calcium","Chromium","Cobalt"],c:0,h:"Used to keep swimming pools clean",g:4},
+    {q:"What element has the symbol P on the periodic table?",a:["Phosphorus","Platinum","Polonium","Palladium"],c:0,h:"Found in fertilisers and matches",g:4},
+    {q:"What element has the symbol Mg on the periodic table?",a:["Magnesium","Manganese","Mercury","Molybdenum"],c:0,h:"Plants need this to make chlorophyll",g:4},
+    {q:"What element has the symbol Zn on the periodic table?",a:["Zinc","Zirconium","Einsteinium","Hafnium"],c:0,h:"Used to coat steel to stop it rusting",g:4},
+    {q:"How many elements are in Group 1 of the periodic table (the alkali metals)?",a:["6","4","8","10"],c:0,h:"They all react vigorously with water",g:4},
+    {q:"What are noble gases known for?",a:["They are very unreactive and stable","They are the most reactive elements","They are all radioactive","They are all liquid at room temperature"],c:0,h:"Helium, neon and argon are examples",g:4},
+    {q:"What does the atomic number of an element tell you?",a:["The number of protons in the nucleus","The number of neutrons","The mass of the atom","The number of electrons only"],c:0,h:"Each element has a unique atomic number",g:4},
+    {q:"What is the lightest element on the periodic table?",a:["Hydrogen","Helium","Lithium","Carbon"],c:0,h:"It has an atomic number of 1",g:4},
+    {q:"Which organ in the human body produces insulin?",a:["Pancreas","Liver","Kidney","Stomach"],c:0,h:"Insulin controls blood sugar levels",g:4},
+    {q:"What is the largest organ in the human body?",a:["Skin","Liver","Brain","Lungs"],c:0,h:"It covers your entire body",g:4},
+    {q:"How many chambers does the human heart have?",a:["4","2","3","6"],c:0,h:"Two atria and two ventricles",g:4},
+    {q:"What is the role of red blood cells?",a:["Carry oxygen around the body","Fight infections","Clot wounds","Produce antibodies"],c:0,h:"They contain haemoglobin which carries oxygen",g:4},
+    {q:"What is the role of white blood cells?",a:["Fight infections and disease","Carry oxygen","Clot wounds","Digest food"],c:0,h:"They are part of your immune system",g:4},
+    {q:"What does the small intestine do?",a:["Absorbs nutrients from digested food","Stores waste","Produces digestive enzymes only","Filters the blood"],c:0,h:"It is where most nutrient absorption happens",g:4},
+    {q:"What is the function of the kidneys?",a:["Filter waste and excess water from the blood","Pump blood around the body","Digest food","Produce hormones only"],c:0,h:"They produce urine as a waste product",g:4},
+    {q:"What vitamin does your body produce when exposed to sunlight?",a:["Vitamin D","Vitamin C","Vitamin A","Vitamin B12"],c:0,h:"Important for strong bones",g:4},
+    {q:"What is the function of the cerebrum in the brain?",a:["Thinking, memory and voluntary movement","Controlling heartbeat","Balancing the body","Regulating breathing only"],c:0,h:"It is the largest part of the brain",g:4},
+    {q:"How many bones are in the human spine (vertebral column)?",a:["33","24","26","40"],c:0,h:"They are called vertebrae",g:4},
+    {q:"What is a calorie?",a:["A unit of energy in food","A type of vitamin","A measure of fat","A type of protein"],c:0,h:"Your body uses calories as fuel",g:4},
+    {q:"Which nutrient is most important for building and repairing muscles?",a:["Protein","Carbohydrates","Fat","Vitamins"],c:0,h:"Found in meat, eggs, beans and dairy",g:4},
+    {q:"What is the main function of carbohydrates in the body?",a:["Provide energy","Build muscles","Protect organs","Regulate temperature"],c:0,h:"Your brain runs mostly on glucose, a type of carbohydrate",g:4},
+    {q:"Why are healthy fats important in your diet?",a:["They help absorb vitamins and support brain function","They provide no benefits","They only cause weight gain","They replace protein"],c:0,h:"Avocado, nuts and fish contain healthy fats",g:4},
+    {q:"What is the recommended number of servings of vegetables and fruit per day in Canada?",a:["At least half your plate","One serving per day","Three servings per week","As little as possible"],c:0,h:"Canadian Food Guide recommends filling half your plate with these",g:4},
+    {q:"Why is it important to eat breakfast?",a:["It gives your brain and body energy to start the day","It is just a tradition","It makes lunch taste better","It has no real benefit"],c:0,h:"Your body has been fasting overnight",g:4},
+    {q:"What happens to your body if you do not drink enough water?",a:["Dehydration - tiredness, headaches and poor concentration","Nothing serious","You become stronger","Your muscles grow faster"],c:0,h:"Your body is about 60% water",g:4},
+    {q:"Which food group should make up the largest part of a balanced meal according to Canada's Food Guide?",a:["Vegetables and fruits","Protein foods","Whole grains","Dairy products"],c:0,h:"Fill half your plate with these colourful foods",g:4},
+    {q:"What is the difference between whole grain and refined grain?",a:["Whole grain keeps all parts of the grain including fibre, refined grain has had fibre removed","They are exactly the same","Whole grain is always white","Refined grain is healthier"],c:0,h:"Brown rice and whole wheat bread are whole grain examples",g:4},
+    {q:"Why is too much added sugar bad for you?",a:["It can cause tooth decay, weight gain and energy crashes","Sugar is always good for energy","It has no negative effects","It only affects adults"],c:0,h:"Fruit sugar is different from added sugar in sweets",g:4},
+    {q:"What does fibre do in your digestive system?",a:["Keeps your digestive system moving and feeds good bacteria","Provides most of your energy","Builds your muscles","Has no real function"],c:0,h:"Found in vegetables, fruits, beans and whole grains",g:4},
+    {q:"Which vitamin is found mainly in citrus fruits like oranges and helps your immune system?",a:["Vitamin C","Vitamin D","Vitamin A","Vitamin K"],c:0,h:"A deficiency of this caused scurvy in sailors long ago",g:4},
+    {q:"What is the benefit of eating a variety of coloured vegetables?",a:["Different colours contain different vitamins and nutrients","Colour has no nutritional meaning","Only green vegetables are healthy","All vegetables have identical nutrients"],c:0,h:"Eat a rainbow of colours for the best nutrition",g:4},
+    {q:"Why should you limit eating ultra-processed foods like crisps and fizzy drinks?",a:["They are high in salt, sugar and unhealthy fats with little nutritional value","They are fine to eat as your main food","They are recommended by nutritionists daily","They provide all your vitamins"],c:0,h:"These foods are designed to taste good but are not nutritious",g:4},
   ],
   coding:[
 
@@ -1278,7 +1417,7 @@ var selected      = ["math","science","coding","space","english","engineering","
 
 // ── GAME STATE ────────────────────────────────────────────
 var questions=[], cur=0, score=0, correct=0, streak=0, bestStreak=0;
-var answered=false, timerID=null, timeLeft=20, difficulty=1;
+var answered=false, timerID=null, timeLeft=20, maxTime=20, difficulty=1;
 var isDailyChallenge=false;
 var pupUsed={fif:false,time:false,skip:false}, pupAllUsed=false;
 
@@ -1479,11 +1618,15 @@ el("sp-fast").addEventListener("click",function(){ setSpeed(12,"sp-fast"); });
 el("daily-card").addEventListener("click",function(){
   var save=saveLoad();
   if(save.dailyDate===todayStr()&&save.dailyDone) return;
-  isDailyChallenge=true; startGame();
+  isDailyChallenge=true;
+  showRules(true);
 });
 
 // Launch
-el("btn-start").addEventListener("click",function(){ isDailyChallenge=false; startGame(); });
+el("btn-start").addEventListener("click",function(){
+  isDailyChallenge=false;
+  showRules(false);
+});
 
 // ══════════════════════════════════════════════════════════
 //  QUIZ GAME
@@ -1510,6 +1653,20 @@ function buildQuestions(forDaily){
     result.push({subj:it.subj,q:it.q,opts:opts,h:it.h,story:it.story||null});
   }
   return result;
+}
+
+// ── RULES OVERLAY ────────────────────────────────────────
+function showRules(isDaily){
+  var overlay = el("rules-overlay");
+  overlay.classList.remove("hidden");
+  el("rules-go-btn").onclick = function(){
+    overlay.classList.add("hidden");
+    startGame();
+  };
+  el("rules-skip-btn").onclick = function(){
+    overlay.classList.add("hidden");
+    startGame();
+  };
 }
 
 function startGame(){
@@ -1582,7 +1739,7 @@ function checkPupAll(){ if(pupUsed.fif&&pupUsed.time&&pupUsed.skip) pupAllUsed=t
 
 function startTimer(isStory){
   clearInterval(timerID);
-  var maxTime=isStory?180:Math.max(8,speedSetting-(difficulty-1)*2);
+  maxTime=isStory?180:Math.max(8,speedSetting-(difficulty-1)*2);
   timeLeft=maxTime; el("timer-num").textContent=maxTime;
   updateTimerBar(maxTime,maxTime);
   timerID=setInterval(function(){
@@ -1610,7 +1767,7 @@ function handleAnswer(idx,isCorrect){
   if(isCorrect){
     correct++;streak++;
     if(streak>bestStreak) bestStreak=streak;
-    var tb=Math.round(timeLeft*2), sb=streak>=3?streak*5:0, pts=10+tb+sb;
+    var tb=Math.round((timeLeft/maxTime)*40), sb=streak>=3?streak*5:0, pts=10+tb+sb;
     score+=pts; difficulty=Math.min(5,1+Math.floor(correct/3));
     var msgs=["Awesome!","Great job!","Brilliant!","Correct!","You got it!","Nailed it!"];
     var msg=msgs[Math.floor(Math.random()*msgs.length)];
@@ -1634,6 +1791,63 @@ function handleTimeout(){
   el("btn-next").className="next-btn";
 }
 function nextQ(){ cur++; if(cur>=questions.length) showResults(); else showQuestion(); }
+
+// ══════════════════════════════════════════════════════════
+//  GLOBAL LEADERBOARD (Firebase)
+// ══════════════════════════════════════════════════════════
+
+function glbRenderTabs(subjects, activeSubj){
+  var tabs = document.getElementById("glb-tabs");
+  var list = document.getElementById("glb-list");
+  if(!tabs || !list) return;
+  if(!subjects || !subjects.length){ tabs.innerHTML=""; list.innerHTML='<div class="lb-empty">No global scores yet - be the first!</div>'; return; }
+  tabs.innerHTML = subjects.map(function(s){
+    return '<button type="button" class="lb-tab'+(s===activeSubj?" active":"")+'" data-subj="'+s+'">'+(LABELS[s]||s)+'</button>';
+  }).join("");
+  tabs.querySelectorAll(".lb-tab").forEach(function(btn){
+    btn.addEventListener("click", function(){ glbLoadSubject(btn.getAttribute("data-subj")); });
+  });
+  glbLoadSubject(activeSubj);
+}
+
+function glbLoadSubject(subj){
+  var list = document.getElementById("glb-list");
+  if(!list) return;
+  // update active tab
+  document.querySelectorAll("#glb-tabs .lb-tab").forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-subj")===subj); });
+  list.innerHTML = '<div class="lb-empty" style="padding:10px 0">Loading...</div>';
+  if(typeof window.fbGetTop5 === "function"){
+    window.fbGetTop5(subj).then(function(entries){
+      if(!entries || !entries.length){
+        list.innerHTML = '<div class="lb-empty">No scores for this subject yet - you could be first!</div>';
+        return;
+      }
+      var rs=["&#129351;","&#129352;","&#129353;"], rc=["gold","silver","bronze"];
+      list.innerHTML = entries.map(function(e,i){
+        var isMe = (e.name === playerName);
+        return '<div class="lb-row'+(isMe?" me":"")+'">'
+          +(i<3?'<span class="lb-rank '+rc[i]+'">'+rs[i]+'</span>':'<span class="lb-rank" style="color:rgba(255,255,255,0.35)">'+(i+1)+'</span>')
+          +'<span class="lb-av">'+(e.avatar||"&#128640;")+'</span>'
+          +'<span class="lb-name">'+e.name+' <span style="font-size:.62rem;color:var(--muted)">Grade '+e.grade+'</span>'+(isMe?' <span style="color:var(--gold);font-size:.62rem">(you)</span>':'')+'</span>'
+          +'<span class="lb-score">'+e.score+' &#11088;</span>'
+          +'</div>';
+      }).join("");
+    }).catch(function(){
+      list.innerHTML = '<div class="lb-empty">Could not load scores - check your connection.</div>';
+    });
+  } else {
+    // Firebase not ready yet - retry after a short delay
+    setTimeout(function(){ glbLoadSubject(subj); }, 1500);
+  }
+}
+
+function saveToGlobalLB(subjKeys, sc, cor, tot){
+  if(typeof window.fbSaveScore !== "function") return Promise.resolve();
+  var promises = subjKeys.map(function(sk){
+    return window.fbSaveScore(playerName, playerAvatar, playerGrade, sk, sc, cor, tot);
+  });
+  return Promise.all(promises).catch(function(){});
+}
 
 // ══════════════════════════════════════════════════════════
 //  RESULTS
@@ -1697,6 +1911,14 @@ function showResults(){
   if(newAch.length) bdgs.push({t:newAch.length+" New Trophy!",col:"#ffc947"});
   el("badges-row").innerHTML=bdgs.map(function(b){ return '<span class="badge" style="background:'+b.col+'22;color:'+b.col+';border:1.5px solid '+b.col+'">'+b.t+'</span>'; }).join("");
   lbRenderTabs(subjKeys[0]||"math");
+
+  // Save to global Firebase leaderboard and render it
+  saveToGlobalLB(subjKeys, score, correct, questions.length).then(function(){
+    glbRenderTabs(subjKeys, subjKeys[0]||"math");
+  });
+  // Also start loading immediately (don't wait for save)
+  glbRenderTabs(subjKeys, subjKeys[0]||"math");
+
   el("btn-replay").onclick=function(){ isDailyChallenge=false; startGame(); };
   el("btn-to-home").onclick=function(){ goHome(); };
   goPage("page-results");
@@ -1719,7 +1941,111 @@ function lbRenderTabs(active){
 }
 
 // ══════════════════════════════════════════════════════════
-//  MEMORY GAME
+//  MEMORY GAME (and Flag Quiz)
+// 
+
+// ── MEMORY MODE SWITCHER ─────────────────────────────────
+var currentMemMode = "memory";
+
+function setMemMode(mode, btn){
+  currentMemMode = mode;
+  document.querySelectorAll("#mode-memory,#mode-quiz").forEach(function(b){ b.classList.remove("on"); });
+  if(btn) btn.classList.add("on");
+  var memBoard = document.getElementById("mem-board");
+  var memNew = document.getElementById("mem-new-btn");
+  var memComplete = document.getElementById("mem-complete");
+  var fqUI = document.getElementById("flag-quiz-ui");
+  var title = document.getElementById("mem-page-title");
+  if(mode === "quiz"){
+    if(memBoard) memBoard.style.display = "none";
+    if(memNew) memNew.style.display = "none";
+    if(memComplete) memComplete.classList.add("hidden");
+    if(fqUI) fqUI.style.display = "block";
+    if(title) title.innerHTML = "&#127988; Flag Quiz";
+    startFlagQuiz();
+  } else {
+    if(memBoard) memBoard.style.display = "";
+    if(memNew) memNew.style.display = "block";
+    if(fqUI) fqUI.style.display = "none";
+    if(title) title.innerHTML = "&#127988; Flag Memory";
+    if(!memStarted) startMemory();
+  }
+}
+
+// ── FLAG QUIZ ─────────────────────────────────────────────
+var fqQuestions=[], fqCur=0, fqScore=0, fqStreak=0, fqAnswered=false;
+
+function startFlagQuiz(){
+  var pool=shuffle(FLAGS).slice(0,10);
+  fqQuestions=pool.map(function(f){
+    var wrong=shuffle(FLAGS.filter(function(x){return x.name!==f.name;})).slice(0,3).map(function(x){return x.name;});
+    return {flag:f.flag, correct:f.name, opts:shuffle([f.name].concat(wrong))};
+  });
+  fqCur=0; fqScore=0; fqStreak=0; fqAnswered=false;
+  document.getElementById("fq-complete").style.display="none";
+  document.getElementById("fq-opts").style.display="";
+  var nb=document.getElementById("fq-next"); if(nb) nb.classList.add("hidden");
+  renderFlagQ();
+}
+
+function renderFlagQ(){
+  var q=fqQuestions[fqCur];
+  document.getElementById("fq-flag").innerHTML=q.flag;
+  document.getElementById("fq-num").textContent=(fqCur+1)+"/"+fqQuestions.length;
+  document.getElementById("fq-score").textContent=fqScore;
+  document.getElementById("fq-streak").textContent=fqStreak;
+  var fb=document.getElementById("fq-feedback"); fb.style.display="none";
+  var nb=document.getElementById("fq-next"); if(nb) nb.classList.add("hidden");
+  fqAnswered=false;
+  var grid=document.getElementById("fq-opts"); grid.innerHTML="";
+  q.opts.forEach(function(opt){
+    var btn=document.createElement("button"); btn.type="button"; btn.className="opt"; btn.textContent=opt;
+    btn.addEventListener("click",function(){ answerFlagQ(opt,btn,q.correct); });
+    grid.appendChild(btn);
+  });
+}
+
+function answerFlagQ(chosen,btn,correct){
+  if(fqAnswered) return; fqAnswered=true;
+  document.getElementById("fq-opts").querySelectorAll(".opt").forEach(function(b){
+    b.disabled=true;
+    if(b.textContent===correct) b.classList.add("correct");
+    else if(b===btn&&chosen!==correct) b.classList.add("wrong");
+  });
+  var fb=document.getElementById("fq-feedback"); fb.style.display="block";
+  if(chosen===correct){
+    fqScore+=10; fqStreak++;
+    var msgs=["Correct! &#127775;","Well done! &#11088;","Great job! &#128293;","Nailed it! &#127942;"];
+    fb.innerHTML=msgs[Math.floor(Math.random()*msgs.length)]+" +10 points";
+    fb.style.cssText="display:block;text-align:center;padding:10px 14px;border-radius:13px;margin-bottom:12px;font-weight:700;font-size:.9rem;background:rgba(46,204,113,0.12);color:#2ecc71;border:1.5px solid rgba(46,204,113,0.28)";
+  } else {
+    fqStreak=0;
+    fb.innerHTML="Not quite! The flag belongs to <strong>"+correct+"</strong>";
+    fb.style.cssText="display:block;text-align:center;padding:10px 14px;border-radius:13px;margin-bottom:12px;font-weight:700;font-size:.9rem;background:rgba(231,76,60,0.1);color:#e98888;border:1.5px solid rgba(231,76,60,0.25)";
+  }
+  document.getElementById("fq-score").textContent=fqScore;
+  document.getElementById("fq-streak").textContent=fqStreak;
+  var nb=document.getElementById("fq-next"); if(nb) nb.classList.remove("hidden");
+}
+
+document.addEventListener("DOMContentLoaded",function(){
+  var nb=document.getElementById("fq-next");
+  if(nb) nb.addEventListener("click",function(){
+    fqCur++;
+    if(fqCur>=fqQuestions.length){
+      document.getElementById("fq-opts").style.display="none";
+      nb.classList.add("hidden");
+      document.getElementById("fq-feedback").style.display="none";
+      document.getElementById("fq-complete").style.display="block";
+      var pct=Math.round((fqScore/(fqQuestions.length*10))*100);
+      var t=pct>=90?"Flag Expert! &#127775;":pct>=60?"Flag Fan! &#128640;":"Keep Learning! &#127988;";
+      document.getElementById("fq-done-title").innerHTML=t;
+      document.getElementById("fq-done-sub").textContent="You scored "+fqScore+" out of "+(fqQuestions.length*10)+" points. "+(pct>=90?"Outstanding!":pct>=60?"Good effort!":"Every flag learned is progress!");
+      var save=saveLoad(); save.xp=(save.xp||0)+Math.round(fqScore/5); savePersist(save); updateHomeStats();
+    } else { renderFlagQ(); }
+  });
+});
+
 // ══════════════════════════════════════════════════════════
 function setMemDiff(pairs,btn){
   memPairs=pairs;
@@ -1968,5 +2294,73 @@ function lockParent(){
 })();
 
 </script>
+<!-- RULES OVERLAY -->
+<div class="rules-overlay hidden" id="rules-overlay">
+  <div class="rules-box">
+    <div class="rules-title">&#128640; How to Play</div>
+    <div class="rules-sub">Read the rules then get blasting!</div>
+
+    <div class="rule-item">
+      <div class="rule-num">1</div>
+      <div class="rule-body">
+        <div class="rule-head">&#127775; Pick your subjects</div>
+        <div class="rule-desc">On the home screen, tap any subject to turn it on or off. Gold means selected! You can mix all 10 subjects or focus on just one.</div>
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-num">2</div>
+      <div class="rule-body">
+        <div class="rule-head">&#128034; Choose your speed</div>
+        <div class="rule-desc">Chill Mode gives you 35 seconds per question. Adventure gives 20 seconds. Turbo Brain gives just 12 seconds. The faster you answer, the more bonus stars you earn!</div>
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-num">3</div>
+      <div class="rule-body">
+        <div class="rule-head">&#9201; Watch the timer!</div>
+        <div class="rule-desc">The bar at the top counts down. Green means plenty of time, orange means hurry up, red means almost out! If time runs out the question is skipped.</div>
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-num">4</div>
+      <div class="rule-body">
+        <div class="rule-head">&#11088; Earn stars and streaks</div>
+        <div class="rule-desc">Every correct answer earns 10 base stars plus a time bonus. Answer 3 or more in a row to trigger a STREAK BONUS! The game gets harder as you improve.</div>
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-num">5</div>
+      <div class="rule-body">
+        <div class="rule-head">&#9986; Use your 3 power-ups</div>
+        <div class="rule-desc">Each game gives you one of each: <b>50/50</b> removes two wrong answers, <b>+10 sec</b> adds time to the clock, <b>Skip</b> jumps to the next question. Use them wisely!</div>
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-num">6</div>
+      <div class="rule-body">
+        <div class="rule-head">&#128214; Stories need more time</div>
+        <div class="rule-desc">When a story appears in a pink box, read it carefully first THEN answer the question. Story questions automatically get 3 full minutes so there is no rush.</div>
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-num">7</div>
+      <div class="rule-body">
+        <div class="rule-head">&#127942; Collect trophies and climb ranks</div>
+        <div class="rule-desc">Every game earns XP. Collect enough to climb from Cadet all the way up to Einstein! Unlock 12 special trophies along the way. Check the Trophies tab to see your progress.</div>
+      </div>
+    </div>
+
+    <div class="rules-tip">&#128161; Top Tip: A correct answer is always better than a fast wrong one. Read the question carefully, then answer as quickly as you can!</div>
+
+    <button type="button" class="rules-go" id="rules-go-btn">&#128293; I am Ready - Let's Play!</button>
+    <button type="button" class="rules-skip" id="rules-skip-btn">Skip rules (I know how to play)</button>
+  </div>
+</div>
 </body>
 </html>
