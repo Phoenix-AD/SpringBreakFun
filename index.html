@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAn-Ip7OPHVqLh7evHXeebn29gtGMnGr8E",
@@ -18,48 +18,47 @@ const firebaseConfig = {
   appId: "1:917436999998:web:e0e88373e93d9a1e7fa46f"
 };
 
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
+try {
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
 
-// Expose to global scope so non-module JS can call these
-window.fbSaveScore = async function(name, avatar, grade, subject, score, correct, total){
-  try {
-    await addDoc(collection(db, "leaderboard"), {
-      name:      name,
-      avatar:    avatar,
-      grade:     grade,
-      subject:   subject,
-      score:     score,
-      correct:   correct,
-      total:     total,
-      timestamp: Date.now()
-    });
-  } catch(e){ console.warn("Firebase save error:", e); }
-};
+  window.fbSaveScore = async function(name, avatar, grade, subject, score, correct, total){
+    try {
+      await addDoc(collection(db, "leaderboard"), {
+        name, avatar, grade, subject, score, correct, total,
+        timestamp: Date.now()
+      });
+      console.log("Score saved to Firebase OK");
+    } catch(e){
+      console.warn("Firebase SAVE error:", e.code, e.message);
+    }
+  };
 
-window.fbGetTop5 = async function(subject){
-  try {
-    // Simple query - no composite index needed
-    const q = query(
-      collection(db, "leaderboard"),
-      orderBy("score","desc"),
-      limit(100)
-    );
-    const snap = await getDocs(q);
-    const all = snap.docs.map(function(d){ return d.data(); });
-    // Filter by subject in JS and keep top 5
-    const filtered = all.filter(function(e){ return e.subject === subject; });
-    return filtered.slice(0, 5);
-  } catch(e){
-    console.warn("Firebase fetch error:", e.message);
-    return [];
-  }
-};
+  window.fbGetTop5 = async function(subject){
+    try {
+      console.log("Fetching Firebase scores for:", subject);
+      const q = query(collection(db, "leaderboard"), orderBy("score","desc"), limit(200));
+      const snap = await getDocs(q);
+      console.log("Firebase returned", snap.docs.length, "total docs");
+      const all = snap.docs.map(d => d.data());
+      const filtered = all.filter(e => e.subject === subject);
+      console.log("Filtered to", filtered.length, "for subject", subject);
+      return filtered.slice(0, 5);
+    } catch(e){
+      console.warn("Firebase FETCH error:", e.code, e.message);
+      return null; // null = error (vs [] = empty)
+    }
+  };
 
-window.fbReady = true;
-console.log("Firebase ready!");
-// Signal to any waiting code
-window.dispatchEvent(new Event("fbready"));
+  window.fbReady = true;
+  window.dispatchEvent(new Event("fbready"));
+  console.log("Firebase initialised OK");
+
+} catch(e){
+  console.error("Firebase INIT error:", e.message);
+  window.fbError = e.message;
+  window.dispatchEvent(new Event("fbready")); // still fire so UI unblocks
+}
 </script>
 <style>
 /* ═══════════════════════════════════════════════
@@ -1863,28 +1862,34 @@ function glbLoadSubject(subj){
     list.innerHTML = '<div class="lb-empty" style="padding:6px 0;font-size:.78rem">&#8987; Loading global scores...</div>';
   }
   // fetch from Firebase
-  if(typeof window.fbGetTop5 === "function"){
+  function doLoad(){
+    if(typeof window.fbGetTop5 !== "function"){
+      list.innerHTML = '<div class="lb-empty">Firebase not loaded. Check console for errors.</div>';
+      return;
+    }
     window.fbGetTop5(subj).then(function(entries){
+      if(entries === null){
+        // Error occurred - show helpful message with Firestore rules reminder
+        list.innerHTML = '<div class="lb-empty" style="font-size:.75rem;line-height:1.6">'
+          +'&#9888; Could not read from Firebase.<br>'
+          +'Make sure your Firestore Rules allow read access.<br>'
+          +'<span style="opacity:.6">Check browser console (F12) for details.</span>'
+          +'</div>';
+        return;
+      }
       glbCache[subj] = { entries: entries, ts: Date.now() };
       glbRenderEntries(subj, entries);
-    }).catch(function(){
-      list.innerHTML = '<div class="lb-empty">Could not load scores - check your connection.</div>';
+    }).catch(function(e){
+      console.warn("glbLoadSubject error:", e);
+      list.innerHTML = '<div class="lb-empty">Error loading scores. See console (F12).</div>';
     });
+  }
+
+  if(window.fbReady){
+    doLoad();
   } else {
-    // Firebase module still initialising - wait for ready event
-    var retryCount = 0;
-    function tryAgain(){
-      retryCount++;
-      if(typeof window.fbGetTop5 === "function"){
-        glbLoadSubject(subj);
-      } else if(retryCount < 10){
-        setTimeout(tryAgain, 500);
-      } else {
-        if(list) list.innerHTML = '<div class="lb-empty">Firebase not available. Check your internet connection.</div>';
-      }
-    }
-    window.addEventListener("fbready", function(){ glbLoadSubject(subj); }, {once:true});
-    setTimeout(tryAgain, 500);
+    list.innerHTML = '<div class="lb-empty" style="padding:6px 0;font-size:.78rem">&#8987; Connecting to Firebase...</div>';
+    window.addEventListener("fbready", doLoad, {once:true});
   }
 }
 
