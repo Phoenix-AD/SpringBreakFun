@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brain Blast! - STEM Learning Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#1a1040;min-height:100vh;color:#fff;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,#2d1b69 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,#0d3b6e 0%,transparent 60%);pointer-events:none;z-index:0}
+#app{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:16px}
+.screen{display:none}.screen.active{display:block}
+
+.hero{text-align:center;padding:28px 0 20px}
+.rocket-emoji{font-size:64px;display:block;animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,7vw,2.8rem);color:#ffe066;margin:10px 0 4px;letter-spacing:1px}
+.tagline{color:rgba(255,255,255,0.65);font-size:.95rem;font-weight:700;margin-bottom:24px}
+
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.stat-box{background:rgba(255,255,255,0.08);border-radius:14px;padding:12px;text-align:center}
+.stat-num{font-family:'Fredoka One',cursive;font-size:1.8rem;color:#ffe066}
+.stat-lbl{font-size:.68rem;font-weight:800;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:.6px;margin-top:2px}
+
+.pick-label{font-size:.78rem;font-weight:800;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.subj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+
+button.subj{background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.15);border-radius:16px;padding:14px 6px;cursor:pointer;color:rgba(255,255,255,0.4);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;transition:all .18s;-webkit-tap-highlight-color:transparent;opacity:0.5}
+button.subj:hover{opacity:0.8;border-color:rgba(255,255,255,0.35)}
+button.subj.on{border-color:#ffe066;background:rgba(255,224,102,0.18);color:#ffe066;opacity:1;box-shadow:0 0 12px rgba(255,224,102,0.2)}
+button.subj .icon{font-size:26px;line-height:1;pointer-events:none}
+button.subj span{pointer-events:none}
+
+button.start{width:100%;padding:16px;background:#ffe066;color:#1a1000;font-family:'Fredoka One',cursive;font-size:1.3rem;border:none;border-radius:20px;cursor:pointer;letter-spacing:1px;transition:transform .15s,background .15s;-webkit-tap-highlight-color:transparent}
+button.start:hover{transform:scale(1.03);background:#ffed6b}
+button.start:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+.game-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+button.back{background:rgba(255,255,255,0.1);border:none;color:#fff;border-radius:12px;padding:8px 14px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;transition:background .15s}
+button.back:hover{background:rgba(255,255,255,0.2)}
+.prog-track{flex:1;height:10px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden}
+.prog-bar{height:100%;background:#ffe066;border-radius:10px;transition:width .35s ease;width:0%}
+.q-num{font-weight:800;font-size:.88rem;color:rgba(255,255,255,0.6);white-space:nowrap}
+
+.hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.score-pill{background:rgba(255,255,255,0.08);border-radius:14px;padding:8px 14px;display:flex;align-items:center;gap:8px}
+.score-big{font-family:'Fredoka One',cursive;font-size:1.4rem;color:#ffe066}
+.streak{font-size:.82rem;font-weight:800;color:#ffa94d}
+.lvl-lbl{font-size:.78rem;font-weight:800;color:rgba(255,255,255,0.55)}
+
+.timer-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.timer-track{flex:1;height:9px;background:rgba(255,255,255,0.1);border-radius:8px;overflow:hidden}
+.timer-bar{height:100%;border-radius:8px;background:#3dd68c;transition:width .1s linear,background .3s}
+.timer-num{font-weight:800;font-size:.95rem;min-width:26px;text-align:right}
+
+.q-card{background:rgba(255,255,255,0.07);border:2px solid rgba(255,255,255,0.12);border-radius:22px;padding:20px;margin-bottom:14px}
+.q-tag{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.q-text{font-size:1.1rem;font-weight:700;line-height:1.5}
+.q-hint{font-size:.82rem;color:rgba(255,255,255,0.6);font-style:italic;margin-top:10px}
+.story-card{background:rgba(255,182,193,0.1);border:1.5px solid rgba(255,105,180,0.3);border-radius:16px;padding:16px 18px;margin-bottom:14px;font-size:.92rem;font-weight:600;line-height:1.7;color:rgba(255,255,255,0.88)}
+
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+button.opt{background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);border-radius:16px;padding:14px 10px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:700;color:#fff;text-align:center;line-height:1.35;transition:transform .12s,border-color .12s,background .12s;-webkit-tap-highlight-color:transparent}
+button.opt:hover:not(:disabled){background:rgba(255,255,255,0.16);border-color:rgba(255,255,255,0.4);transform:translateY(-2px)}
+button.opt:disabled{cursor:default;transform:none!important}
+button.opt.correct{background:rgba(61,214,140,0.22);border-color:#3dd68c;color:#3dd68c}
+button.opt.wrong{background:rgba(255,107,107,0.18);border-color:#ff6b6b;color:#ff8585}
+
+.feedback{text-align:center;padding:14px 16px;border-radius:16px;margin-bottom:12px;font-weight:700;font-size:.95rem;line-height:1.4}
+.feedback.good{background:rgba(61,214,140,0.14);color:#3dd68c;border:1.5px solid rgba(61,214,140,0.3)}
+.feedback.bad{background:rgba(255,107,107,0.12);color:#ff8585;border:1.5px solid rgba(255,107,107,0.28)}
+
+button.next-q{width:100%;padding:14px;background:#a78bfa;color:#fff;font-family:'Fredoka One',cursive;font-size:1.1rem;border:none;border-radius:16px;cursor:pointer;transition:transform .15s,background .15s;-webkit-tap-highlight-color:transparent}
+button.next-q:hover{background:#8b5cf6;transform:scale(1.02)}
+
+.hidden{display:none!important}
+
+.results{text-align:center;padding:28px 0 20px}
+.res-icon{font-size:68px;display:block;animation:pop .5s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.res-title{font-family:'Fredoka One',cursive;font-size:clamp(1.8rem,5vw,2.2rem);color:#ffe066;margin:12px 0 4px}
+.res-sub{color:rgba(255,255,255,0.65);font-size:.95rem;font-weight:700;margin-bottom:22px}
+.res-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.badges{margin-bottom:22px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:.76rem;font-weight:800;margin:4px}
+
+button.replay{width:100%;padding:16px;background:#3dd68c;color:#062916;font-family:'Fredoka One',cursive;font-size:1.25rem;border:none;border-radius:20px;cursor:pointer;margin-bottom:10px;transition:transform .15s,background .15s;-webkit-tap-highlight-color:transparent}
+button.replay:hover{transform:scale(1.03);background:#52eea4}
+button.menu-btn{width:100%;padding:13px;background:rgba(255,255,255,0.08);color:#fff;font-family:'Fredoka One',cursive;font-size:1.05rem;border:2px solid rgba(255,255,255,0.2);border-radius:18px;cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent}
+button.menu-btn:hover{background:rgba(255,255,255,0.15)}
+
+@media(max-width:420px){.subj-grid{grid-template-columns:repeat(2,1fr)}.opts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <div class="hero">
+      <span class="rocket-emoji">&#128640;</span>
+      <h1>Brain Blast!</h1>
+      <p class="tagline">The adventure learning game for Grade 4 &mdash; Alberta</p>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-box"><div class="stat-num" id="h-total">0</div><div class="stat-lbl">Total Stars</div></div>
+      <div class="stat-box"><div class="stat-num" id="h-streak">0</div><div class="stat-lbl">Best Streak</div></div>
+      <div class="stat-box"><div class="stat-num" id="h-games">0</div><div class="stat-lbl">Games Won</div></div>
+    </div>
+    <div class="pick-label">Pick your subjects &mdash; <span id="subj-count" style="color:#ffe066">7 selected</span></div>
+    <div class="subj-grid">
+      <button type="button" class="subj on" data-subj="math"><span class="icon">&#128290;</span>Math</button>
+      <button type="button" class="subj on" data-subj="science"><span class="icon">&#128300;</span>Science</button>
+      <button type="button" class="subj on" data-subj="coding"><span class="icon">&#128187;</span>Coding</button>
+      <button type="button" class="subj on" data-subj="space"><span class="icon">&#127756;</span>Space</button>
+      <button type="button" class="subj on" data-subj="english"><span class="icon">&#128218;</span>English</button>
+      <button type="button" class="subj on" data-subj="engineering"><span class="icon">&#9881;</span>Engineering</button>
+      <button type="button" class="subj on" data-subj="stories"><span class="icon">&#128214;</span>Stories</button>
+    </div>
+    <button type="button" class="start" id="btn-start">&#128640; Launch Brain Blast!</button>
+  </div>
+
+  <!-- GAME -->
+  <div class="screen" id="screen-game">
+    <div class="game-top">
+      <button type="button" class="back" id="btn-back">&#8592; Menu</button>
+      <div class="prog-track"><div class="prog-bar" id="prog-bar"></div></div>
+      <div class="q-num" id="q-num">1/10</div>
+    </div>
+    <div class="hud">
+      <div class="score-pill">
+        <span>&#11088;</span>
+        <span class="score-big" id="live-score">0</span>
+        <span class="streak hidden" id="streak-display"></span>
+      </div>
+      <div class="lvl-lbl" id="lvl-lbl">Level 1</div>
+    </div>
+    <div class="timer-row">
+      <div class="timer-track"><div class="timer-bar" id="timer-bar"></div></div>
+      <div class="timer-num" id="timer-num">20</div>
+    </div>
+    <div class="q-card">
+      <div class="q-tag" id="q-tag">Subject</div>
+      <div class="q-text" id="q-text">Loading...</div>
+      <div class="q-hint hidden" id="q-hint"></div>
+    </div>
+    <div class="story-card hidden" id="story-card"></div>
+    <div class="opts" id="opts-grid"></div>
+    <div class="feedback hidden" id="feedback"></div>
+    <button type="button" class="next-q hidden" id="btn-next">Next Question &#8594;</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="screen" id="screen-results">
+    <div class="results">
+      <span class="res-icon" id="res-icon">&#127942;</span>
+      <div class="res-title" id="res-title">Amazing!</div>
+      <div class="res-sub" id="res-sub">You completed Brain Blast!</div>
+      <div class="res-stats">
+        <div class="stat-box"><div class="stat-num" id="res-score">0</div><div class="stat-lbl">Stars</div></div>
+        <div class="stat-box"><div class="stat-num" id="res-correct">0/10</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat-box"><div class="stat-num" id="res-streak">0</div><div class="stat-lbl">Best Streak</div></div>
+      </div>
+      <div class="badges" id="badges"></div>
+      <button type="button" class="replay" id="btn-replay">&#128260; Play Again!</button>
+      <button type="button" class="menu-btn" id="btn-menu">&#127968; Main Menu</button>
+    </div>
+  </div>
+
+</div>
+<script>
+var Q = {
+  math:[
+    {q:"A T-Rex ate 144 hot dogs and split them equally over 12 days. How many hot dogs per day? (Impressive diet!)",a:["12","14","11","13"],c:0,h:"Divide 144 by 12"},
+    {q:"Your pet hamster runs 8km every night. How far does he run in a week? (Someone needs to slow down!)",a:["56km","48km","64km","54km"],c:0,h:"Multiply 8 by 7 days"},
+    {q:"A wizard has 256 magic spells. He forgets half of them after lunch. How many does he remember?",a:["128","124","132","256"],c:0,h:"Divide 256 by 2"},
+    {q:"A penguin waddles 3/4 of a kilometre to school each day. How far does he waddle in 4 days?",a:["3 km","2 km","4 km","2.5 km"],c:0,h:"Multiply 3/4 by 4"},
+    {q:"Your teacher has 1,000 stickers. She gives away 347. How many stickers does she have left? (She really loves stickers)",a:["653","643","663","753"],c:0,h:"Subtract 347 from 1000"},
+    {q:"A ninja needs to jump over a wall that is 2.4m tall. He can jump 1.9m. How much higher does he need to train?",a:["0.5m","0.4m","0.6m","0.3m"],c:0,h:"Subtract 1.9 from 2.4"},
+    {q:"A dragon baked 96 cookies and wants to share them equally among 8 knights. How many cookies per knight?",a:["12","8","16","14"],c:0,h:"Divide 96 by 8"},
+    {q:"A sloth travels at 0.03km per hour. At that speed, how far does it travel in 100 hours? (Slow and steady!)",a:["3 km","0.3 km","30 km","300 km"],c:0,h:"Multiply 0.03 by 100"},
+    {q:"A superhero saves 15 people on Monday, 23 on Tuesday, and 7 on Wednesday. What is the average per day?",a:["15","14","16","13"],c:0,h:"Add all three then divide by 3"},
+    {q:"A pizza is cut into 12 slices. You eat 3 slices and your dog sneaks 1. What percentage of the pizza is left?",a:["66.6%","75%","25%","50%"],c:0,h:"8 slices remain out of 12"},
+    {q:"An alien has 4 arms. There are 9 aliens at a party. How many arms are there in total? (Awkward handshakes!)",a:["36","32","40","28"],c:0,h:"Multiply 4 by 9"},
+    {q:"A zombie walks 1.5km every hour. How far will it walk in 6 hours? (Please walk the other way!)",a:["9 km","7.5 km","10.5 km","8 km"],c:0,h:"Multiply 1.5 by 6"},
+    {q:"A skateboarder starts at position 12 on a number line, skates back 18 spaces. Where does he end up?",a:["-6","6","-4","30"],c:0,h:"12 minus 18 goes below zero"},
+    {q:"A pirate has a treasure chest with 500 gold coins. He spends 35% on snacks. How many coins does he spend?",a:["175","150","200","125"],c:0,h:"Find 35% of 500"},
+    {q:"A cat knocks 7 cups off a table every hour for 8 hours. How many cups fell? (Classic cat behaviour!)",a:["56","48","63","54"],c:0,h:"Multiply 7 by 8"},
+    {q:"A spaceship travels 1,250 km in 5 hours. What is its speed per hour?",a:["250 km/h","200 km/h","300 km/h","275 km/h"],c:0,h:"Divide 1250 by 5"},
+    {q:"A robot vacuum cleaner covers a 6m by 4m room. What area does it clean?",a:["24 m2","20 m2","10 m2","28 m2"],c:0,h:"Area equals length times width"},
+    {q:"What is the next number in this pattern? 3, 6, 12, 24, ___",a:["48","36","42","30"],c:0,h:"Each number is doubled"},
+    {q:"A class of 30 students voted for their favourite animal. 12 chose dogs. What fraction chose dogs?",a:["2/5","1/3","2/3","1/5"],c:0,h:"12 out of 30 - can you simplify?"},
+    {q:"Your mum buys 4 packs of juice. Each pack has 6 cartons. Each carton costs $0.75. What is the total cost?",a:["$18.00","$16.00","$20.00","$15.00"],c:0,h:"Work out how many cartons first, then multiply by $0.75"},
+    {q:"A fence around a rectangular garden is 36m long. The garden is 10m long. How wide is it?",a:["8m","9m","6m","7m"],c:0,h:"Perimeter = 2 x (length + width). Solve for width!"},
+    {q:"A snail and a cheetah have a race. The snail gets a 500m head start. The cheetah runs at 100m per minute, the snail at 5m per minute. After 5 minutes, how far ahead is the cheetah?",a:["25m","55m","45m","75m"],c:0,h:"Calculate both distances after 5 minutes, then compare"}
+  ],
+  science:[
+    {q:"What gas do plants use to make food during photosynthesis?",a:["Carbon dioxide","Oxygen","Nitrogen","Hydrogen"],c:0,h:"We breathe this out!"},
+    {q:"Which state of matter has a definite shape AND definite volume?",a:["Solid","Liquid","Gas","Plasma"],c:0,h:"Think of rocks and ice"},
+    {q:"What organ pumps blood around your body?",a:["Heart","Lungs","Brain","Liver"],c:0,h:"You can feel it beat"},
+    {q:"What force pulls objects toward the centre of Earth?",a:["Gravity","Friction","Magnetism","Tension"],c:0,h:"It keeps your feet on the ground"},
+    {q:"Which of these is a mammal?",a:["Whale","Salmon","Eagle","Frog"],c:0,h:"Mammals breathe air and feed young with milk"},
+    {q:"What is the boiling point of water in Celsius?",a:["100 degrees","50 degrees","212 degrees","0 degrees"],c:0,h:"When water turns to steam"},
+    {q:"Which part of the plant makes seeds?",a:["Flower","Leaf","Root","Stem"],c:0,h:"Bees love to visit this part"},
+    {q:"What do we call it when a caterpillar becomes a butterfly?",a:["Metamorphosis","Photosynthesis","Respiration","Evolution"],c:0,h:"The caterpillar changes inside its cocoon"},
+    {q:"What is the hard outer layer of Earth called?",a:["The crust","The mantle","The core","The atmosphere"],c:0,h:"We live on it"},
+    {q:"What do we call animals that eat only plants?",a:["Herbivores","Carnivores","Omnivores","Predators"],c:0,h:"Rabbits and deer are examples"},
+    {q:"What is the process of water turning into vapour called?",a:["Evaporation","Condensation","Precipitation","Melting"],c:0,h:"Puddles disappear this way on a sunny day"},
+    {q:"Which of these is NOT a renewable energy source?",a:["Coal","Solar power","Wind power","Hydro power"],c:0,h:"It took millions of years to form underground"},
+    {q:"What do plants produce during photosynthesis that we need to breathe?",a:["Oxygen","Carbon dioxide","Nitrogen","Water vapour"],c:0,h:"Trees are like air factories!"},
+    {q:"What is the name of the process where water falls from clouds?",a:["Precipitation","Evaporation","Condensation","Transpiration"],c:0,h:"Rain and snow are examples"}
+  ],
+  coding:[
+    {q:"In coding, what does a loop do?",a:["Repeats actions","Stops the program","Deletes data","Names a variable"],c:0,h:"Think of a circular track"},
+    {q:"What does an IF statement do in a program?",a:["Makes a decision","Prints text","Stores a number","Loops forever"],c:0,h:"IF something is true, THEN do this"},
+    {q:"What is a variable in coding?",a:["A box that stores information","A type of loop","A button on screen","A website"],c:0,h:"You give it a name and put data inside"},
+    {q:"Which best describes an algorithm?",a:["Step-by-step instructions","A type of computer","A programming language","A website address"],c:0,h:"Like a recipe for a computer"},
+    {q:"What does debugging mean in coding?",a:["Finding and fixing errors","Making the screen brighter","Writing new code","Deleting programs"],c:0,h:"Bugs are mistakes in code"},
+    {q:"If x equals 5, then x equals x plus 3, what does x equal now?",a:["8","5","3","53"],c:0,h:"Start with 5, then add 3"},
+    {q:"Which shape shows a decision in a flowchart?",a:["Diamond","Circle","Rectangle","Triangle"],c:0,h:"It has 4 pointed corners"},
+    {q:"What does HTML stand for?",a:["HyperText Markup Language","High Tech Modern Links","Home Tool Making Language","HyperText Modern Layout"],c:0},
+    {q:"If a program does Task A, then B, then C in order, what is this called?",a:["Sequence","Loop","Function","Variable"],c:0,h:"Things in a specific order"},
+    {q:"In coding, what is a function?",a:["A reusable block of code","A type of variable","A screen button","A computer chip"],c:0,h:"Write once, use many times!"},
+    {q:"What is a computer program?",a:["A set of instructions for a computer","A type of screen","A storage device","An internet connection"],c:0,h:"Computers follow instructions exactly"},
+    {q:"TRUE and FALSE are examples of what data type?",a:["Boolean","String","Integer","Array"],c:0,h:"Only two possible values!"}
+  ],
+  space:[
+    {q:"How many planets are in our Solar System?",a:["8","9","7","10"],c:0,h:"Pluto is now a dwarf planet"},
+    {q:"Which planet is closest to the Sun?",a:["Mercury","Venus","Earth","Mars"],c:0,h:"It is very hot there!"},
+    {q:"What is the name of Earth's natural satellite?",a:["The Moon","Mars","Europa","Titan"],c:0,h:"It lights up the night sky"},
+    {q:"What is a light-year?",a:["Distance light travels in one year","Time for light to reach Earth","A very bright year","How old a star is"],c:0,h:"Light travels very very fast"},
+    {q:"Which is the largest planet in our Solar System?",a:["Jupiter","Saturn","Neptune","Uranus"],c:0,h:"It has a Great Red Spot"},
+    {q:"What is the Sun mostly made of?",a:["Hydrogen gas","Rock and metal","Ice","Carbon"],c:0,h:"It is like a giant ball of burning gas"},
+    {q:"Which planet is famous for its rings?",a:["Saturn","Mars","Earth","Jupiter"],c:0,h:"You would recognise it instantly"},
+    {q:"How long does it take Earth to orbit the Sun?",a:["365 days","24 hours","30 days","100 years"],c:0,h:"One year!"},
+    {q:"What is a black hole?",a:["A region where nothing can escape its gravity","A hole you can see through space","An empty planet","A very dark moon"],c:0},
+    {q:"What is the name of the galaxy we live in?",a:["The Milky Way","Andromeda","Triangulum","Sombrero"],c:0,h:"You can sometimes see it at night"},
+    {q:"What do we call a rock from space that lands on Earth?",a:["Meteorite","Asteroid","Comet","Satellite"],c:0,h:"It survives the journey through the atmosphere"},
+    {q:"Which planet is known as the Red Planet?",a:["Mars","Venus","Mercury","Jupiter"],c:0,h:"Its soil contains iron oxide"}
+  ],
+  english:[
+    {q:"What type of word describes a noun? For example: The BIG dog",a:["Adjective","Verb","Adverb","Pronoun"],c:0,h:"It describes what something is like"},
+    {q:"Which word is spelled correctly?",a:["because","becaus","becouse","beacuse"],c:0,h:"Sound it out: be-cause"},
+    {q:"What is a synonym for the word happy?",a:["Joyful","Sad","Angry","Tired"],c:0,h:"It means the same thing"},
+    {q:"Which sentence uses correct punctuation?",a:["I love cats, dogs, and fish.","I love cats dogs and fish","I love cats dogs, and fish.","I love cats, dogs and, fish."],c:0,h:"Use a comma before and in a list"},
+    {q:"What do you call the main character in a story?",a:["Protagonist","Antagonist","Narrator","Setting"],c:0,h:"The hero of the story"},
+    {q:"Which word is an antonym (opposite) of ancient?",a:["Modern","Old","Historic","Vintage"],c:0,h:"Ancient means very old, so the opposite is..."},
+    {q:"What is a metaphor?",a:["Saying something IS something else","Comparing using like or as","A rhyming pattern","A type of punctuation"],c:0,h:"The world is a stage is one example"},
+    {q:"Choose the correct word: She ___ to school every day.",a:["goes","go","gone","going"],c:0,h:"She is third person singular"},
+    {q:"What does the prefix un- mean?",a:["Not or the opposite of","Before","Again","More than"],c:0,h:"Unhappy means NOT happy"},
+    {q:"Which of these is a proper noun?",a:["Edmonton","city","park","river"],c:0,h:"Proper nouns name specific places"},
+    {q:"What is the plural of child?",a:["Children","Childs","Childes","Childrens"],c:0,h:"This is an irregular plural"},
+    {q:"Which word is an adverb?",a:["Quickly","Quick","Quicker","Quickest"],c:0,h:"Adverbs often end in -ly"},
+    {q:"Words that sound the same but have different meanings are called what?",a:["Homophones","Synonyms","Antonyms","Adjectives"],c:0,h:"Like there and their"},
+    {q:"Which sentence is written in the past tense?",a:["She walked to school.","She walks to school.","She will walk to school.","She is walking to school."],c:0,h:"Look for the -ed ending"}
+  ],
+  stories:[
+    {story:"Mia and her little brother Leo were walking home from school when they found a wallet on the ground. Inside was $50 and a library card with the name Mr. Hassan. Mia wanted to keep the money, but Leo said they should return it. They looked up Mr. Hassan in the school directory and returned the wallet. Mr. Hassan was so grateful he had tears in his eyes. On the walk home, Mia told Leo: You were right. That felt better than keeping the money ever could.",q:"What is the main moral of this story?",a:["Honesty and doing the right thing brings true happiness","Finding money means it is yours to keep","Always check a wallet before returning it","You should only help people you know"],c:0,h:"How did Mia feel at the very end?"},
+    {story:"Every day at lunch, Omar sat alone because he was new at school. One day, a girl named Sofia noticed him sitting by himself. Even though her friends told her not to bother, Sofia walked over and introduced herself. Soon Omar was smiling and laughing. By the end of the week, Sofia and all her friends were sitting together with Omar and the table was full of laughter.",q:"What lesson does Sofia teach us?",a:["A small act of kindness can change someone's whole day","New students should always sit alone first","You should only make friends your group approves of","Lunch tables should never change"],c:0,h:"What changed by the end of the week?"},
+    {story:"Aiden was the fastest runner in Grade 4 and he knew it. Before the school race he laughed at his classmate Priya and said she was too slow to even try. Priya said nothing. She trained hard every morning before school. On race day, Priya finished just one second behind Aiden. The crowd cheered loudly for her. Aiden felt ashamed and went to congratulate her. Priya smiled and said: Want to train together next time?",q:"Which value does Priya best show?",a:["Perseverance and grace","Speed and natural talent","Anger and a desire for revenge","Pride and overconfidence"],c:0,h:"What did Priya do instead of arguing with Aiden?"},
+    {story:"The forest animals were thirsty. The river had dried up and only one small pond remained. The larger animals pushed to the front. A tiny rabbit named Pip spoke up: If we all take only what we need and share, there will be enough for everyone. The animals grumbled but listened. By taking turns and being careful, every animal had enough water, and the pond did not run dry.",q:"What is the most important lesson from this story?",a:["When we share and think of others, everyone benefits","The biggest animals should always go first","Small animals should not speak up to large ones","Take as much as you can as quickly as possible"],c:0,h:"What would have happened if the animals had not shared?"},
+    {story:"Lily promised her friend James she would help him study for the big maths test on Saturday. But on Friday night, her favourite band announced a surprise concert for Saturday. Lily really wanted to go but she remembered how nervous James was. She kept her promise and helped him study all morning. James passed the test with a great mark. The concert was still on when they finished, and James surprised her with two tickets he had bought as a thank-you.",q:"What does Lily's choice teach us?",a:["Keeping your promises is always worth it","Concerts are more important than studying","Friends should buy gifts to get your help","Break promises if something fun comes up"],c:0,h:"What happened because Lily kept her promise?"},
+    {story:"Marco's family did not have much money, but his mother always cooked extra food and left it on the doorstep for their elderly neighbour Mrs. Chen who lived alone. One winter, Marco's family got sick and had no food in the house. The next morning they found a huge pot of soup on their own doorstep with a note that said: With love, from your neighbour. Marco realised his mother had been quietly planting seeds of kindness for years.",q:"What does planting seeds of kindness mean in this story?",a:["Small acts of kindness grow and come back to you","You should plant vegetables in your garden","Kindness only works if everyone knows about it","Mrs. Chen had a large vegetable garden"],c:0,h:"Think about what Marco's mother gave and what came back"},
+    {story:"During an art competition, Zara accidentally knocked over her classmate Ben's painting and ruined it. Nobody saw it happen. Zara could have stayed quiet and no one would ever have known. Instead she told the teacher, apologised to Ben, and spent her own free time helping him repaint the picture. Ben did not win the competition but he told everyone that Zara was the bravest person in the class.",q:"Why did Ben call Zara the bravest person in the class?",a:["Because she told the truth even when she did not have to","Because she was the best painter in school","Because she won the art competition","Because she never made mistakes"],c:0,h:"What would have been the easy but wrong choice for Zara?"},
+    {story:"Sam loved football but was not the best player on the team. Coach Rivera told him to practise his passing every evening. Sam practised faithfully for three months, even when it was cold and raining in Edmonton. In the championship game, Sam made a perfect pass that led to the winning goal. The crowd cheered. A reporter asked Sam his secret. He smiled and said: I just kept going when it was hard.",q:"What value helped Sam achieve his goal?",a:["Perseverance - keep trying even when it is hard","Natural talent is the most important thing","Only practise when the weather is good","Wait for the coach to make you better"],c:0,h:"What did Sam do every evening for three months?"},
+    {story:"Nadia noticed her classmate Dylan always came to school without a snack and looked hungry by lunchtime. She started packing an extra sandwich every day and quietly leaving it on his desk. She never said a word. Months later Dylan's family situation improved. On the last day of school, Dylan gave Nadia a card that said: I never knew who my sandwich fairy was, but you kept me going. Thank you. Nadia smiled and finally told him it was her.",q:"What quality does Nadia show throughout this story?",a:["Quiet and selfless compassion","A desire for attention and praise","Curiosity about other people","A love of baking and cooking"],c:0,h:"Did Nadia tell Dylan what she was doing while she was doing it?"},
+    {story:"Every time someone at school dropped their books or needed help, a quiet girl named Amara was the first there. She never asked for thanks and never told anyone. One day the principal announced an award for the most helpful student. Everyone was surprised when Amara's name was called, because she had never done anything to show off. Amara blushed and said: I just did what felt right.",q:"What does Amara's story teach us about kindness?",a:["True kindness does not need an audience or a reward","You should always tell people when you do good things","Helping others is only worth it if you get an award","Being quiet means you will never be noticed"],c:0,h:"Did Amara help others because she wanted an award?"},
+    {story:"In a small town, two brothers inherited a farm. Instead of working together they argued about who owned more land and built a fence down the middle. For years they did not speak. One spring a flood destroyed both their crops. With nothing left, they finally had to work together to rebuild. As they worked side by side they remembered how much they had laughed as children. When the harvest came it was the best either had ever seen.",q:"What is the main lesson the brothers learned?",a:["Working together is far better than fighting over what you own","Floods always make crops grow better","Fences are bad for farms","Brothers should never share land"],c:0,h:"What changed when the brothers started working together?"},
+    {story:"A group of Grade 4 students led by a boy named Eli learned the old oak tree in their park was going to be cut down to build a car park. Eli and his classmates started a petition, made posters, and spoke at a town meeting. Adults smiled politely but did not think children could make a difference. Three weeks later the town council voted to save the tree. Eli told his class: Never think you are too small to make a change.",q:"What is the most important lesson from Eli's story?",a:["Everyone, even children, can make a difference if they speak up","Adults always know best and children should stay quiet","Petitions and posters never actually work","Car parks are more important than trees"],c:0,h:"What did Eli and his classmates do to try to save the tree?"}
+  ],
+  engineering:[
+    {q:"What simple machine makes lifting easier by spreading work over a longer distance?",a:["Ramp (inclined plane)","Pulley","Lever","Wheel"],c:0,h:"Think of a loading dock"},
+    {q:"What type of bridge is held up by cables attached to tall towers?",a:["Suspension bridge","Arch bridge","Beam bridge","Truss bridge"],c:0,h:"The Golden Gate Bridge is one!"},
+    {q:"Which material is the best conductor of electricity?",a:["Copper","Wood","Rubber","Plastic"],c:0,h:"Used in most electrical wires"},
+    {q:"What does an engineer do FIRST when solving a problem?",a:["Define the problem clearly","Build the solution","Test the solution","Present the solution"],c:0,h:"You need to understand it before fixing it"},
+    {q:"What do the letters CAD stand for in engineering?",a:["Computer-Aided Design","Creative Art Drawing","Computer Analysis Data","Calculated Accurate Design"],c:0,h:"Engineers use software to draw plans"},
+    {q:"Why do engineers build and test prototypes?",a:["To find problems before building the real thing","To show off their work","To save money","To practice drawing"],c:0,h:"Better to fail small than fail big!"},
+    {q:"Which shape is the STRONGEST for building structures?",a:["Triangle","Square","Circle","Rectangle"],c:0,h:"Pyramids and roof trusses use this shape"},
+    {q:"What is the purpose of insulation in an Alberta house?",a:["Keep heat in during winter","Make the house look nice","Hold up the walls","Make it waterproof"],c:0,h:"Alberta winters are very cold!"},
+    {q:"What does renewable energy mean?",a:["Energy from sources that will not run out","Energy that is cheap","Energy from oil","Energy stored in batteries"],c:0},
+    {q:"What is the FIRST step of the engineering design process?",a:["Identify the problem","Brainstorm ideas","Build a prototype","Test and improve"],c:0,h:"You cannot solve it without knowing what it is"},
+    {q:"What is a gear used for in machines?",a:["To transfer and change the speed of movement","To store electricity","To measure temperature","To filter water"],c:0,h:"Bicycles use gears!"},
+    {q:"What does a circuit need in order to work?",a:["A complete loop with a power source","Just a battery","Just wires","Only a light bulb"],c:0,h:"Electricity needs a full path to flow"}
+  ]
+};
+
+var COLOURS = {
+  stories:     {bg:"rgba(255,182,193,0.22)",col:"#ffb6c1",bdr:"#ff69b4"},
+  math:        {bg:"rgba(255,107,107,0.22)",col:"#ff8585",bdr:"#ff6b6b"},
+  science:     {bg:"rgba(61,214,140,0.22)", col:"#3dd68c",bdr:"#3dd68c"},
+  coding:      {bg:"rgba(78,205,196,0.22)", col:"#4ecdc4",bdr:"#4ecdc4"},
+  space:       {bg:"rgba(167,139,250,0.22)",col:"#a78bfa",bdr:"#a78bfa"},
+  english:     {bg:"rgba(255,169,77,0.22)", col:"#ffa94d",bdr:"#ffa94d"},
+  engineering: {bg:"rgba(244,114,182,0.22)",col:"#f472b6",bdr:"#f472b6"}
+};
+var LABELS = {math:"Math",science:"Science",coding:"Coding",space:"Space",english:"English",engineering:"Engineering",stories:"Stories"};
+
+var selected = ["math","science","coding","space","english","engineering","stories"];
+var questions=[], cur=0, score=0, correct=0, streak=0, bestStreak=0;
+var answered=false, timerID=null, timeLeft=20, difficulty=1;
+var totalScore=0, allTimeBest=0, gamesPlayed=0;
+
+function el(id){ return document.getElementById(id); }
+
+function showScreen(name){
+  ["screen-home","screen-game","screen-results"].forEach(function(id){
+    el(id).classList.remove("active");
+  });
+  el("screen-"+name).classList.add("active");
+}
+
+function shuffle(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var t=a[i];a[i]=a[j];a[j]=t;
+  }
+  return a;
+}
+
+function updateHomeStats(){
+  el("h-total").textContent=totalScore;
+  el("h-streak").textContent=allTimeBest;
+  el("h-games").textContent=gamesPlayed;
+}
+
+// Subject toggle buttons
+var subjBtns=document.querySelectorAll("button.subj");
+for(var si=0;si<subjBtns.length;si++){
+  (function(btn){
+    btn.addEventListener("click",function(){
+      btn.classList.toggle("on");
+      selected=[];
+      var all=document.querySelectorAll("button.subj");
+      for(var i=0;i<all.length;i++){
+        if(all[i].classList.contains("on")) selected.push(all[i].getAttribute("data-subj"));
+      }
+      el("btn-start").disabled=(selected.length===0);
+      el("subj-count").textContent=selected.length+" selected";
+    });
+  })(subjBtns[si]);
+}
+
+el("btn-start").addEventListener("click",function(){ startGame(); });
+el("btn-back").addEventListener("click",function(){ clearInterval(timerID); showScreen("home"); updateHomeStats(); });
+el("btn-next").addEventListener("click",function(){ nextQ(); });
+el("btn-replay").addEventListener("click",function(){ startGame(); });
+el("btn-menu").addEventListener("click",function(){ showScreen("home"); updateHomeStats(); });
+
+function buildQuestions(){
+  var pool=[];
+  var subjs=selected.length>0?selected:Object.keys(Q);
+  for(var s=0;s<subjs.length;s++){
+    var key=subjs[s];
+    if(!Q[key]) continue;
+    for(var i=0;i<Q[key].length;i++){
+      var item=Q[key][i];
+      pool.push({subj:key,q:item.q,a:item.a,c:item.c,h:item.h,story:item.story||null});
+    }
+  }
+  pool=shuffle(pool);
+  var take=Math.min(10,pool.length);
+  var result=[];
+  for(var p=0;p<take;p++){
+    var it=pool[p];
+    var opts=[];
+    for(var oi=0;oi<it.a.length;oi++){
+      opts.push({text:it.a[oi],correct:oi===it.c});
+    }
+    opts=shuffle(opts);
+    result.push({subj:it.subj,q:it.q,opts:opts,h:it.h,story:it.story||null});
+  }
+  return result;
+}
+
+function startGame(){
+  questions=buildQuestions();
+  cur=0;score=0;correct=0;streak=0;bestStreak=0;difficulty=1;
+  showScreen("game");
+  showQuestion();
+}
+
+function showQuestion(){
+  var item=questions[cur];
+  var total=questions.length;
+  el("prog-bar").style.width=Math.round((cur/total)*100)+"%";
+  el("q-num").textContent=(cur+1)+"/"+total;
+  el("live-score").textContent=score;
+  el("lvl-lbl").textContent="Level "+difficulty;
+
+  var col=COLOURS[item.subj]||COLOURS.math;
+  var tag=el("q-tag");
+  tag.textContent=LABELS[item.subj]||item.subj;
+  tag.style.cssText="display:inline-block;padding:4px 12px;border-radius:20px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;background:"+col.bg+";color:"+col.col+";border:1.5px solid "+col.bdr;
+
+  el("q-text").textContent=item.q;
+  var storyCard=el("story-card");
+  if(item.story){
+    storyCard.textContent=item.story;
+    storyCard.classList.remove("hidden");
+  } else {
+    storyCard.classList.add("hidden");
+  }
+  var hint=el("q-hint");
+  if(item.h&&difficulty<=2){hint.textContent="Hint: "+item.h;hint.classList.remove("hidden");}
+  else{hint.classList.add("hidden");}
+
+  var grid=el("opts-grid");
+  grid.innerHTML="";
+  for(var i=0;i<item.opts.length;i++){
+    (function(idx,isCorrect,text){
+      var btn=document.createElement("button");
+      btn.className="opt";
+      btn.textContent=text;
+      btn.addEventListener("click",function(){ handleAnswer(idx,isCorrect); });
+      grid.appendChild(btn);
+    })(i,item.opts[i].correct,item.opts[i].text);
+  }
+
+  el("feedback").className="feedback hidden";
+  el("btn-next").className="next-q hidden";
+  el("streak-display").classList.add("hidden");
+  answered=false;
+  startTimer();
+}
+
+function startTimer(){
+  clearInterval(timerID);
+  var maxTime=Math.max(10,26-(difficulty*3));
+  timeLeft=maxTime;
+  el("timer-num").textContent=maxTime;
+  updateTimerBar(maxTime,maxTime);
+  timerID=setInterval(function(){
+    timeLeft-=0.1;
+    updateTimerBar(timeLeft,maxTime);
+    el("timer-num").textContent=Math.max(0,Math.round(timeLeft));
+    if(timeLeft<=0){clearInterval(timerID);if(!answered)handleTimeout();}
+  },100);
+}
+
+function updateTimerBar(left,max){
+  var pct=Math.max(0,(left/max)*100);
+  var bar=el("timer-bar");
+  bar.style.width=pct+"%";
+  bar.style.background=pct>60?"#3dd68c":pct>30?"#ffa94d":"#ff6b6b";
+}
+
+function handleAnswer(idx,isCorrect){
+  if(answered) return;
+  answered=true;
+  clearInterval(timerID);
+  var btns=el("opts-grid").querySelectorAll("button.opt");
+  var item=questions[cur];
+  for(var i=0;i<btns.length;i++){
+    btns[i].disabled=true;
+    if(item.opts[i].correct) btns[i].classList.add("correct");
+    else if(i===idx&&!isCorrect) btns[i].classList.add("wrong");
+  }
+  var fb=el("feedback");
+  if(isCorrect){
+    correct++;streak++;
+    if(streak>bestStreak) bestStreak=streak;
+    var timeBonus=Math.round(timeLeft*2);
+    var streakBonus=streak>=3?streak*5:0;
+    var pts=10+timeBonus+streakBonus;
+    score+=pts;
+    difficulty=Math.min(5,1+Math.floor(correct/3));
+    var msgs=["Awesome!","Great job!","Brilliant!","Correct!","You got it!"];
+    var msg=msgs[Math.floor(Math.random()*msgs.length)];
+    if(streak>=3) msg+=" "+streak+" in a row! +"+streakBonus+" bonus!";
+    fb.textContent=msg+" +"+pts+" stars";
+    fb.className="feedback good";
+    if(streak>=2){
+      var sk=el("streak-display");
+      sk.textContent="x"+streak+" streak!";
+      sk.classList.remove("hidden");
+    }
+  } else {
+    streak=0;
+    var correctText="";
+    for(var oi=0;oi<item.opts.length;oi++){if(item.opts[oi].correct){correctText=item.opts[oi].text;break;}}
+    fb.textContent="Not quite! The answer is: "+correctText+" - keep going!";
+    fb.className="feedback bad";
+    difficulty=Math.max(1,difficulty-1);
+  }
+  el("live-score").textContent=score;
+  el("btn-next").className="next-q";
+}
+
+function handleTimeout(){
+  if(answered) return;
+  answered=true;streak=0;
+  var btns=el("opts-grid").querySelectorAll("button.opt");
+  var item=questions[cur];
+  for(var i=0;i<btns.length;i++){
+    btns[i].disabled=true;
+    if(item.opts[i].correct) btns[i].classList.add("correct");
+  }
+  el("feedback").textContent="Time is up! No worries, you will get the next one!";
+  el("feedback").className="feedback bad";
+  el("btn-next").className="next-q";
+}
+
+function nextQ(){
+  cur++;
+  if(cur>=questions.length) showResults();
+  else showQuestion();
+}
+
+function showResults(){
+  clearInterval(timerID);
+  totalScore+=score;
+  if(bestStreak>allTimeBest) allTimeBest=bestStreak;
+  gamesPlayed++;
+  var pct=Math.round((correct/questions.length)*100);
+  var icon,title,sub;
+  if(pct>=90){icon="&#127775;";title="Genius!";sub="You nailed it - top of the class!";}
+  else if(pct>=70){icon="&#127942;";title="Amazing!";sub="You are a Brain Blast champion!";}
+  else if(pct>=50){icon="&#127881;";title="Great effort!";sub="Keep practising and you will ace it!";}
+  else{icon="&#128640;";title="Keep going!";sub="Every question makes you smarter!";}
+  el("res-icon").innerHTML=icon;
+  el("res-title").textContent=title;
+  el("res-sub").textContent=sub;
+  el("res-score").textContent=score;
+  el("res-correct").textContent=correct+"/"+questions.length;
+  el("res-streak").textContent=bestStreak;
+  var badges=[];
+  if(correct===questions.length) badges.push({t:"Perfect Score!",col:"#a78bfa"});
+  if(bestStreak>=5) badges.push({t:"5-Streak Champ!",col:"#ffa94d"});
+  if(score>=150) badges.push({t:"Speed Demon!",col:"#4ecdc4"});
+  if(correct>=8) badges.push({t:"Brain Master!",col:"#3dd68c"});
+  var html="";
+  for(var b=0;b<badges.length;b++){
+    html+='<span class="badge" style="background:'+badges[b].col+'22;color:'+badges[b].col+';border:1.5px solid '+badges[b].col+'">'+badges[b].t+'</span>';
+  }
+  el("badges").innerHTML=html;
+  showScreen("results");
+  updateHomeStats();
+}
+
+updateHomeStats();
+</script>
+</body>
+</html>
