@@ -1512,17 +1512,44 @@ el("btn-start").addEventListener("click",function(){
 //  QUIZ GAME
 // ══════════════════════════════════════════════════════════
 function buildQuestions(forDaily){
-  var pool=[];
   var subjs=forDaily?Object.keys(Q):(selected.length>0?selected:Object.keys(Q));
-  for(var s=0;s<subjs.length;s++){
-    var key=subjs[s]; if(!Q[key]) continue;
-    for(var i=0;i<Q[key].length;i++){
-      var item=Q[key][i];
-      var itemGrade=item.g||4;
-      if(itemGrade!==playerGrade) continue;
-      pool.push({subj:key,q:item.q,a:item.a,c:item.c,h:item.h,story:item.story||null});
+
+  function getPool(grades){
+    var p=[];
+    for(var s=0;s<subjs.length;s++){
+      var key=subjs[s]; if(!Q[key]) continue;
+      for(var i=0;i<Q[key].length;i++){
+        var item=Q[key][i];
+        var itemGrade=item.g||4;
+        if(grades.indexOf(itemGrade)===-1) continue;
+        p.push({subj:key,q:item.q,a:item.a,c:item.c,h:item.h,story:item.story||null,grade:itemGrade});
+      }
     }
+    return p;
   }
+
+  // Try exact grade first; widen to adjacent grades if not enough questions
+  var pool = getPool([playerGrade]);
+  if(pool.length < 10){
+    // include one grade below and above
+    var grades = [playerGrade];
+    if(playerGrade > 1) grades.push(playerGrade-1);
+    if(playerGrade < 4) grades.push(playerGrade+1);
+    pool = getPool(grades);
+  }
+  if(pool.length < 10){
+    // still not enough - use all grades
+    pool = getPool([1,2,3,4]);
+  }
+
+  // Mix difficulty: aim for ~40% easy (grade-1), ~40% same grade, ~20% harder (grade+1)
+  // Sort: same grade questions first, then lower, then higher
+  pool.sort(function(a,b){
+    var aD = Math.abs((a.grade||4) - playerGrade);
+    var bD = Math.abs((b.grade||4) - playerGrade);
+    return aD - bD;
+  });
+
   pool=shuffle(pool);
   var take=Math.min(10,pool.length);
   var result=[];
@@ -1572,11 +1599,17 @@ function showQuestion(){
   var tag=el("q-tag");
   tag.textContent=LABELS[item.subj]||item.subj;
   tag.style.cssText="display:inline-block;padding:3px 10px;border-radius:20px;font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;background:"+col.bg+";color:"+col.col+";border:1.5px solid "+col.bdr;
+  // Show difficulty indicator
+  var diffLabels={1:"&#128994; Easy",2:"&#128993; Medium",3:"&#128992; Challenging",4:"&#128308; Hard"};
+  var qGrade = item.grade||playerGrade;
+  el("q-tag").innerHTML = (LABELS[item.subj]||item.subj) + ' <span style="opacity:.65;font-size:.6rem;font-weight:700;margin-left:4px">'+(diffLabels[qGrade]||"")+'</span>';
   el("q-text").textContent=item.q;
   var sb=el("story-box");
   if(item.story){ sb.textContent=item.story; sb.classList.remove("hidden"); } else { sb.classList.add("hidden"); }
   var hint=el("q-hint");
-  if(item.h&&difficulty<=2){ hint.textContent="Hint: "+item.h; hint.classList.remove("hidden"); } else { hint.classList.add("hidden"); }
+  // Always show hint for easy questions (grade 1) or when difficulty is low
+  var isEasy = (item.grade===1 || (!item.grade && playerGrade===1));
+  if(item.h&&(isEasy||difficulty<=2)){ hint.textContent="Hint: "+item.h; hint.classList.remove("hidden"); } else { hint.classList.add("hidden"); }
   var grid=el("opts-grid"); grid.innerHTML="";
   for(var i=0;i<item.opts.length;i++){
     (function(idx,isCorrect,text){
@@ -1758,11 +1791,23 @@ function glbLoadSubject(subj){
     });
   }
 
-  if(window.fbReady){
+  if(window.fbReady || typeof window.fbGetTop5 === "function"){
     doLoad();
   } else {
     list.innerHTML = '<div class="lb-empty" style="padding:6px 0;font-size:.78rem">&#8987; Connecting to Firebase...</div>';
     window.addEventListener("fbready", doLoad, {once:true});
+    // Fallback: also poll every 500ms in case the event was already fired
+    var pollCount = 0;
+    var poll = setInterval(function(){
+      pollCount++;
+      if(typeof window.fbGetTop5 === "function"){
+        clearInterval(poll);
+        doLoad();
+      } else if(pollCount > 20){
+        clearInterval(poll);
+        list.innerHTML = '<div class="lb-empty" style="font-size:.75rem">Could not connect to Firebase.<br><span style="opacity:.6">Check Firestore rules allow read access.</span></div>';
+      }
+    }, 500);
   }
 }
 
@@ -1829,6 +1874,11 @@ function showResults(){
   var subjKeys=Object.keys(subjPlayed);
   subjKeys.forEach(function(sk){
     if(!lbd[sk]) lbd[sk]=[];
+    // Remove any existing entry for this player then add current score
+    lbd[sk] = lbd[sk].filter(function(e){ return e.name !== playerName; });
+    // Only keep this score if it is their personal best
+    var personalBest = score;
+    // (already filtered out old entry, so just push current)
     lbd[sk].push({name:playerName,avatar:playerAvatar,score:score,correct:correct,date:new Date().toLocaleDateString("en-CA")});
     lbd[sk].sort(function(a,b){return b.score-a.score;});
     if(lbd[sk].length>10) lbd[sk]=lbd[sk].slice(0,10);
@@ -1858,12 +1908,14 @@ function showResults(){
   el("badges-row").innerHTML=bdgs.map(function(b){ return '<span class="badge" style="background:'+b.col+'22;color:'+b.col+';border:1.5px solid '+b.col+'">'+b.t+'</span>'; }).join("");
   lbRenderTabs(subjKeys[0]||"math");
 
-  // Save to global Firebase leaderboard and render it
+  // Render global leaderboard immediately (uses cache or fetches)
+  glbRenderTabs(subjKeys, subjKeys[0]||"math");
+  // Save score in background then refresh leaderboard
   saveToGlobalLB(subjKeys, score, correct, questions.length).then(function(){
+    // Clear cache so fresh scores show after save
+    subjKeys.forEach(function(sk){ glbCache[sk] = null; });
     glbRenderTabs(subjKeys, subjKeys[0]||"math");
   });
-  // Also start loading immediately (don't wait for save)
-  glbRenderTabs(subjKeys, subjKeys[0]||"math");
 
   el("btn-replay").onclick=function(){ isDailyChallenge=false; startGame(); };
   el("btn-to-home").onclick=function(){ goHome(); };
